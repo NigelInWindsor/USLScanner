@@ -1,0 +1,13 @@
+TARGETNAME=USLSERVO
+TARGETTYPE=DRIVER
+TARGETPATH=OBJ
+
+INCLUDES=$(BASEDIR)\inc;
+
+SOURCES=	Init.cpp \
+			Dispatch.cpp \
+			DeviceIo.cpp \
+			DebugPrint.c \
+			ServoDriver.rc
+
+NTTARGETFILES=PostBuildSteps

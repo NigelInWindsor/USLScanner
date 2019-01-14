@@ -1,0 +1,50 @@
+#***********************************************************
+#  File: Sources
+#
+#  Specifies build settings and files to compile
+#***********************************************************
+
+
+TARGETNAME = Plx$(PLX_CHIP)
+TARGETPATH = Driver_Plx$(PLX_CHIP)\$(DDKBUILDENV)
+TARGETTYPE = DRIVER
+DRIVERTYPE = WDM
+
+INCLUDES   = ..\..\..\Include
+
+C_DEFINES  = -DPLX_DRIVER -DPLX_WDM_DRIVER -DPCI$(PLX_CHIP)
+
+!IF $(IA64) != 0 || $(AMD64) != 0
+C_DEFINES = $(C_DEFINES) -DPLX_64BIT
+!ENDIF
+
+!IF "$(DDKBUILDENV)" == "checked" || "$(DDKBUILDENV)" == "chk"
+C_DEFINES = $(C_DEFINES) -DPLX_DEBUG
+!ENDIF
+
+!IF "$(PLX_LOG_TO_FILE)" == "1"
+C_DEFINES = $(C_DEFINES) -DPLX_LOG_TO_FILE
+!ENDIF
+
+!IF "$(PLX_DISPLAY_SGL)" == "1"
+C_DEFINES = $(C_DEFINES) -DPLX_DISPLAY_SGL
+!ENDIF
+
+
+#***********************************************************
+# Files to build
+#***********************************************************
+SOURCES = \
+          ApiFunc.c              \
+          Dispatch.c             \
+          Driver.c               \
+          DriverVer.rc           \
+          Eep_9000.c             \
+          GlobalVars.c           \
+          PciFunc.c              \
+          PlugPlay.c             \
+          PlxChipFn.c    \
+          PlxChipApi.c   \
+          PlxInterrupt.c \
+          Power.c                \
+          SuppFunc.c

@@ -1,0 +1,9 @@
+diff a/EgismosRangefinder.cpp b/EgismosRangefinder.cpp	(rejected hunks)
+@@ -5,7 +5,6 @@
+ #include "stdafx.h"
+ #include "uslscanner.h"
+ #include "EgismosRangefinder.h"
+-#include "MainFrm.h"
+ 
+ #ifdef _DEBUG
+ #undef THIS_FILE

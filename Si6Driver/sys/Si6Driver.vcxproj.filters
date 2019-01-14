@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Build">
+      <UniqueIdentifier>{5cafcee4-735b-44a3-bfbc-65174f76c71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4bc5e282-b956-40f4-ae89-1e6293c0b75e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DebugPrint.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceIo.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Dispatch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DebugPrint.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GUIDs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SI6Driver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Si6Ioctl.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SI6Driver.rc">
+      <Filter>Source</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\MakeDrvr.bat">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MAKEFILE">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Makefile.inc">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SOURCES">
+      <Filter>Build</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\i386\free\SI6Driver.bsc" />
+    <None Include="SI6Driver.bsc" />
+  </ItemGroup>
+</Project>

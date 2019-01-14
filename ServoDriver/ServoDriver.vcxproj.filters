@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Build">
+      <UniqueIdentifier>{49dcb1f5-bc15-4047-a239-b21a9ee40ad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{772fdc6d-019f-4272-adfe-c927250dea69}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sys\DebugPrint.c">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\DeviceIo.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\Dispatch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\Init.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sys\DebugPrint.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\ServoDriver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\ServoIoctl.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sys\ServoDriver.rc">
+      <Filter>Source</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="sys\Sources">
+      <Filter>Build</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\i386\free\ServoDriver.bsc" />
+  </ItemGroup>
+</Project>

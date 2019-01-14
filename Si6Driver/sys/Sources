@@ -1,0 +1,14 @@
+TARGETNAME=Si6
+TARGETTYPE=DRIVER
+TARGETPATH=OBJ
+
+INCLUDES=$(BASEDIR)\inc;
+LIB=$(BASEDIR)\lib;
+
+SOURCES=	Init.cpp \
+			Dispatch.cpp \
+			DeviceIo.cpp \
+			DebugPrint.c \
+			Si6Driver.rc
+
+NTTARGETFILES=PostBuildSteps

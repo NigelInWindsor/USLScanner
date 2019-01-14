@@ -1,0 +1,14 @@
+[Monitor]
+Count=2
+[Monitor_0]
+DisplayFrequency=4294967295
+BitsPerPel=4294967295
+PelsWidth=4294967295
+PelsHeight=4294967295
+[Monitor_1]
+DisplayFrequency=4294967295
+BitsPerPel=4294967295
+PelsWidth=4294967295
+PelsHeight=4294967295
+[OEMPAWizardExample]
+Count=0

@@ -1,0 +1,721 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\OEMPACustomizedAPI.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "HW Dialog",                   ID_EDIT_DIALOG_HARDWARE
+        MENUITEM "Setup Files Dialog",          ID_EDIT_SETUPFILES
+        MENUITEM "Cscan Dialog",                ID_EDIT_MAXDIALOG
+        MENUITEM "Kernel Message Box",          ID_EDIT_KERNELMESSAGEBOX
+        MENUITEM "Test FW Memory",              ID_EDIT_TESTFWMEMORY
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About OEMPACustomizedAPI...", ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About OEMPACustomizedAPI"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "OEMPACustomizedAPI, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2011",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_DIALOG_HW DIALOGEX 0, 0, 204, 158
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Hardware"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,184,129,17,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,164,130,26,12
+    PUSHBUTTON      "Samples",IDC_BUTTON_WRITE,117,105,39,12
+    EDITTEXT        IDC_EDIT_GAIN,11,79,22,14,ES_AUTOHSCROLL
+    CONTROL         "Enable",IDC_CHECK_SHOT_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,58,33,8
+    CONTROL         "Connect",IDC_CHECK_CONNECT,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,14,15,39,12
+    CONTROL         "",IDC_IPADDRESS,"SysIPAddress32",WS_TABSTOP,58,14,100,14
+    EDITTEXT        IDC_EDIT_PORT,159,14,31,14,ES_AUTOHSCROLL
+    LTEXT           "dB",IDC_STATIC_GAIN_UNIT,45,82,9,8
+    EDITTEXT        IDC_EDIT_ERROR,159,30,31,15,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Communication Error Count",IDC_STATIC,107,29,50,15
+    CONTROL         "Ethernet",IDC_RADIO_ETHERNET,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_GROUP,127,119,40,10
+    CONTROL         "USB",IDC_RADIO_USB,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,170,119,25,10
+    GROUPBOX        "Connection",IDC_STATIC,7,3,190,44
+    COMBOBOX        IDC_COMBO_USB,0,0,33,30,CBS_DROPDOWNLIST | CBS_SORT | NOT WS_VISIBLE | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_SPIN_GAIN,"msctls_updown32",UDS_ARROWKEYS,32,79,12,14
+    PUSHBUTTON      "file=>hw",IDC_BUTTON_FILE_OEMPA_LOAD,156,57,36,12
+    PUSHBUTTON      "hw=>file",IDC_BUTTON_FILE_OEMPA_SAVE,156,69,36,12
+    GROUPBOX        "HW Device",IDC_STATIC,116,48,81,72
+    COMBOBOX        IDC_COMBO_DISPLAY_CYCLE,78,79,30,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Cycle",IDC_STATIC_CYCLE,60,81,17,8
+    GROUPBOX        "Display",IDC_STATIC,8,48,105,61
+    CONTROL         "Image",IDC_CHECK_DISPLAY_IMAGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,47,58,31,8
+    CONTROL         "Invert",IDC_CHECK_DISPLAY_INVERT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,47,67,31,8
+    PUSHBUTTON      "wiz=>hw",IDC_BUTTON_WIZARD_TO_HW,117,69,39,12
+    CONTROL         "Color",IDC_BUTTON_DISPLAY_COLOR,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,82,56,27,12
+    PUSHBUTTON      "Reset Acq",IDC_BUTTON_RESET,117,81,39,12
+    PUSHBUTTON      "Status",IDC_BUTTON_STATUS,156,81,36,12
+    PUSHBUTTON      "Toolbox",IDC_BUTTON_CONFIG,58,30,39,12
+    CONTROL         "Max",IDC_CHECK_DISPLAY_MAX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,67,26,8
+    COMBOBOX        IDC_COMBO_CHANNEL,78,94,30,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Channel (Probe-Scan)",IDC_STATIC_CHANNEL,32,92,45,16
+    EDITTEXT        IDC_EDIT_DATA_LOST,44,142,69,13,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Data Lost",IDC_STATIC_CHANNEL2,10,144,34,8
+    CONTROL         "HW Link",IDC_BUTTON_MULTI,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,14,30,39,12
+    PUSHBUTTON      "Output",IDC_BUTTON_OUTPUT,156,93,36,12
+    PUSHBUTTON      "Calibration",IDC_BUTTON_CALIBRATION,117,93,39,12
+    CONTROL         "Calibration",IDC_CHECK_FMC_CALIBRATION,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,75,46,10
+    CONTROL         "",IDC_RICHEDIT_ENCODER,"RichEdit20W",ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY | WS_BORDER | WS_TABSTOP,8,110,106,31
+    CONTROL         "Test USB",IDC_CHECK_TEST,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,127,144,42,10
+    PUSHBUTTON      "file=>hw",IDC_BUTTON_FILE_OEMPA_LOAD2,116,130,36,12,NOT WS_VISIBLE
+    CONTROL         "add/data",IDC_CHECK_FILE_ADD_DATA_FORMAT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,117,58,38,10
+    PUSHBUTTON      "reset",IDC_BUTTON_RESET_USB3,170,143,21,11,NOT WS_VISIBLE
+END
+
+IDD_DIALOG_SETUPFILES DIALOGEX 0, 0, 229, 106
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Setup Files"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,90,85,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,172,7,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Load",IDC_BUTTON_SYSTEM_LOAD,180,64,35,12
+    PUSHBUTTON      "Save",IDC_BUTTON_SYSTEM_SAVE,142,64,35,12
+    PUSHBUTTON      "Notepad",IDC_BUTTON_NOTEPAD,103,64,35,12
+    PUSHBUTTON      "Scan Update",IDC_BUTTON_WIZARD_UPDATE,141,42,75,12
+    PUSHBUTTON      "Linear",IDC_BUTTON_SCAN_LINEAR,141,29,35,12
+    PUSHBUTTON      "Sectorial",IDC_BUTTON_SCAN_SECTORIAL,181,29,35,12
+    GROUPBOX        "Wizard Edit",IDC_STATIC,93,19,129,64
+    CONTROL         "Wizard Enable",IDC_CHECK_WIZARD_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,7,61,10
+    PUSHBUTTON      "Toolbox",IDC_BUTTON_TOOLBOX,103,29,35,12
+    GROUPBOX        "Toolbox File Format",IDC_STATIC,97,55,121,24
+    PUSHBUTTON      "Sample",IDC_BUTTON_FILE_SAMPLE,11,54,35,12
+    PUSHBUTTON      "txt=>bin",IDC_BUTTON_TXT_TO_BIN,47,29,35,12
+    PUSHBUTTON      "bin=>txt",IDC_BUTTON_BIN_TO_TXT,47,41,35,12
+    GROUPBOX        "OEMPA File Format",IDC_STATIC,7,19,81,64
+    PUSHBUTTON      "bin diff",IDC_BUTTON_FILE_BIN_DIFF,47,54,35,12
+    PUSHBUTTON      "wiz=>file",IDC_BUTTON_WIZARD_TO_FILE,11,29,35,12
+    PUSHBUTTON      "file option",IDC_BUTTON_FILE_OPTION,11,41,35,12
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,5,4
+ PRODUCTVERSION 1,1,5,4
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Advanced OEM Solutions"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.1.5.4"
+            VALUE "InternalName", "OEMPATool.exe"
+            VALUE "LegalCopyright", "Advanced OEM Solutions.  All rights reserved."
+            VALUE "OriginalFilename", "OEMPATool.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.1.5.4"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_DIALOG_HW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 197
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 151
+    END
+
+    IDD_DIALOG_SETUPFILES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 222
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\OEMPACustomizedAPI.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_HW DLGINIT
+BEGIN
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 4, 0
+0x6e41, 0x0079, 
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 2, 0
+0x0030, 
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 2, 0
+0x0031, 
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 2, 0
+0x0032, 
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 2, 0
+0x0033, 
+    IDC_COMBO_DISPLAY_CYCLE, 0x403, 2, 0
+0x0034, 
+    IDC_COMBO_CHANNEL, 0x403, 4, 0
+0x6c41, 0x006c, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0030, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0031, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0032, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0033, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0034, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0035, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0036, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0037, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0038, 
+    IDC_COMBO_CHANNEL, 0x403, 2, 0
+0x0039, 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3031, "\000" 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3131, "\000" 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3231, "\000" 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3331, "\000" 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3431, "\000" 
+    IDC_COMBO_CHANNEL, 0x403, 3, 0
+0x3531, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "OEMPATool"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "OEMPATool"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_CSCAN_DISPLAY DIALOGEX 0, 0, 183, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Cscan"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,53,12,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,65,53,50,14
+    CONTROL         "Display",IDC_CHECK_DISPLAY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,24,39,10
+    COMBOBOX        IDC_COMBO_GATE,82,37,36,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_POINT_COUNT,131,7,30,14,ES_AUTOHSCROLL
+    CONTROL         "HW",IDC_RADIO_HW,"Button",BS_AUTORADIOBUTTON | WS_GROUP,54,24,27,10
+    CONTROL         "SW",IDC_RADIO_SW,"Button",BS_AUTORADIOBUTTON,87,24,27,10
+    LTEXT           "GateId",IDC_STATIC,55,39,22,8
+    LTEXT           "Horiz Point Quantity",IDC_STATIC,56,10,65,8
+    CONTROL         "Enable",IDC_CHECK_ENABLE_CSCAN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,9,38,10
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET,131,22,30,12
+END
+
+IDD_DIALOG_KERNELMESSAGEBOX DIALOGEX 0, 0, 317, 163
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Kernel Message Box"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,142,50,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,133,142,50,14
+    CONTROL         "Message Hook Enable",IDC_CHECK_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,10,89,10
+    LISTBOX         IDC_LIST_MESSAGE,7,21,303,118,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Delete",IDC_BUTTON_DELETE,260,7,50,14
+END
+
+IDD_DIALOG_MAXIMUM DIALOGEX 0, 0, 130, 129
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Maximum Detection"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,106,12,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,40,106,50,14
+    LTEXT           "Gate Start (us)",-1,10,58,50,8
+    LTEXT           "Gate Stop (us)",-1,71,58,48,8
+    EDITTEXT        IDC_EDIT_OUT,10,86,106,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_AXIS_OFFSET,12,106,47,14,ES_AUTOHSCROLL | NOT WS_VISIBLE
+    LTEXT           "Axis Offset (us)",-1,12,112,51,8,NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT_AXIS_START,11,42,47,14,ES_AUTOHSCROLL
+    LTEXT           "Ascan Start (us)",-1,11,33,54,8
+    EDITTEXT        IDC_EDIT_GATE_START,11,67,47,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_GATE_STOP,70,67,47,14,ES_AUTOHSCROLL
+    CONTROL         "Enable",IDC_CHECK_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,14,19,35,10
+    EDITTEXT        IDC_EDIT_AXIS_STOP,70,42,47,14,ES_AUTOHSCROLL
+    LTEXT           "Ascan Stop (us)",-1,70,33,53,8
+    EDITTEXT        IDC_EDIT_CYCLE,70,18,47,14,ES_AUTOHSCROLL
+    LTEXT           "Cycle",-1,71,9,18,8
+    GROUPBOX        "SW Gate",-1,7,3,113,100
+END
+
+IDD_DIALOG_CALIBRATION DIALOGEX 0, 0, 115, 116
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Calibration"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,0,16,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,17,92,50,14
+    CONTROL         "Alignment",IDC_CHECK_CALIBRATION_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,45,49,10
+    PUSHBUTTON      "Reset",IDC_BUTTON_CALIBRATION_RESET,17,26,50,14
+    PUSHBUTTON      "Perform",IDC_BUTTON_CALIBRATION_PERFORM,17,7,50,14
+    CONTROL         "Offset",IDC_CHECK_CALIBRATION_OFFSET,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,58,35,10
+    LTEXT           "Static",IDC_STATIC_ALIGNMENT,71,46,40,8
+    LTEXT           "Static",IDC_STATIC_OFFSET,71,59,41,8
+    PUSHBUTTON      "Update",IDC_BUTTON_UPDATE,17,73,50,14
+END
+
+IDD_DIALOG_TEST_FW_MEMORY DIALOGEX 0, 0, 143, 94
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Test FW Memory"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,0,16,13,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,26,69,50,14
+    PUSHBUTTON      "Cycles",IDC_BUTTON_CYCLE,26,27,50,14
+    EDITTEXT        IDC_EDIT_CYCLE,85,28,51,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Filters",IDC_BUTTON_FILTER,26,44,50,14
+    EDITTEXT        IDC_EDIT_DATA,85,11,51,14,ES_AUTOHSCROLL
+    LTEXT           "Data (Hexadecimal)",IDC_STATIC,14,14,65,8
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 218, 167
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "OEMMC Wizard"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,56,143,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,110,143,50,14
+    CONTROL         "Channel #1",IDC_CHECK_CHANNEL_1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,28,54,10
+    CONTROL         "Channel #2",IDC_CHECK_CHANNEL_2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,41,54,10
+    CONTROL         "Channel #3",IDC_CHECK_CHANNEL_3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,54,54,10
+    CONTROL         "Channel #4",IDC_CHECK_CHANNEL_4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,67,54,10
+    CONTROL         "Channel #5",IDC_CHECK_CHANNEL_5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,81,54,10
+    CONTROL         "Channel #6",IDC_CHECK_CHANNEL_6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,94,54,10
+    CONTROL         "Channel #7",IDC_CHECK_CHANNEL_7,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,107,54,10
+    CONTROL         "Channel #8",IDC_CHECK_CHANNEL_8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,29,120,54,10
+    GROUPBOX        "",IDC_STATIC,14,14,80,123
+    CONTROL         "Pulse/Echo",IDC_RADIO_PULSE_ECHO,"Button",BS_AUTORADIOBUTTON,29,14,51,10
+    CONTROL         "Channel #1 => #2",IDC_CHECK_CHANNEL_9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,28,78,10
+    CONTROL         "Channel #3 => #4",IDC_CHECK_TRANSMISSION_34,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,41,78,10
+    CONTROL         "Channel #5 => #6",IDC_CHECK_TRANSMISSION_56,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,54,78,10
+    CONTROL         "Channel #7 => #8",IDC_CHECK_TRANSMISSION_78,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,121,67,78,10
+    GROUPBOX        "",IDC_STATIC,106,14,100,123
+    CONTROL         "Transmission",IDC_RADIO_TRANSMISSION,"Button",BS_AUTORADIOBUTTON,121,14,59,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_CSCAN_DISPLAY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 176
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_DIALOG_KERNELMESSAGEBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 310
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 156
+    END
+
+    IDD_DIALOG_MAXIMUM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 123
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 122
+    END
+
+    IDD_DIALOG_CALIBRATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 108
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 109
+    END
+
+    IDD_DIALOG_TEST_FW_MEMORY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 136
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 211
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_CSCAN_DISPLAY DLGINIT
+BEGIN
+    IDC_COMBO_GATE, 0x403, 2, 0
+0x0030, 
+    IDC_COMBO_GATE, 0x403, 2, 0
+0x0031, 
+    IDC_COMBO_GATE, 0x403, 2, 0
+0x0032, 
+    IDC_COMBO_GATE, 0x403, 2, 0
+0x0033, 
+    0
+END
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United Kingdom) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_HW_LINK DIALOGEX 0, 0, 321, 186
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "HW Link"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,117,165,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,183,165,50,14,NOT WS_VISIBLE
+    LISTBOX         IDC_LIST_BOARD,13,113,295,44,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Select the Master",IDC_STATIC,14,104,57,8
+    PUSHBUTTON      "Deselect",IDC_BUTTON_DESELECT,258,98,50,13
+    LTEXT           "Current Device",IDC_STATIC,14,43,49,8
+    COMBOBOX        IDC_COMBO_DEFAULT_LINK,27,13,73,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Status",IDC_STATIC,7,34,306,128
+    GROUPBOX        "Before Connection",IDC_STATIC,7,3,306,28
+    CONTROL         "Matched Devices Enable",IDC_CHECK_MATCHED_DEVICE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,133,14,94,10
+    LISTBOX         IDC_LIST_DEVICE,13,52,295,44,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_HW_LINK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 179
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_HW_LINK DLGINIT
+BEGIN
+    IDC_COMBO_DEFAULT_LINK, 0x403, 9, 0
+0x6e55, 0x696c, 0x6b6e, 0x6465, "\000" 
+    IDC_COMBO_DEFAULT_LINK, 0x403, 7, 0
+0x614d, 0x7473, 0x7265, "\000" 
+    IDC_COMBO_DEFAULT_LINK, 0x403, 6, 0
+0x6c53, 0x7661, 0x0065, 
+    0
+END
+
+#endif    // English (United Kingdom) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\OEMPACustomizedAPI.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

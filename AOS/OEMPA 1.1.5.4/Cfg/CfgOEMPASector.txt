@@ -1,0 +1,9 @@
+[Acquisition]
+Length=200.000000
+PieceThickness=10.000000
+DisplayLastButOne=1
+AscanSequenceLostTimerMs=2000
+
+[System]
+Name_#0=
+Name_#1=

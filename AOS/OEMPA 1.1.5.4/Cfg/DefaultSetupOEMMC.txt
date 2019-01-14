@@ -1,0 +1,31 @@
+[Root]
+VersionDriverOEMPA=1.1.5.4
+EnableMultiChannel=1
+CycleCount=1
+
+[Cycle:0]
+GainDigital=0.000000 dB
+HWAcquisition=1
+BeamCorrection=0.000000 dB
+Range=30.000000 us
+HWAcquisitionTime=2000.000000 us
+PointCount=0
+CompressionType=Compression
+Rectification=Signed
+FilterIndex=1
+GainAnalog=20.000000 dB
+GateCount=0
+
+[Cycle:0\Pulser]
+Element.count=1
+Element=0
+Width.count=1
+Width=0.500000 us
+
+[Cycle:0\Receiver]
+Element.count=1
+Element=0
+StartFirst=0
+Start.count=1
+Start=0.000000 us
+Decimation=0

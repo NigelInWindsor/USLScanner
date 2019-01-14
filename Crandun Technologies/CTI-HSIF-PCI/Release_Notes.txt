@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------------------
+CTI-HSIF-PCI Software Library Release 1.02
+Release Notes
+-------------------------------------------------------------------------------------------
+
+Changes since the previous version:
+- this version has a number of performance improvements
+- bug fixes for the encoder angle interpolation when the mirror is turning slowly, and the sample rate is high
+- **Please carefully read the description of the setAngleOffset() function in the manual**. The behaviour of this function has changed.  Please see the Reference Manual for details.
+
+-------------------------------------------------------------------------------------------
+Copyright (c) 2006, Crandun Technologies Inc.
+For support on this product, please consult our website at www.crandun.com
+-------------------------------------------------------------------------------------------
+
+

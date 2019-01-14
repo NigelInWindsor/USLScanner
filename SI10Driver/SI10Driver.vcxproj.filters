@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{7a0f3012-e5d6-4391-8298-1828db0c6455}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Build">
+      <UniqueIdentifier>{861624a3-7cb5-4a0b-9ba8-237d9c9e546c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ApiFunc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugPrint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dispatch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Driver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Eep_9000.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVars.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PciFunc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlugPlay.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlxChipApi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlxChipFn.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlxInterrupt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PolyCoordDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Power.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SuppFunc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ApiFunc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugPrint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dispatch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrvDefs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Eep_9000.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVars.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PciFunc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlugPlay.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlxChip.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlxChipApi.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlxChipFn.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlxInterrupt.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Power.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Si10Ioctl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SuppFunc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\2DPrimitives.h" />
+    <ClInclude Include="Include\PlxIoctl.h" />
+    <ClInclude Include="..\PolyCoordDlg.h" />
+    <ClInclude Include="..\TubeScanPage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DriverVer.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="BuildDriver.bat">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="BuildSI10.bat">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Makefile">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\WXPDDK\bin\setenv.bat">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Sources">
+      <Filter>Build</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SI10Driver.bsc" />
+  </ItemGroup>
+</Project>

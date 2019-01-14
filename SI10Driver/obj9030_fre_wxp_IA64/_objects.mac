@@ -1,0 +1,72 @@
+386_OBJECTS= \
+    $(_OBJ_DIR)\i386\driverver.res \
+    $(_OBJ_DIR)\i386\apifunc.obj \
+    $(_OBJ_DIR)\i386\dispatch.obj \
+    $(_OBJ_DIR)\i386\driver.obj \
+    $(_OBJ_DIR)\i386\eep_9000.obj \
+    $(_OBJ_DIR)\i386\globalvars.obj \
+    $(_OBJ_DIR)\i386\pcifunc.obj \
+    $(_OBJ_DIR)\i386\plugplay.obj \
+    $(_OBJ_DIR)\i386\plxchipfn.obj \
+    $(_OBJ_DIR)\i386\plxchipapi.obj \
+    $(_OBJ_DIR)\i386\plxinterrupt.obj \
+    $(_OBJ_DIR)\i386\power.obj \
+    $(_OBJ_DIR)\i386\suppfunc.obj \
+    $(_OBJ_DIR)\i386\debugprint.obj
+
+PASS0_386_OBJECTS=
+
+IA64_OBJECTS= \
+    $(_OBJ_DIR)\ia64\driverver.res \
+    $(_OBJ_DIR)\ia64\apifunc.obj \
+    $(_OBJ_DIR)\ia64\dispatch.obj \
+    $(_OBJ_DIR)\ia64\driver.obj \
+    $(_OBJ_DIR)\ia64\eep_9000.obj \
+    $(_OBJ_DIR)\ia64\globalvars.obj \
+    $(_OBJ_DIR)\ia64\pcifunc.obj \
+    $(_OBJ_DIR)\ia64\plugplay.obj \
+    $(_OBJ_DIR)\ia64\plxchipfn.obj \
+    $(_OBJ_DIR)\ia64\plxchipapi.obj \
+    $(_OBJ_DIR)\ia64\plxinterrupt.obj \
+    $(_OBJ_DIR)\ia64\power.obj \
+    $(_OBJ_DIR)\ia64\suppfunc.obj \
+    $(_OBJ_DIR)\ia64\debugprint.obj
+
+PASS0_IA64_OBJECTS=
+
+AMD64_OBJECTS= \
+    $(_OBJ_DIR)\amd64\driverver.res \
+    $(_OBJ_DIR)\amd64\apifunc.obj \
+    $(_OBJ_DIR)\amd64\dispatch.obj \
+    $(_OBJ_DIR)\amd64\driver.obj \
+    $(_OBJ_DIR)\amd64\eep_9000.obj \
+    $(_OBJ_DIR)\amd64\globalvars.obj \
+    $(_OBJ_DIR)\amd64\pcifunc.obj \
+    $(_OBJ_DIR)\amd64\plugplay.obj \
+    $(_OBJ_DIR)\amd64\plxchipfn.obj \
+    $(_OBJ_DIR)\amd64\plxchipapi.obj \
+    $(_OBJ_DIR)\amd64\plxinterrupt.obj \
+    $(_OBJ_DIR)\amd64\power.obj \
+    $(_OBJ_DIR)\amd64\suppfunc.obj \
+    $(_OBJ_DIR)\amd64\debugprint.obj
+
+PASS0_AMD64_OBJECTS=
+
+ARM_OBJECTS= \
+    $(_OBJ_DIR)\arm\driverver.res \
+    $(_OBJ_DIR)\arm\apifunc.obj \
+    $(_OBJ_DIR)\arm\dispatch.obj \
+    $(_OBJ_DIR)\arm\driver.obj \
+    $(_OBJ_DIR)\arm\eep_9000.obj \
+    $(_OBJ_DIR)\arm\globalvars.obj \
+    $(_OBJ_DIR)\arm\pcifunc.obj \
+    $(_OBJ_DIR)\arm\plugplay.obj \
+    $(_OBJ_DIR)\arm\plxchipfn.obj \
+    $(_OBJ_DIR)\arm\plxchipapi.obj \
+    $(_OBJ_DIR)\arm\plxinterrupt.obj \
+    $(_OBJ_DIR)\arm\power.obj \
+    $(_OBJ_DIR)\arm\suppfunc.obj \
+    $(_OBJ_DIR)\arm\debugprint.obj
+
+PASS0_ARM_OBJECTS=
+

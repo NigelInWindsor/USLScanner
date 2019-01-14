@@ -1,0 +1,10 @@
+deviceio.cpp(1112) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1122) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1273) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1278) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+link() : error LNK1181: cannot open input file "objfre\i386\deviceio.obj"
+deviceio.cpp(1112) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1122) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1273) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+deviceio.cpp(1278) : error C2039: 'nMemOffset' : is not a member of 'AxisData'
+link() : error LNK1181: cannot open input file "objfre\i386\deviceio.obj"

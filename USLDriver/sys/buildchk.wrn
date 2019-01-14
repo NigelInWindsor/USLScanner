@@ -1,0 +1,16 @@
+deviceio.cpp(1285) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1305) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1307) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1318) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1325) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1350) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1352) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1359) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1285) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1305) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1307) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1318) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1325) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data
+deviceio.cpp(1350) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1352) : warning C4018: '>=' : signed/unsigned mismatch
+deviceio.cpp(1359) : warning C4242: 'argument' : conversion from 'int' to 'unsigned char', possible loss of data

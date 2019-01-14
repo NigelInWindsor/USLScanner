@@ -1,0 +1,43 @@
+# TEMPLATE - SINGLE-CHANNEL
+#Fill in following input parameters (default values are OK),save the file and
+#close notepad to go on!
+
+[OEMPACustomizeAPI\Parameters]
+#"CycleCount" is the cycle count.
+CycleCount=1
+#"TimeSlot=" for all cycles.
+TimeSlot=2000 탎
+#"SameAllCycles" 1 to have same UT parameters for all cycles.
+SameAllCycles=1
+
+[OEMPACustomizeAPI\EmissionParameters]
+#"ElementCount" is the element count for the emission aperture.
+ElementCount=16
+#"WedgeDelay" is the wedge delay (unit=microsecond) for the emission aperture.
+WedgeDelay=0.0 탎
+#"PulseWidth=" for all cycles.
+PulseWidth=0.1 탎
+
+[OEMPACustomizeAPI\ReceptionParameters]
+#"ElementCount" is the element count for the reception aperture.
+ElementCount=16
+#"FocalCount" is the reception focal law count including the first focal law even in the case that the Dynamic Depth Focusing is not used.
+FocalCount=4
+#"WedgeDelay" is the wedge delay (unit=microsecond) for the reception aperture.
+WedgeDelay=0.0 탎
+#"AscanStart" is the ascan start (unit=microsecond) for all gates.
+AscanStart=1.0 탎
+#"AscanRange" is the ascan range (unit=microsecond) for all gates.
+AscanRange=5.0 탎
+#"DACCount" is the point count of the DAC.
+DACCount=0
+
+[OEMPACustomizeAPI\GateParameters]
+#"Count" is the gate count.
+Count=0
+#"Start" is the gate start (unit=microsecond) for all gates.
+Start=2.0 탎
+#"Stop" is the gate stop (unit=microsecond) for all gates.
+Stop=4.0 탎
+#"Threshold" is the gate threshold (unit=percent) for all gates.
+Threshold=50.0 %

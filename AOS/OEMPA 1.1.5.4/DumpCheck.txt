@@ -1,0 +1,61 @@
+
+C:\ProgramData\AOS\OEMPA 1.1.5.4>netstat -n -a -p TCP 
+
+Active Connections
+
+  Proto  Local Address          Foreign Address        State
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:3306           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:3648           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:5357           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:7779           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:31104          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:31105          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49152          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49153          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49154          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49155          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49669          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING
+  TCP    127.0.0.1:5939         0.0.0.0:0              LISTENING
+  TCP    192.168.1.98:139       0.0.0.0:0              LISTENING
+  TCP    192.168.1.98:57604     40.77.229.30:443       ESTABLISHED
+  TCP    192.168.1.98:57642     52.169.189.83:443      TIME_WAIT
+  TCP    192.168.1.98:57703     178.248.128.91:443     TIME_WAIT
+  TCP    192.168.1.98:57789     109.144.113.169:80     TIME_WAIT
+  TCP    192.168.1.98:57790     216.58.206.142:80      TIME_WAIT
+  TCP    192.168.1.98:57795     88.221.41.197:80       FIN_WAIT_1
+  TCP    192.168.1.98:57796     88.221.40.237:80       LAST_ACK
+  TCP    192.168.1.98:57798     93.184.221.200:80      TIME_WAIT
+  TCP    192.168.1.98:57799     93.184.221.200:443     TIME_WAIT
+  TCP    192.168.1.98:57809     168.62.105.45:443      TIME_WAIT
+  TCP    192.168.1.98:57810     93.184.221.200:443     TIME_WAIT
+  TCP    192.168.1.98:57812     65.52.55.39:443        TIME_WAIT
+  TCP    192.168.1.98:57819     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57822     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57827     88.221.41.197:443      ESTABLISHED
+  TCP    192.168.1.98:57831     168.62.105.45:443      ESTABLISHED
+  TCP    192.168.1.98:57837     93.184.221.200:443     ESTABLISHED
+  TCP    192.168.1.98:57838     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57839     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57840     65.55.44.109:443       ESTABLISHED
+  TCP    192.168.1.98:57847     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57850     88.221.41.197:443      ESTABLISHED
+  TCP    192.168.1.98:57851     65.52.55.39:443        ESTABLISHED
+  TCP    192.168.1.98:57861     191.236.129.107:5671   ESTABLISHED
+  TCP    192.168.1.98:57862     93.184.221.200:443     ESTABLISHED
+  TCP    192.168.1.98:57863     192.168.1.80:5357      TIME_WAIT
+  TCP    192.168.1.98:57864     40.114.241.141:443     ESTABLISHED
+  TCP    192.168.1.98:57866     178.248.128.91:443     ESTABLISHED
+  TCP    192.168.1.98:57867     65.55.44.109:443       ESTABLISHED
+  TCP    192.168.1.98:57869     157.55.240.220:443     TIME_WAIT
+  TCP    192.168.1.98:57874     52.178.178.16:443      ESTABLISHED
+  TCP    192.168.1.98:57876     65.55.44.109:443       ESTABLISHED
+  TCP    192.168.1.98:57879     65.55.44.109:443       ESTABLISHED
+  TCP    192.168.1.98:57886     91.228.166.45:80       TIME_WAIT

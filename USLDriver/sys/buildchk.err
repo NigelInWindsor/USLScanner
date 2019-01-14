@@ -1,0 +1,4 @@
+deviceio.cpp(1269) : error C2440: '=' : cannot convert from 'const int' to 'struct _USL_DEVICE_EXTENSION *'
+link() : error LNK1181: cannot open input file "objchk\i386\deviceio.obj"
+deviceio.cpp(1269) : error C2440: '=' : cannot convert from 'const int' to 'struct _USL_DEVICE_EXTENSION *'
+link() : error LNK1181: cannot open input file "objchk\i386\deviceio.obj"

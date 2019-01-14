@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OEMPASector", "OEMPASector\SectorApp.vcxproj", "{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}"
+	ProjectSection(ProjectDependencies) = postProject
+		{01F5E50D-017D-4011-9E62-12A8CD58606B} = {01F5E50D-017D-4011-9E62-12A8CD58606B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OEMPASectorStub", "OEMPASectorStub\SectorAppStub.vcxproj", "{01F5E50D-017D-4011-9E62-12A8CD58606B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Debug|Win32.Build.0 = Debug|Win32
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Debug|x64.ActiveCfg = Debug|x64
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Debug|x64.Build.0 = Debug|x64
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Release|Win32.ActiveCfg = Release|Win32
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Release|Win32.Build.0 = Release|Win32
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Release|x64.ActiveCfg = Release|x64
+		{EF7FE67F-1E72-4952-AC5F-CC79B7157A18}.Release|x64.Build.0 = Release|x64
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Debug|Win32.Build.0 = Debug|Win32
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Debug|x64.ActiveCfg = Debug|x64
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Debug|x64.Build.0 = Debug|x64
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Release|Win32.ActiveCfg = Release|Win32
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Release|Win32.Build.0 = Release|Win32
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Release|x64.ActiveCfg = Release|x64
+		{01F5E50D-017D-4011-9E62-12A8CD58606B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

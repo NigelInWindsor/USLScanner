@@ -1,0 +1,106 @@
+;this file is a template for the flash memory of the device.
+
+[Root]
+ItemCount=15
+
+[Item:0]
+Name=MacEthernetAddress
+Type=string
+Value=0.10.53.1.147.235
+
+[Item:1]
+Name=IPAddress
+Type=string
+Value=192.168.1.11
+
+[Item:2]
+Name=NetMask
+Type=string
+Value=255.255.255.0
+
+[Item:3]
+Name=Gateway
+Type=string
+Value=192.168.1.1
+;please use IP 192.168.1.X with X in range 11 to 51.
+
+[Item:4]
+Name=Passcode
+Type=string
+Value=default
+;please use default (100BT speed about 5MB/s) or special pass code (gigabit speed about 10 MB/s).
+;this item can also be used for the 4096 cycles option.
+
+[Item:5]
+Name=Speed
+Type=string
+Value=default
+;10/100/1000 or auto.
+; auto for autoconnect.
+;1000 is possible only if the right "SpeedPasscode" is used.
+
+[Item:6]
+Name=Options
+Type=string
+Value=0.3.25.0
+;FWOption.TCPMss.TCPWndSize.TCPScale+1	0=newAddress	TCPMss*1500-40
+;FWOPtion bit0 (FSL address size) => 0=12 bits (new FW version), 1=16 bits (old FW version).
+;FWOption bit1 disconnect the link between uBlaze and the FW => 0=connected, 1=disconnected.
+;FWOption bit2 gigabit TCP options => 0=TCP options are used, 1=TCP options are not used.
+;FWOption bit3 100BT TCP options => 0=TCP options are used (TCPMss is not used), 1=TCP options are not used.
+; if TCPScale=0 (scale default that is 4)	TCPWndSize*256*16
+; if TCPScale=1 (scale=0)			TCPWndSize*9000-40
+
+
+[Item:7]
+Name=RXBoardCount
+Type=string
+Value=2
+;example: 1, 2, 3, 4
+
+[Item:8]
+Name=Multiplexer
+Type=string
+Value=0:0
+;examples: 0:0, 16:128, 32:128. 0:0 if no mux.
+;and also 64:64a and 64:64b for 128:128
+
+[Item:9]
+Name=MatchedDevice
+Type=string
+Value=192.168.1.12:5001
+
+[Item:10]
+Name=IOBoard
+Type=string
+Value=0.0.15.0.0
+;first data=IOBoard
+;second data=OEMMC or OEMPA
+;third data=max power consumption (default value is 15 Watts).
+;fourth data=USB3
+;fifth data=bandwidth (0=high, 1=low)
+;example: 1.1.15.0.1 => IOBoard enabled.OEMMC enabled.15Watts USB3.disabled	low_bandwith
+;example: 1.0.15.0.0 => IOBoard enabled.OEMPA enabled.15Watts USB3.disabled	high_bandwidth
+
+[Item:11]
+Name=SerialNumber
+Type=string
+Value=3232N001
+;each HW have its own serial number
+
+[Item:12]
+Name=Spare1
+Type=string
+Value=0
+
+[Item:13]
+Name=Spare2
+Type=string
+Value=0
+
+[Item:14]
+Name=BoardName
+Type=string
+Value=3232N001
+;example: by default same as the serial number.
+

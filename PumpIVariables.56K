@@ -1,0 +1,33 @@
+I1300=1	;Switch the axis on
+I1400=1	;Switch the axis on
+
+I1309=2	;Velocity loop scale factor
+I1409=2	;Velocity loop scale factor
+
+I1311=0	;Fatal error off
+I1411=0	;Fatal error off
+
+I1324=$20000 ;switch off limit switches
+I1424=$20000 ;switch off limit switches
+
+I1303=$350F	;Encoder 15 Position feed back
+I1403=$3510	;Encoder 16 Position feed back
+
+I1319=0.01	;Acceleration
+I1419=0.01	;Acceleration
+
+I1322=0.026	;speed
+I1422=0.026	;speed
+
+I1330=10000	;P
+I1430=10000	;P
+
+I1331=12000	;I
+I1431=12000	;I
+
+I1332=1280	;D
+I1432=1280	;D
+
+I7330=0		;Encoder 15 = Pulse on A
+I7340=0		;Encoder 16 = Direction on B
+

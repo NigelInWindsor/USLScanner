@@ -1,0 +1,319 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#include "verrsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,5,4
+ PRODUCTVERSION 1,1,5,4
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Advanced OEM Solutions"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.4.0"
+            VALUE "InternalName", "testDemoSetting.dll"
+            VALUE "LegalCopyright", "Advanced OEM Solutions.  All rights reserved."
+            VALUE "OriginalFilename", "testDemoSetting.dll"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.4.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "#include ""verrsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#include ""res\\testDemoSetting.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""      // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_HW DIALOGEX 0, 0, 227, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "HW"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,209,106,17,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,182,89,23,14
+    EDITTEXT        IDC_EDIT_GAIN,67,22,22,14,ES_AUTOHSCROLL
+    LTEXT           "Gain",IDC_STATIC,51,26,15,8
+    CONTROL         "Connect",IDC_CHECK_CONNECT,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,157,6,33,14
+    LTEXT           "dB",IDC_STATIC,103,26,9,8
+    CONTROL         "",IDC_SPIN_GAIN,"msctls_updown32",UDS_ARROWKEYS,88,22,11,14
+    PUSHBUTTON      "wiz=>hw",IDC_BUTTON_HW_UPDATE,85,40,39,14
+    COMBOBOX        IDC_COMBO_SYSTEM_COUNT,56,122,24,66,CBS_DROPDOWNLIST | CBS_SORT | NOT WS_VISIBLE | WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "System Count",IDC_STATIC,7,124,46,8,NOT WS_VISIBLE
+    CONTROL         "Init",IDC_CHECK_TOOLBOX_INIT,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,7,6,20,14
+    CONTROL         "Wizard",IDC_CHECK_WIZARD,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,7,109,34,10
+    PUSHBUTTON      "file=>hw",IDC_BUTTON_HW_LOAD,46,40,39,14
+    PUSHBUTTON      "wiz=>file",IDC_BUTTON_HW_SAVE,7,40,39,14
+    CONTROL         "Probe 1",IDC_RADIO_PROBE1,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE | WS_GROUP,79,124,41,10
+    CONTROL         "Probe 2",IDC_RADIO_PROBE2,"Button",BS_AUTORADIOBUTTON | NOT WS_VISIBLE,107,124,41,10
+    PUSHBUTTON      "Reset Acq",IDC_BUTTON_RESET_TIMESTAMP,46,55,39,14
+    PUSHBUTTON      "Status",IDC_BUTTON_STATUS,85,55,39,14
+    CONTROL         "Enable",IDC_CHECK_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,25,34,9
+    EDITTEXT        IDC_EDIT_ENCODER,123,80,42,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Load",IDC_BUTTON_SYSTEM_LOAD,171,57,35,12
+    PUSHBUTTON      "Save",IDC_BUTTON_SYSTEM_SAVE,132,57,35,12
+    PUSHBUTTON      "Sectorial",IDC_BUTTON_SCAN_SECTORIAL,171,44,35,12
+    PUSHBUTTON      "Toolbox",IDC_BUTTON_TOOLBOX,132,44,35,12
+    GROUPBOX        "Wizard",IDC_STATIC,128,35,92,38
+    CONTROL         "Resolution",IDC_CHECK_ENCODER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,82,44,9
+    PUSHBUTTON      "Load",IDC_BUTTON_LOAD,192,57,25,12,NOT WS_VISIBLE
+    PUSHBUTTON      "Save",IDC_BUTTON_SAVE,192,44,25,12,NOT WS_VISIBLE
+    GROUPBOX        "Matrix",IDC_STATIC,185,35,35,37,NOT WS_VISIBLE
+    PUSHBUTTON      "Toolbox",IDC_BUTTON_CONFIG,190,120,30,14,NOT WS_VISIBLE
+    GROUPBOX        "Encoder",IDC_STATIC,8,70,165,51
+    LTEXT           "Length",IDC_STATIC,64,96,23,8
+    EDITTEXT        IDC_EDIT_LENGTH,61,104,29,14,ES_AUTOHSCROLL
+    LTEXT           "Thickness",IDC_STATIC,91,96,32,8
+    EDITTEXT        IDC_EDIT_THICKNESS,93,104,29,14,ES_AUTOHSCROLL
+    LTEXT           "mm",IDC_STATIC,155,107,12,8
+    LTEXT           "Step",IDC_STATIC,129,96,16,8
+    EDITTEXT        IDC_EDIT_STEP,123,104,29,14,ES_AUTOHSCROLL
+    CONTROL         "AutoResetAcq",IDC_CHECK_AUTO_RESETACQ,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,129,125,61,9
+    CONTROL         "Internal",IDC_CHECK_INTERNAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,95,38,9
+    EDITTEXT        IDC_EDIT_RESOLUTION,61,80,29,14,ES_AUTOHSCROLL
+    LTEXT           "step\r\n/mm",IDC_STATIC,92,78,18,15
+    PUSHBUTTON      "Calibration",IDC_BUTTON_CALIBRATION,7,55,39,14
+    EDITTEXT        IDC_EDIT_DATA_LOST,148,22,73,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Data Lost",IDC_STATIC,116,25,32,8
+    CONTROL         "",IDC_IPADDRESS1,"SysIPAddress32",WS_TABSTOP,28,6,100,15
+    EDITTEXT        IDC_EDIT_PORT1,128,6,29,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "HW Link",IDC_CHECK_HW_LINK,191,6,32,14
+    CONTROL         "Betw",IDC_CHECK_FILLING_BETWEEN,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,175,105,32,10
+    CONTROL         "Last",IDC_CHECK_FILLING_LAST,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,175,114,29,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_HW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 220
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 126
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_HW DLGINIT
+BEGIN
+    IDC_COMBO_SYSTEM_COUNT, 0x403, 2, 0
+0x0031, 
+    IDC_COMBO_SYSTEM_COUNT, 0x403, 2, 0
+0x0032, 
+    0
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_HW_LINK DIALOGEX 0, 0, 321, 181
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "HW Link"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,117,158,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,194,158,50,14
+    LISTBOX         IDC_LIST_BOARD,13,105,295,44,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_SYSTEM,13,52,295,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Select the Master",IDC_STATIC,14,95,57,8
+    PUSHBUTTON      "Deselect",IDC_BUTTON_DESELECT,258,90,50,14
+    LTEXT           "Current Device",IDC_STATIC,14,43,49,8
+    COMBOBOX        IDC_COMBO_DEFAULT_LINK,27,13,75,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Status",IDC_STATIC,7,34,308,120
+    GROUPBOX        "Before Connection",IDC_STATIC,8,3,236,28
+    CONTROL         "Matched Devices Enable",IDC_CHECK_MATCHED_DEVICE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,133,14,94,10
+    EDITTEXT        IDC_EDIT_MATCHED_DEVICE,13,74,295,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Matched Device",IDC_STATIC,15,65,58,8
+END
+
+IDD_DIALOG_CALIBRATION DIALOGEX 0, 0, 115, 116
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Calibration"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,0,16,14,NOT WS_VISIBLE
+    PUSHBUTTON      "Close",IDCANCEL,17,92,50,14
+    CONTROL         "Alignment",IDC_CHECK_CALIBRATION_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,45,49,10
+    PUSHBUTTON      "Reset",IDC_BUTTON_CALIBRATION_RESET,17,26,50,14
+    PUSHBUTTON      "Perform",IDC_BUTTON_CALIBRATION_PERFORM,17,7,50,14
+    CONTROL         "Offset",IDC_CHECK_CALIBRATION_OFFSET,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,19,58,35,10
+    LTEXT           "Static",IDC_STATIC_ALIGNMENT,71,46,30,8
+    LTEXT           "Static",IDC_STATIC_OFFSET,71,59,29,8
+    PUSHBUTTON      "Update",IDC_BUTTON_UPDATE,17,73,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_HW_LINK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 278
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_DIALOG_CALIBRATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 108
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 109
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_HW_LINK DLGINIT
+BEGIN
+    IDC_COMBO_DEFAULT_LINK, 0x403, 9, 0
+0x6e55, 0x696c, 0x6b6e, 0x6465, "\000" 
+    IDC_COMBO_DEFAULT_LINK, 0x403, 7, 0
+0x614d, 0x7473, 0x7265, "\000" 
+    IDC_COMBO_DEFAULT_LINK, 0x403, 6, 0
+0x6c53, 0x7661, 0x0065, 
+    0
+END
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#include "res\testDemoSetting.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"      // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,1 @@
+setup.txt is used by the evaluation kit.

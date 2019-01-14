@@ -1,0 +1,1223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>MFCProj</Keyword>
+    <ProjectGuid>{A77C2D2D-9910-40B3-A23E-BB8544841D86}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="optionalComponents.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="optionalComponents.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;C:\WindowsProjects\USLScannerV5\DataTranslation\Include;vld-10</IncludePath>
+    <LibraryPath>Optitrack\Motive\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)Lib\x86;;$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release;vld-10;C:\W7DDK\lib\wxp\i386</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;C:\WindowsProjects\USLScannerV5\DataTranslation\Include;vld-10</IncludePath>
+    <LibraryPath>Optitrack\Motive\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)Lib\x86;$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release;vld-10;C:\W7DDK\lib\wxp\i386</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(ProjectDir);$(PATH);$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;</IncludePath>
+    <LibraryPath>Optitrack\Motive\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)Lib\x86;</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\..\DXUT11\Core;..\..\DXUT11\Optional;C:\DX90SDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_MBCS;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <PrecompiledHeaderOutputFile>.\Release\USLScanner.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\USLScanner.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0809</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\USLScanner.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>C:\WindowsProjects\USLScannerV5\DirectXTK\Lib\DirectXTK.lib;.\Spectrum\spcm_win32_msvcpp.lib;.\Libraries\Aquiris\AqDrv4.lib;legacy_stdio_definitions.lib;%DIRECTX9%\Lib\x86\d3dx9.lib;OLDNAMES.LIB;d3d9.lib;winmm.lib;ATSApi.lib;htmlHelp.lib;Inpout32.lib;CTI_HSIF_PCI_DLL.lib;SiUSBXp.lib;FTChipID.lib;ftd2xx.lib;mpr.lib;iphlpapi.lib;ws2_32.lib;TrackerUnicode.lib;cifX32DLL.lib;oldaapi32.lib;olmem32.lib;UTKernelAPI.lib;UTKernelDriver.lib;UTKernelDriverOEMPA.lib;UTCom.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);C:\WindowsProjects\USLScannerV5.00\Hilscher\Include;C:\WindowsProjects\USLScannerV5.00\Include\DataTranslation;C:\WindowsProjects\USLScannerV5.00\Include\Ethercat;C:\WindowsProjects\USLScannerV5.00\Include\Alazar</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;__WINNT__;_AFXDLL;UNICODE;DMADRIVERDLL_EXPORTS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>-D_CRTDBG_MAP_ALLOC %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Debug\USLScanner.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0809</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\USLScanner.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalDependencies>.\DirectXTK\Bin\Desktop_2012\Win32\Debug\DirectXTK.lib;d3d11.lib;dxguid.lib;.\Spectrum\spcm_win32_msvcpp.lib;.\Libraries\Aquiris\AqDrv4.lib;legacy_stdio_definitions.lib;$(DXSDK_DIR)\Lib\x86\d3dx9d.lib;OLDNAMES.LIB;d3d9.lib;winmm.lib;ATSApi.lib;htmlHelp.lib;Inpout32.lib;CTI_HSIF_PCI_DLL.lib;SiUSBXp.lib;FTChipID.lib;ftd2xx.lib;mpr.lib;iphlpapi.lib;ws2_32.lib;TrackerUnicode.lib;cifX32DLL.lib;oldaapi32.lib;olmem32.lib;UTKernelAPI.lib;UTKernelDriver.lib;UTKernelDriverOEMPA.lib;UTCom.lib;SetupApi.lib;C:\WindowsProjects\DMADriver\TestCli\DmaDriverDLL\Debug\DmaDriverDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalLibraryDirectories>$(NPTRACKINGTOOLS_LIB);C:\WindowsProjects\USLScannerV5.00\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="3DBladePage.cpp" />
+    <ClCompile Include="3DCamera.cpp" />
+    <ClCompile Include="3DDesignPage.cpp" />
+    <ClCompile Include="3DEditTurnTablePage.cpp" />
+    <ClCompile Include="3DEyePointPage.cpp" />
+    <ClCompile Include="3DLightsPage.cpp" />
+    <ClCompile Include="3DObject.cpp" />
+    <ClCompile Include="3DPart.cpp" />
+    <ClCompile Include="3DPrimitive.cpp" />
+    <ClCompile Include="3DStiffenerPage.cpp" />
+    <ClCompile Include="3DToolsSheet1.cpp" />
+    <ClCompile Include="3DViewEditDlg.cpp" />
+    <ClCompile Include="3DViewPage.cpp" />
+    <ClCompile Include="3DWorldViewLightsPage.cpp" />
+    <ClCompile Include="3DWorldViewPane.cpp" />
+    <ClCompile Include="AccessLevelsDlg.cpp" />
+    <ClCompile Include="AcqirisDigitizer.cpp" />
+    <ClCompile Include="AcqirisDlg.cpp" />
+    <ClCompile Include="ActiveTimeSlots.cpp" />
+    <ClCompile Include="ActivityLogPage.cpp" />
+    <ClCompile Include="ALazarDigitizer.cpp" />
+    <ClCompile Include="AmplitudePalettePage.cpp" />
+    <ClCompile Include="AnnotateDlg.cpp" />
+    <ClCompile Include="AOSPhasedArray.cpp" />
+    <ClCompile Include="AOSPhasedArrayPage.cpp" />
+    <ClCompile Include="AOSPhasedArrayUTPage.cpp" />
+    <ClCompile Include="ArchiveSheet.cpp" />
+    <ClCompile Include="ArtificialSignalPage.cpp" />
+    <ClCompile Include="AssignAxesDlg.cpp" />
+    <ClCompile Include="AxesCompensationPage.cpp" />
+    <ClCompile Include="AxesPane.cpp" />
+    <ClCompile Include="AxesPmacStatus.cpp" />
+    <ClCompile Include="AxesSheet.cpp" />
+    <ClCompile Include="AxesVirtualPage.cpp" />
+    <ClCompile Include="AxisDlg.cpp" />
+    <ClCompile Include="AxisPane.cpp" />
+    <ClCompile Include="AxisPmacDlg.cpp" />
+    <ClCompile Include="AxisPowerPmacPage.cpp" />
+    <ClCompile Include="AxisServoStatus.cpp" />
+    <ClCompile Include="AxisStatusPane.cpp" />
+    <ClCompile Include="BallPage.cpp" />
+    <ClCompile Include="BarGraphPropertiesDlg1.cpp" />
+    <ClCompile Include="BisectMoveDlg.cpp" />
+    <ClCompile Include="BladeCSVPage.cpp" />
+    <ClCompile Include="BladeMasterPage.cpp" />
+    <ClCompile Include="BladeStatisticsDlg.cpp" />
+    <ClCompile Include="BladeTolerancePage.cpp" />
+    <ClCompile Include="Bluetooth.cpp" />
+    <ClCompile Include="BMPViewerDlg.cpp" />
+    <ClCompile Include="BootUpDlg.cpp" />
+    <ClCompile Include="BrainEditDlg.cpp" />
+    <ClCompile Include="BrainToolsDlg.cpp" />
+    <ClCompile Include="CADElement.cpp" />
+    <ClCompile Include="CADLinePage.cpp" />
+    <ClCompile Include="CADSheet.cpp" />
+    <ClCompile Include="CADTableDlg.cpp" />
+    <ClCompile Include="CardsDlg.cpp" />
+    <ClCompile Include="ChildView.cpp" />
+    <ClCompile Include="CircumcentreDlg.cpp" />
+    <ClCompile Include="ClientSocket.cpp" />
+    <ClCompile Include="CMFCToolBarSpinButton.cpp" />
+    <ClCompile Include="ColourListCtrl.cpp" />
+    <ClCompile Include="ColoursEditDlg.cpp" />
+    <ClCompile Include="CompensationSheet.cpp" />
+    <ClCompile Include="ConcurrentQueue.cpp" />
+    <ClCompile Include="ContourScanDlg.cpp" />
+    <ClCompile Include="Coord.cpp" />
+    <ClCompile Include="CoordArrayPane.cpp" />
+    <ClCompile Include="CoordTracker.cpp" />
+    <ClCompile Include="CoordV3.cpp" />
+    <ClCompile Include="CopyCoordsDlg.cpp" />
+    <ClCompile Include="CorrelationPage.cpp" />
+    <ClCompile Include="CPhasedArraySheet.cpp" />
+    <ClCompile Include="CPoint4.cpp" />
+    <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CtrlPropertiesDlg.cpp" />
+    <ClCompile Include="CustomizeSheet.cpp" />
+    <ClCompile Include="CV120Page.cpp" />
+    <ClCompile Include="CV120Trio.cpp" />
+    <ClCompile Include="D3DFont.cpp" />
+    <ClCompile Include="DangerPlanePage.cpp" />
+    <ClCompile Include="Data.cpp" />
+    <ClCompile Include="DataBaseDlg.cpp" />
+    <ClCompile Include="DataExportRulesDlg.cpp" />
+    <ClCompile Include="DataProperties.cpp" />
+    <ClCompile Include="DataPropertiesDlg.cpp" />
+    <ClCompile Include="DataTranslationHW.cpp" />
+    <ClCompile Include="DataValuePropertiesDlg.cpp" />
+    <ClCompile Include="DatePropertiesDlg.cpp" />
+    <ClCompile Include="DecimateDlg.cpp" />
+    <ClCompile Include="DetailsEditDlg.cpp" />
+    <ClCompile Include="DetailsPage.cpp" />
+    <ClCompile Include="DeviceResoucesDlg.cpp" />
+    <ClCompile Include="DialogBarPumps.cpp" />
+    <ClCompile Include="DirectoriesDlg.cpp" />
+    <ClCompile Include="DiscsShaftsPage.cpp" />
+    <ClCompile Include="DoubleScrollBar.cpp" />
+    <ClCompile Include="DrawingToollsDlg.cpp" />
+    <ClCompile Include="EdgeArray.cpp" />
+    <ClCompile Include="EdgeEqualizerPage.cpp" />
+    <ClCompile Include="EditBladeDlg.cpp" />
+    <ClCompile Include="EditColour.cpp" />
+    <ClCompile Include="EditCoordDlg.cpp" />
+    <ClCompile Include="EditDetailsDlg.cpp" />
+    <ClCompile Include="EditSpinCtrl.cpp" />
+    <ClCompile Include="EditSpinItem.cpp" />
+    <ClCompile Include="EgismosBluetoothClient.cpp" />
+    <ClCompile Include="EgismosRangefinder.cpp" />
+    <ClCompile Include="EgismosRangefinderPage.cpp" />
+    <ClCompile Include="EndEffector.cpp" />
+    <ClCompile Include="EnvelopeEditDlg.cpp" />
+    <ClCompile Include="EnvelopePage.cpp" />
+    <ClCompile Include="EnvelopeRectangularDlg.cpp" />
+    <ClCompile Include="EnvelopeToolsDlg.cpp" />
+    <ClCompile Include="Ethercat.cpp" />
+    <ClCompile Include="EthercatPage.cpp" />
+    <ClCompile Include="Ethernet.cpp" />
+    <ClCompile Include="EthernetPage.cpp" />
+    <ClCompile Include="EvaluationDlg.cpp" />
+    <ClCompile Include="ExclusionZonesDlg.cpp" />
+    <ClCompile Include="ExtSourcePage.cpp" />
+    <ClCompile Include="ExtTrigScan.cpp" />
+    <ClCompile Include="FaroCoordinateDlg.cpp" />
+    <ClCompile Include="FaroElementExpansionDlg.cpp" />
+    <ClCompile Include="FaroTrackerPage.cpp" />
+    <ClCompile Include="FeatureEditDlg.cpp" />
+    <ClCompile Include="FFT.cpp" />
+    <ClCompile Include="FieldBusController.cpp" />
+    <ClCompile Include="FileThumbNailDlg.cpp" />
+    <ClCompile Include="FillLeadscrewTableDlg.cpp" />
+    <ClCompile Include="FilterSheet.cpp" />
+    <ClCompile Include="FIR.cpp" />
+    <ClCompile Include="FIRDlg.cpp" />
+    <ClCompile Include="FLatPackToolsDlg.cpp" />
+    <ClCompile Include="FlatScanPage.cpp" />
+    <ClCompile Include="FlattenDlg.cpp" />
+    <ClCompile Include="FocalLaw.cpp" />
+    <ClCompile Include="FLSC10Page.cpp" />
+    <ClCompile Include="FLSC10Rangefinder.cpp" />
+    <ClCompile Include="FocalLawRx.cpp" />
+    <ClCompile Include="FocalLawTx.cpp" />
+    <ClCompile Include="FokkerPumpPage.cpp" />
+    <ClCompile Include="FokkerScanDetailsPage.cpp" />
+    <ClCompile Include="GatesPage.cpp" />
+    <ClCompile Include="GlobalUtPage.cpp" />
+    <ClCompile Include="GraticulePage.cpp" />
+    <ClCompile Include="HeaderCtrlCheck.cpp" />
+    <ClCompile Include="Help.cpp" />
+    <ClCompile Include="HilscherPage.cpp" />
+    <ClCompile Include="HistogramDlg.cpp" />
+    <ClCompile Include="HistogramOptionsPage.cpp" />
+    <ClCompile Include="HoldingFixtureEditDlg.cpp" />
+    <ClCompile Include="HoldingPage.cpp" />
+    <ClCompile Include="HolesEditDlg.cpp" />
+    <ClCompile Include="HRTimer.cpp" />
+    <ClCompile Include="IGES.cpp" />
+    <ClCompile Include="IGESDlg.cpp" />
+    <ClCompile Include="IJKPage.cpp" />
+    <ClCompile Include="ImageFilterPage.cpp" />
+    <ClCompile Include="ImageProcessorPage.cpp" />
+    <ClCompile Include="ImagePropertiesDlg.cpp" />
+    <ClCompile Include="ImportCrossSectionOverlayDlg.cpp" />
+    <ClCompile Include="ImportRulesDlg.cpp" />
+    <ClCompile Include="ImportToolPathsDlg.cpp" />
+    <ClCompile Include="InclusionRulesPage.cpp" />
+    <ClCompile Include="Inclusions.cpp" />
+    <ClCompile Include="InclusionsDetailsPage.cpp" />
+    <ClCompile Include="InclusionsResultsPage.cpp" />
+    <ClCompile Include="InclusionsSheet.cpp" />
+    <ClCompile Include="IntervalTimer.cpp" />
+    <ClCompile Include="IsometricPage.cpp" />
+    <ClCompile Include="JogPage.cpp" />
+    <ClCompile Include="Joints.cpp" />
+    <ClCompile Include="KinematicDlg.cpp" />
+    <ClCompile Include="Kinematics.cpp" />
+    <ClCompile Include="LaserRangefinder.cpp" />
+    <ClCompile Include="LaserToolsPage.cpp" />
+    <ClCompile Include="LeadScrew.cpp" />
+    <ClCompile Include="LeadScrewCompensationPage.cpp" />
+    <ClCompile Include="LeAlignPage.cpp" />
+    <ClCompile Include="LiftPage.cpp" />
+    <ClCompile Include="LinePropertiesDlg.cpp" />
+    <ClCompile Include="ListCtrlCheck.cpp" />
+    <ClCompile Include="ListItemEdit.cpp" />
+    <ClCompile Include="ListPropertiesDlg.cpp" />
+    <ClCompile Include="LogonDlg.cpp" />
+    <ClCompile Include="LoopTimer.cpp" />
+    <ClCompile Include="LSA.cpp" />
+    <ClCompile Include="LSABScanDlg.cpp" />
+    <ClCompile Include="LSAPage.cpp" />
+    <ClCompile Include="MachineDescriptionDlg.cpp" />
+    <ClCompile Include="MachineMonitorPage.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MaintenanceDiagnosticsSheet.cpp" />
+    <ClCompile Include="MaintenancePage.cpp" />
+    <ClCompile Include="MainThread.cpp" />
+    <ClCompile Include="ManipulatorSelectPage.cpp" />
+    <ClCompile Include="MarkerPenPage.cpp" />
+    <ClCompile Include="MatecFileImport.cpp" />
+    <ClCompile Include="MFCNormalizeDlg.cpp" />
+    <ClCompile Include="MosaicDlg.cpp" />
+    <ClCompile Include="MotionToolsSheet.cpp" />
+    <ClCompile Include="Motors.cpp" />
+    <ClCompile Include="MoveLadderPage.cpp" />
+    <ClCompile Include="MoveToPage.cpp" />
+    <ClCompile Include="MovingAverage.cpp" />
+    <ClCompile Include="MultipleBScansDlg.cpp" />
+    <ClCompile Include="MultipleScansPage.cpp" />
+    <ClCompile Include="NonCadVariablesDlg.cpp" />
+    <ClCompile Include="NormalizePage.cpp" />
+    <ClCompile Include="NormalsEditDlg.cpp" />
+    <ClCompile Include="NURBS.cpp" />
+    <ClCompile Include="OperatorContourScanPage.cpp" />
+    <ClCompile Include="OptimizePane.cpp" />
+    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="OriginForeplanePage.cpp" />
+    <ClCompile Include="OriginPage.cpp" />
+    <ClCompile Include="OverlayPage.cpp" />
+    <ClCompile Include="PAEdgeEqualizerPage.cpp" />
+    <ClCompile Include="PaletteSheet.cpp" />
+    <ClCompile Include="ParksMcClellanPage.cpp" />
+    <ClCompile Include="PermissionDlg.cpp" />
+    <ClCompile Include="PhasedArrayLineScanPage.cpp" />
+    <ClCompile Include="PhasedArrayProbe.cpp" />
+    <ClCompile Include="PhasedArrayProbeDlg.cpp" />
+    <ClCompile Include="PhasePage.cpp" />
+    <ClCompile Include="PM40.cpp" />
+    <ClCompile Include="PM40Packets.cpp" />
+    <ClCompile Include="PM40Page.cpp" />
+    <ClCompile Include="PM40Utils.cpp" />
+    <ClCompile Include="Pmac.cpp" />
+    <ClCompile Include="PmacArchivePage.cpp" />
+    <ClCompile Include="PmacDeviceEvents.cpp" />
+    <ClCompile Include="PmacDownLoadPage.cpp" />
+    <ClCompile Include="PmacDPRAMTestPage.cpp" />
+    <ClCompile Include="PmacFaultFindingPage.cpp" />
+    <ClCompile Include="PmacFaultsPage.cpp" />
+    <ClCompile Include="PmacGeneralPage.cpp" />
+    <ClCompile Include="PmacMacroPage.cpp" />
+    <ClCompile Include="PmacNCEvents.cpp" />
+    <ClCompile Include="PmacPcomm32.cpp" />
+    <ClCompile Include="PmacPcommServer.cpp" />
+    <ClCompile Include="PmacSheet.cpp" />
+    <ClCompile Include="PmacTrajectoryPage.cpp" />
+    <ClCompile Include="PmacTuningPage.cpp" />
+    <ClCompile Include="PmacUSL.cpp" />
+    <ClCompile Include="PmacVariablesPage.cpp" />
+    <ClCompile Include="PolyCoord.cpp" />
+    <ClCompile Include="PolyCoordDlg1.cpp" />
+    <ClCompile Include="PolyMeshCoord.cpp" />
+    <ClCompile Include="PorosityPage.cpp" />
+    <ClCompile Include="PositionGraphicalPage1.cpp" />
+    <ClCompile Include="PositionHoldingFokkerPage.cpp" />
+    <ClCompile Include="PositionPage.cpp" />
+    <ClCompile Include="PositionPane.cpp" />
+    <ClCompile Include="PositionSheet.cpp" />
+    <ClCompile Include="PositionSingleBridgePage.cpp" />
+    <ClCompile Include="PositionSwivGimRotPage.cpp" />
+    <ClCompile Include="PowerPmacStatusPage.cpp" />
+    <ClCompile Include="Pr20Dlg.cpp" />
+    <ClCompile Include="PrintConesCylindersDlg.cpp" />
+    <ClCompile Include="PrinterDiagnosticsPage.cpp" />
+    <ClCompile Include="PrinterUtils.cpp" />
+    <ClCompile Include="PrintOptionsDlg.cpp" />
+    <ClCompile Include="Probe.cpp" />
+    <ClCompile Include="ProbeAxialPlotPage.cpp" />
+    <ClCompile Include="ProbeBeamProfilePage.cpp" />
+    <ClCompile Include="ProbeBeamSectionsPage.cpp" />
+    <ClCompile Include="ProbeCharacterisationSheet.cpp" />
+    <ClCompile Include="ProbeDataSheetPage.cpp" />
+    <ClCompile Include="ProbeSpecificationPage.cpp" />
+    <ClCompile Include="ProbeToolsSheet.cpp" />
+    <ClCompile Include="Profile.cpp" />
+    <ClCompile Include="ProfileSheet.cpp" />
+    <ClCompile Include="ProgressDlg.cpp" />
+    <ClCompile Include="PromptDlg.cpp" />
+    <ClCompile Include="PropertiesPane.cpp" />
+    <ClCompile Include="ProtractorPage.cpp" />
+    <ClCompile Include="PumpPage.cpp" />
+    <ClCompile Include="QuaternionPage.cpp" />
+    <ClCompile Include="RBluetooth.cpp" />
+    <ClCompile Include="RBluetoothClient.cpp" />
+    <ClCompile Include="RBluetoothServer.cpp" />
+    <ClCompile Include="RClientSocket.cpp" />
+    <ClCompile Include="RectanglePropertiesDlg.cpp" />
+    <ClCompile Include="RectFloat.cpp" />
+    <ClCompile Include="RectilinearScanPage.cpp" />
+    <ClCompile Include="RegisterActiveX.cpp" />
+    <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="Remote.cpp" />
+    <ClCompile Include="RemoteInterface.cpp" />
+    <ClCompile Include="RemoteInterfacePage.cpp" />
+    <ClCompile Include="RemotePage.cpp" />
+    <ClCompile Include="ReportHeaderFooterDlg.cpp" />
+    <ClCompile Include="ReportPrintDlg1.cpp" />
+    <ClCompile Include="ReportTablePropertiesDlg.cpp" />
+    <ClCompile Include="ReportUltrasonicsPropertiesDlg.cpp" />
+    <ClCompile Include="ResizableDialog.cpp" />
+    <ClCompile Include="ResizableFormView.cpp" />
+    <ClCompile Include="ResizableGrip.cpp" />
+    <ClCompile Include="ResizableLayout.cpp" />
+    <ClCompile Include="ResizableMinMax.cpp" />
+    <ClCompile Include="ResizablePage.cpp" />
+    <ClCompile Include="ResizablePageEx.cpp" />
+    <ClCompile Include="ResizableSheet.cpp" />
+    <ClCompile Include="ResizableSheetEx.cpp" />
+    <ClCompile Include="ResizableState.cpp" />
+    <ClCompile Include="RMessage.cpp" />
+    <ClCompile Include="RMessageHandler.cpp" />
+    <ClCompile Include="RMessageQueue.cpp" />
+    <ClCompile Include="Robot.cpp" />
+    <ClCompile Include="RobotArmPositionsPage.cpp" />
+    <ClCompile Include="RobotCommsPage.cpp" />
+    <ClCompile Include="RobotDualPosPage.cpp" />
+    <ClCompile Include="RobotEndEffectorPage.cpp" />
+    <ClCompile Include="RobotHandShakingPage.cpp" />
+    <ClCompile Include="RobotJointsPage.cpp" />
+    <ClCompile Include="RobotPage.cpp" />
+    <ClCompile Include="RobotSheet.cpp" />
+    <ClCompile Include="RobotUserPage.cpp" />
+    <ClCompile Include="RollerProbePage.cpp" />
+    <ClCompile Include="RollerScanPage.cpp" />
+    <ClCompile Include="RotateSwivelGimbalPage.cpp" />
+    <ClCompile Include="RotateThetaLiftPage.cpp" />
+    <ClCompile Include="RRBladeScanPage.cpp" />
+    <ClCompile Include="RRImportCSVThicknessOverlay.cpp" />
+    <ClCompile Include="RRMES.cpp" />
+    <ClCompile Include="RRMESPage.cpp" />
+    <ClCompile Include="RRWIPPage.cpp" />
+    <ClCompile Include="RSendMessage.cpp" />
+    <ClCompile Include="RServerSocket.cpp" />
+    <ClCompile Include="RSocket.cpp" />
+    <ClCompile Include="RThetaPage.cpp" />
+    <ClCompile Include="RulerPage.cpp" />
+    <ClCompile Include="Runtime.cpp" />
+    <ClCompile Include="SafetyInterlocksDlg.cpp" />
+    <ClCompile Include="SafetySerial.cpp" />
+    <ClCompile Include="ScanLinesEditDlg.cpp" />
+    <ClCompile Include="ScanLinesPage.cpp" />
+    <ClCompile Include="ScanSheet.cpp" />
+    <ClCompile Include="Scope.cpp" />
+    <ClCompile Include="ScopeDlg.cpp" />
+    <ClCompile Include="ScopeOptionsPage.cpp" />
+    <ClCompile Include="SelfTestDlg.cpp" />
+    <ClCompile Include="SentenceDlg.cpp" />
+    <ClCompile Include="Serial.cpp" />
+    <ClCompile Include="SerialEgismos.cpp" />
+    <ClCompile Include="SerialFLSC10.cpp" />
+    <ClCompile Include="SerialJoystickDlg.cpp" />
+    <ClCompile Include="Servo.cpp" />
+    <ClCompile Include="ServoDrivesPage.cpp" />
+    <ClCompile Include="Si10.cpp" />
+    <ClCompile Include="SI10Page.cpp" />
+    <ClCompile Include="SI10x64.cpp" />
+    <ClCompile Include="Si6.cpp" />
+    <ClCompile Include="Si6StatusPage.cpp" />
+    <ClCompile Include="SineWaveDlg.cpp" />
+    <ClCompile Include="SpectrumAnalyzerDlg.cpp" />
+    <ClCompile Include="SpectrumDigitizer.cpp" />
+    <ClCompile Include="SquirtersPage.cpp" />
+    <ClCompile Include="StaticPosManage.cpp" />
+    <ClCompile Include="StaticScroll.cpp" />
+    <ClCompile Include="StatusPane.cpp" />
+    <ClCompile Include="Stats.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="StepperSheet.cpp" />
+    <ClCompile Include="TaughtLinesEditDlg.cpp" />
+    <ClCompile Include="TaughtToolsDlg.cpp" />
+    <ClCompile Include="TessellationPage.cpp" />
+    <ClCompile Include="TextPropertiesDlg.cpp" />
+    <ClCompile Include="ThicknessCalibrationpage.cpp" />
+    <ClCompile Include="ThicknessPalettePage.cpp" />
+    <ClCompile Include="ThirdPartyImageDlg.cpp" />
+    <ClCompile Include="TimeSlotData.cpp" />
+    <ClCompile Include="TimeSlotDataPr20.cpp" />
+    <ClCompile Include="TimeSlotDataPr30.cpp" />
+    <ClCompile Include="TimeSlotDataPr50.cpp" />
+    <ClCompile Include="TimeSlotPr30.cpp" />
+    <ClCompile Include="Token.cpp" />
+    <ClCompile Include="ToolBarLabel.cpp" />
+    <ClCompile Include="ToolChangerPage.cpp" />
+    <ClCompile Include="ToolChangers.cpp" />
+    <ClCompile Include="ToolPathDlg1.cpp" />
+    <ClCompile Include="ToolPathPage.cpp" />
+    <ClCompile Include="TranslatDlg.cpp" />
+    <ClCompile Include="TranslationDlg.cpp" />
+    <ClCompile Include="TransPlyPage.cpp" />
+    <ClCompile Include="TubeScanPage1.cpp" />
+    <ClCompile Include="TurntablePage.cpp" />
+    <ClCompile Include="TurnTableScanPage.cpp" />
+    <ClCompile Include="UltrasonicsSheet.cpp" />
+    <ClCompile Include="USBKey.cpp" />
+    <ClCompile Include="USBtoI2C.cpp" />
+    <ClCompile Include="Users.cpp" />
+    <ClCompile Include="UsersDlg.cpp" />
+    <ClCompile Include="uslbar.cpp" />
+    <ClCompile Include="USLDockablePane.cpp" />
+    <ClCompile Include="USLFile.cpp" />
+    <ClCompile Include="USLMFCHeaderCtrl.cpp" />
+    <ClCompile Include="USLMFCListCtrl.cpp" />
+    <ClCompile Include="USLPalette.cpp" />
+    <ClCompile Include="USLPrint.cpp" />
+    <ClCompile Include="USLPropertyGridProperty.cpp" />
+    <ClCompile Include="USLScanner.cpp" />
+    <ClCompile Include="USLScans.cpp" />
+    <ClCompile Include="USLThread.cpp" />
+    <ClCompile Include="USLut.cpp" />
+    <ClCompile Include="UtTrafficLightPage.cpp" />
+    <ClCompile Include="V120TrackerPage.cpp" />
+    <ClCompile Include="Vertex.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
+    <ClCompile Include="VerticalBoreScannerPage.cpp" />
+    <ClCompile Include="ViewBladeThickneessDlg.cpp" />
+    <ClCompile Include="ViewCommentsDlg.cpp" />
+    <ClCompile Include="ViewOptionsSheet.cpp" />
+    <ClCompile Include="ViewPage.cpp" />
+    <ClCompile Include="ViewSheet.cpp" />
+    <ClCompile Include="ViewStatsDlg.cpp" />
+    <ClCompile Include="ViewThicknessCrossSectionDlg.cpp" />
+    <ClCompile Include="ViewUltrasonicsDlg.cpp" />
+    <ClCompile Include="ViewValuePage.cpp" />
+    <ClCompile Include="VolumeAscanPage.cpp" />
+    <ClCompile Include="VolumeData.cpp" />
+    <ClCompile Include="VolumeLibraryPage.cpp" />
+    <ClCompile Include="VolumeOptionsSheet.cpp" />
+    <ClCompile Include="VolumeViewDlg.cpp" />
+    <ClCompile Include="WayLinesEditDlg.cpp" />
+    <ClCompile Include="WayPointsDlg.cpp" />
+    <ClCompile Include="WindowedSincPage.cpp" />
+    <ClCompile Include="WorkerThread.cpp" />
+    <ClCompile Include="WorkSpace.cpp" />
+    <ClCompile Include="WorkSpaceDlg.cpp" />
+    <ClCompile Include="WorkSpaceSheet.cpp" />
+    <ClCompile Include="XMLRulesDlg.cpp" />
+    <ClCompile Include="ZoomPage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="USLScanner.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3DBladePage.h" />
+    <ClInclude Include="3DCamera.h" />
+    <ClInclude Include="3DDesignPage.h" />
+    <ClInclude Include="3DEditTurnTablePage.h" />
+    <ClInclude Include="3DEyePointPage.h" />
+    <ClInclude Include="3DLightsPage.h" />
+    <ClInclude Include="3DObject.h" />
+    <ClInclude Include="3DPart.h" />
+    <ClInclude Include="3DPrimitive.h" />
+    <ClInclude Include="3DStiffenerPage.h" />
+    <ClInclude Include="3DToolsSheet1.h" />
+    <ClInclude Include="3DViewEditDlg.h" />
+    <ClInclude Include="3DViewPage.h" />
+    <ClInclude Include="3DWorldViewLightsPage.h" />
+    <ClInclude Include="3DWorldViewPane.h" />
+    <ClInclude Include="AccessLevelsDlg.h" />
+    <ClInclude Include="AcqirisDigitizer.h" />
+    <ClInclude Include="AcqirisDlg.h" />
+    <ClInclude Include="ActiveTimeSlots.h" />
+    <ClInclude Include="ActivityLogPage.h" />
+    <ClInclude Include="AlazarDigitizer.h" />
+    <ClInclude Include="AmplitudePalettePage.h" />
+    <ClInclude Include="AnnotateDlg.h" />
+    <ClInclude Include="AOSPhasedArray.h" />
+    <ClInclude Include="AOSPhasedArrayPage.h" />
+    <ClInclude Include="AOSPhasedArrayUTPage.h" />
+    <ClInclude Include="ArchiveSheet.h" />
+    <ClInclude Include="ArtificialSignalPage.h" />
+    <ClInclude Include="AssignAxesDlg.h" />
+    <ClInclude Include="AxesCompensationPage.h" />
+    <ClInclude Include="AxesPane.h" />
+    <ClInclude Include="AxesPmacStatus.h" />
+    <ClInclude Include="AxesSheet.h" />
+    <ClInclude Include="AxesVirtualPage.h" />
+    <ClInclude Include="AxisDlg.h" />
+    <ClInclude Include="AxisPane.h" />
+    <ClInclude Include="AxisPmacDlg.h" />
+    <ClInclude Include="AxisPowerPmacPage.h" />
+    <ClInclude Include="AxisServoStatus.h" />
+    <ClInclude Include="AxisStatusPane.h" />
+    <ClInclude Include="BallPage.h" />
+    <ClInclude Include="BarGraphPropertiesDlg1.h" />
+    <ClInclude Include="BisectMoveDlg.h" />
+    <ClInclude Include="BladeCSVPage.h" />
+    <ClInclude Include="BladeMasterPage.h" />
+    <ClInclude Include="BladeStatisticsDlg.h" />
+    <ClInclude Include="BladeTolerancePage.h" />
+    <ClInclude Include="Bluetooth.h" />
+    <ClInclude Include="BluetoothServer.h" />
+    <ClInclude Include="BMPViewerDlg.h" />
+    <ClInclude Include="BootUpDlg.h" />
+    <ClInclude Include="BrainEditDlg.h" />
+    <ClInclude Include="BrainToolsDlg.h" />
+    <ClInclude Include="CADElement.h" />
+    <ClInclude Include="CADLinePage.h" />
+    <ClInclude Include="CADSheet.h" />
+    <ClInclude Include="CADTableDlg.h" />
+    <ClInclude Include="CardsDlg.h" />
+    <ClInclude Include="ChildView.h" />
+    <ClInclude Include="CircumcentreDlg.h" />
+    <ClInclude Include="ClientSocket.h" />
+    <ClInclude Include="CMFCToolBarSpinButton.h" />
+    <ClInclude Include="ColourListCtrl.h" />
+    <ClInclude Include="ColoursEditDlg.h" />
+    <ClInclude Include="CompensationSheet.h" />
+    <ClInclude Include="ConcurrentQueue.h" />
+    <ClInclude Include="ContourScanDlg.h" />
+    <ClInclude Include="Coord.h" />
+    <ClInclude Include="CoordArrayPane.h" />
+    <ClInclude Include="CoordTracker.h" />
+    <ClInclude Include="CoordV3.h" />
+    <ClInclude Include="CopyCoordsDlg.h" />
+    <ClInclude Include="CorrelationPage.h" />
+    <ClInclude Include="CPoint4.h" />
+    <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CPhasedArraySheet.h" />
+    <ClInclude Include="CtrlPropertiesDlg.h" />
+    <ClInclude Include="CustomizeSheet.h" />
+    <ClInclude Include="CV120Page.h" />
+    <ClInclude Include="CV120Trio.h" />
+    <ClInclude Include="D3DFont.h" />
+    <ClInclude Include="DangerPlanePage.h" />
+    <ClInclude Include="Data.h" />
+    <ClInclude Include="DataBaseDlg.h" />
+    <ClInclude Include="DataExportRulesDlg.h" />
+    <ClInclude Include="DataProperties.h" />
+    <ClInclude Include="DataPropertiesDlg.h" />
+    <ClInclude Include="DataTranslationHW.h" />
+    <ClInclude Include="DataValuePropertiesDlg.h" />
+    <ClInclude Include="DatePropertiesDlg.h" />
+    <ClInclude Include="DecimateDlg.h" />
+    <ClInclude Include="DetailsEditDlg.h" />
+    <ClInclude Include="DetailsPage.h" />
+    <ClInclude Include="DeviceResoucesDlg.h" />
+    <ClInclude Include="DialogBarPumps.h" />
+    <ClInclude Include="DirectoriesDlg.h" />
+    <ClInclude Include="DiscsShaftsPage.h" />
+    <ClInclude Include="DoubleScrollBar.h" />
+    <ClInclude Include="DrawingToollsDlg.h" />
+    <ClInclude Include="EdgeArray.h" />
+    <ClInclude Include="EdgeEqualizerPage.h" />
+    <ClInclude Include="EditBladeDlg.h" />
+    <ClInclude Include="EditColour.h" />
+    <ClInclude Include="EditCoordDlg.h" />
+    <ClInclude Include="EditDetailsDlg.h" />
+    <ClInclude Include="EditSpinCtrl.h" />
+    <ClInclude Include="EditSpinItem.h" />
+    <ClInclude Include="EgismosBluetoothClient.h" />
+    <ClInclude Include="EgismosRangefinder.h" />
+    <ClInclude Include="EgismosRangefinderPage.h" />
+    <ClInclude Include="EndEffector.h" />
+    <ClInclude Include="EnvelopeEditDlg.h" />
+    <ClInclude Include="EnvelopePage.h" />
+    <ClInclude Include="EnvelopeRectangularDlg.h" />
+    <ClInclude Include="EnvelopeToolsDlg.h" />
+    <ClInclude Include="Ethercat.h" />
+    <ClInclude Include="EthercatPage.h" />
+    <ClInclude Include="Ethernet.h" />
+    <ClInclude Include="EthernetPage.h" />
+    <ClInclude Include="EvaluationDlg.h" />
+    <ClInclude Include="ExclusionZonesDlg.h" />
+    <ClInclude Include="ExtSourcePage.h" />
+    <ClInclude Include="ExtTrigScan.h" />
+    <ClInclude Include="FaroCoordinateDlg.h" />
+    <ClInclude Include="FaroElementExpansionDlg.h" />
+    <ClInclude Include="FaroTrackerPage.h" />
+    <ClInclude Include="FeatureEditDlg.h" />
+    <ClInclude Include="FFT.h" />
+    <ClInclude Include="FieldBusController.h" />
+    <ClInclude Include="FileThumbNailDlg.h" />
+    <ClInclude Include="FillLeadscrewTableDlg.h" />
+    <ClInclude Include="FilterSheet.h" />
+    <ClInclude Include="FIR.h" />
+    <ClInclude Include="FIRDlg.h" />
+    <ClInclude Include="FLatPackToolsDlg.h" />
+    <ClInclude Include="FlatScanPage.h" />
+    <ClInclude Include="FlattenDlg.h" />
+    <ClInclude Include="FLSC10Page.h" />
+    <ClInclude Include="FLSC10Rangefinder.h" />
+    <ClInclude Include="FocalLaw.h" />
+    <ClInclude Include="FokkerPumpPage.h" />
+    <ClInclude Include="FokkerScanDetailsPage.h" />
+    <ClInclude Include="GatesPage.h" />
+    <ClInclude Include="GenericScanner.h" />
+    <ClInclude Include="GlobalUtPage.h" />
+    <ClInclude Include="GraticulePage.h" />
+    <ClInclude Include="HeaderCtrlCheck.h" />
+    <ClInclude Include="Help.h" />
+    <ClInclude Include="HilscherPage.h" />
+    <ClInclude Include="HistogramDlg.h" />
+    <ClInclude Include="HistogramOptionsPage.h" />
+    <ClInclude Include="HoldingFixtureEditDlg.h" />
+    <ClInclude Include="HoldingPage.h" />
+    <ClInclude Include="HolesEditDlg.h" />
+    <ClInclude Include="HRTimer.h" />
+    <ClInclude Include="IGES.h" />
+    <ClInclude Include="IGESDlg.h" />
+    <ClInclude Include="IJKPage.h" />
+    <ClInclude Include="ImageFilterPage.h" />
+    <ClInclude Include="ImageProcessorPage.h" />
+    <ClInclude Include="ImagePropertiesDlg.h" />
+    <ClInclude Include="ImportCrossSectionOverlayDlg.h" />
+    <ClInclude Include="ImportRulesDlg.h" />
+    <ClInclude Include="ImportToolPathsDlg.h" />
+    <ClInclude Include="InclusionRulesPage.h" />
+    <ClInclude Include="Inclusions.h" />
+    <ClInclude Include="InclusionsDetailsPage.h" />
+    <ClInclude Include="InclusionsResultsPage.h" />
+    <ClInclude Include="InclusionsSheet.h" />
+    <ClInclude Include="IntervalTimer.h" />
+    <ClInclude Include="iphlpapi.h" />
+    <ClInclude Include="IsometricPage.h" />
+    <ClInclude Include="JogPage.h" />
+    <ClInclude Include="Joints.h" />
+    <ClInclude Include="KinematicDlg.h" />
+    <ClInclude Include="Kinematics.h" />
+    <ClInclude Include="LaserRangefinder.h" />
+    <ClInclude Include="LaserToolsPage.h" />
+    <ClInclude Include="LeadScrew.h" />
+    <ClInclude Include="LeadScrewCompensationPage.h" />
+    <ClInclude Include="LeAlignPage.h" />
+    <ClInclude Include="LiftPage.h" />
+    <ClInclude Include="LinePropertiesDlg.h" />
+    <ClInclude Include="ListCtrlCheck.h" />
+    <ClInclude Include="ListItemEdit.h" />
+    <ClInclude Include="ListPropertiesDlg.h" />
+    <ClInclude Include="LogonDlg.h" />
+    <ClInclude Include="LoopTimer.h" />
+    <ClInclude Include="LSA.h" />
+    <ClInclude Include="LSABScanDlg.h" />
+    <ClInclude Include="LSAPage.h" />
+    <ClInclude Include="MachineDescriptionDlg.h" />
+    <ClInclude Include="MachineMonitorPage.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MaintenanceDiagnosticsSheet.h" />
+    <ClInclude Include="MaintenancePage.h" />
+    <ClInclude Include="MainThread.h" />
+    <ClInclude Include="ManipulatorSelectPage.h" />
+    <ClInclude Include="MarkerPenPage.h" />
+    <ClInclude Include="MatecFileImport.h" />
+    <ClInclude Include="MFCNormalizeDlg.h" />
+    <ClInclude Include="MosaicDlg.h" />
+    <ClInclude Include="MotionToolsSheet.h" />
+    <ClInclude Include="Motors.h" />
+    <ClInclude Include="MoveLadderPage.h" />
+    <ClInclude Include="MoveToPage.h" />
+    <ClInclude Include="MovingAverage.h" />
+    <ClInclude Include="MultipleBScansDlg.h" />
+    <ClInclude Include="MultipleScansPage.h" />
+    <ClInclude Include="NonCadVariablesDlg.h" />
+    <ClInclude Include="NormalizePage.h" />
+    <ClInclude Include="NormalsEditDlg.h" />
+    <ClInclude Include="NURBS.h" />
+    <ClInclude Include="OperatorContourScanPage.h" />
+    <ClInclude Include="OptimizePane.h" />
+    <ClInclude Include="OptionsDlg.h" />
+    <ClInclude Include="OriginForeplanePage.h" />
+    <ClInclude Include="OriginPage.h" />
+    <ClInclude Include="OverlayPage.h" />
+    <ClInclude Include="PAEdgeEqualizerPage.h" />
+    <ClInclude Include="PaletteSheet.h" />
+    <ClInclude Include="ParksMcClellanPage.h" />
+    <ClInclude Include="PermissionDlg.h" />
+    <ClInclude Include="PhasedArrayLineScanPage.h" />
+    <ClInclude Include="PhasedArrayProbe.h" />
+    <ClInclude Include="PhasedArrayProbeDlg.h" />
+    <ClInclude Include="PhasePage.h" />
+    <ClInclude Include="PM40.h" />
+    <ClInclude Include="PM40Packets.h" />
+    <ClInclude Include="PM40Page.h" />
+    <ClInclude Include="PM40Utils.h" />
+    <ClInclude Include="Pmac.h" />
+    <ClInclude Include="PmacArchivePage.h" />
+    <ClInclude Include="PmacDownLoadPage.h" />
+    <ClInclude Include="PmacDPRAMTestPage.h" />
+    <ClInclude Include="PmacFaultFindingPage.h" />
+    <ClInclude Include="PmacFaultsPage.h" />
+    <ClInclude Include="PmacGeneralPage.h" />
+    <ClInclude Include="PmacMacroPage.h" />
+    <ClInclude Include="PmacPcomm32.h" />
+    <ClInclude Include="PmacPcommServer.h" />
+    <ClInclude Include="PmacSheet.h" />
+    <ClInclude Include="PmacTrajectoryPage.h" />
+    <ClInclude Include="PmacTuningPage.h" />
+    <ClInclude Include="PmacUSL.h" />
+    <ClInclude Include="PmacVariablesPage.h" />
+    <ClInclude Include="PolyCoord.h" />
+    <ClInclude Include="PolyCoordDlg1.h" />
+    <ClInclude Include="PolyMeshCoord.h" />
+    <ClInclude Include="PorosityPage.h" />
+    <ClInclude Include="PositionGraphicalPage1.h" />
+    <ClInclude Include="PositionHoldingFokkerPage.h" />
+    <ClInclude Include="PositionPage.h" />
+    <ClInclude Include="PositionPane.h" />
+    <ClInclude Include="PositionSheet.h" />
+    <ClInclude Include="PositionSingleBridgePage.h" />
+    <ClInclude Include="PositionSwivGimRotPage.h" />
+    <ClInclude Include="PowerPmacStatusPage.h" />
+    <ClInclude Include="Pr20Dlg.h" />
+    <ClInclude Include="PrintConesCylindersDlg.h" />
+    <ClInclude Include="PrinterDiagnosticsPage.h" />
+    <ClInclude Include="PrinterUtils.h" />
+    <ClInclude Include="PrintOptionsDlg.h" />
+    <ClInclude Include="Probe.h" />
+    <ClInclude Include="ProbeAxialPlotPage.h" />
+    <ClInclude Include="ProbeBeamProfilePage.h" />
+    <ClInclude Include="ProbeBeamSectionsPage.h" />
+    <ClInclude Include="ProbeCharacterisationSheet.h" />
+    <ClInclude Include="ProbeDataSheetPage.h" />
+    <ClInclude Include="ProbeSpecificationPage.h" />
+    <ClInclude Include="ProbeToolsSheet.h" />
+    <ClInclude Include="Profile.h" />
+    <ClInclude Include="ProfileSheet.h" />
+    <ClInclude Include="ProgressDlg.h" />
+    <ClInclude Include="PromptDlg.h" />
+    <ClInclude Include="PropertiesPane.h" />
+    <ClInclude Include="ProtractorPage.h" />
+    <ClInclude Include="PumpPage.h" />
+    <ClInclude Include="QuaternionPage.h" />
+    <ClInclude Include="RBluetooth.h" />
+    <ClInclude Include="RBluetoothClient.h" />
+    <ClInclude Include="RBluetoothServer.h" />
+    <ClInclude Include="RClientSocket.h" />
+    <ClInclude Include="RectanglePropertiesDlg.h" />
+    <ClInclude Include="RectFloat.h" />
+    <ClInclude Include="RectilinearScanPage.h" />
+    <ClInclude Include="RegisterActiveX.h" />
+    <ClInclude Include="Registry.h" />
+    <ClInclude Include="Remote.h" />
+    <ClInclude Include="RemoteInterface.h" />
+    <ClInclude Include="RemoteInterfacePage.h" />
+    <ClInclude Include="RemotePage.h" />
+    <ClInclude Include="ReportHeaderFooterDlg.h" />
+    <ClInclude Include="ReportPrintDlg1.h" />
+    <ClInclude Include="ReportTablePropertiesDlg.h" />
+    <ClInclude Include="ReportUltrasonicsPropertiesDlg.h" />
+    <ClInclude Include="ResizableDialog.h" />
+    <ClInclude Include="ResizableFormView.h" />
+    <ClInclude Include="ResizableGrip.h" />
+    <ClInclude Include="ResizableLayout.h" />
+    <ClInclude Include="ResizableMinMax.h" />
+    <ClInclude Include="ResizablePage.h" />
+    <ClInclude Include="ResizablePageEx.h" />
+    <ClInclude Include="ResizableSheet.h" />
+    <ClInclude Include="ResizableSheetEx.h" />
+    <ClInclude Include="ResizableState.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="RMessage.h" />
+    <ClInclude Include="RMessageDefs.h" />
+    <ClInclude Include="RMessageHandler.h" />
+    <ClInclude Include="RMessageQueue.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="RobotArmPositionsPage.h" />
+    <ClInclude Include="RobotCommsPage.h" />
+    <ClInclude Include="RobotDualPosPage.h" />
+    <ClInclude Include="RobotEndEffectorPage.h" />
+    <ClInclude Include="RobotHandShakingPage.h" />
+    <ClInclude Include="RobotJointsPage.h" />
+    <ClInclude Include="RobotPage.h" />
+    <ClInclude Include="RobotSheet.h" />
+    <ClInclude Include="RobotUserPage.h" />
+    <ClInclude Include="RollerProbePage.h" />
+    <ClInclude Include="RollerScanPage.h" />
+    <ClInclude Include="RotateSwivelGimbalPage.h" />
+    <ClInclude Include="RotateThetaLiftPage.h" />
+    <ClInclude Include="RRBladeScanPage.h" />
+    <ClInclude Include="RReceiveMessage.h" />
+    <ClInclude Include="RRImportCSVThicknessOverlay.h" />
+    <ClInclude Include="RRMES.h" />
+    <ClInclude Include="RRMESPage.h" />
+    <ClInclude Include="RRWIPPage.h" />
+    <ClInclude Include="RSendMessage.h" />
+    <ClInclude Include="RServerSocket.h" />
+    <ClInclude Include="RSocket.h" />
+    <ClInclude Include="RThetaPage.h" />
+    <ClInclude Include="RulerPage.h" />
+    <ClInclude Include="Runtime.h" />
+    <ClInclude Include="SafetyInterlocksDlg.h" />
+    <ClInclude Include="SafetySerial.h" />
+    <ClInclude Include="ScanLinesEditDlg.h" />
+    <ClInclude Include="ScanLinesPage.h" />
+    <ClInclude Include="ScanSheet.h" />
+    <ClInclude Include="Scope.h" />
+    <ClInclude Include="ScopeDlg.h" />
+    <ClInclude Include="ScopeOptionsPage.h" />
+    <ClInclude Include="SelfTestDlg.h" />
+    <ClInclude Include="SentenceDlg.h" />
+    <ClInclude Include="Serial.h" />
+    <ClInclude Include="SerialEgismos.h" />
+    <ClInclude Include="SerialFLSC10.h" />
+    <ClInclude Include="SerialJoystickDlg.h" />
+    <ClInclude Include="Servo.h" />
+    <ClInclude Include="ServoDrivesPage.h" />
+    <ClInclude Include="Si10.h" />
+    <ClInclude Include="SI10Page.h" />
+    <ClInclude Include="SI10x64.h" />
+    <ClInclude Include="Si6.h" />
+    <ClInclude Include="Si6StatusPage.h" />
+    <ClInclude Include="SineWaveDlg.h" />
+    <ClInclude Include="SpectrumAnalyzerDlg.h" />
+    <ClInclude Include="SpectrumDigitizer.h" />
+    <ClInclude Include="SquirtersPage.h" />
+    <ClInclude Include="StaticPosManage.h" />
+    <ClInclude Include="StaticScroll.h" />
+    <ClInclude Include="Stats.h" />
+    <ClInclude Include="StatusPane.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="StepperSheet.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TaughtLinesEditDlg.h" />
+    <ClInclude Include="TaughtToolsDlg.h" />
+    <ClInclude Include="TessellationPage.h" />
+    <ClInclude Include="TextPropertiesDlg.h" />
+    <ClInclude Include="ThicknessCalibrationpage.h" />
+    <ClInclude Include="ThicknessPalettePage.h" />
+    <ClInclude Include="ThirdPartyImageDlg.h" />
+    <ClInclude Include="TimeSlotData.h" />
+    <ClInclude Include="TimeSlotDataPr20.h" />
+    <ClInclude Include="TimeSlotDataPr30.h" />
+    <ClInclude Include="TimeSlotDataPr50.h" />
+    <ClInclude Include="TimeSlotPr30.h" />
+    <ClInclude Include="Token.h" />
+    <ClInclude Include="ToolBarLabel.h" />
+    <ClInclude Include="ToolChangerPage.h" />
+    <ClInclude Include="ToolChangers.h" />
+    <ClInclude Include="ToolPathDlg1.h" />
+    <ClInclude Include="ToolPathPage.h" />
+    <ClInclude Include="tracker.h" />
+    <ClInclude Include="TranslatDlg.h" />
+    <ClInclude Include="TranslationDlg.h" />
+    <ClInclude Include="TransPlyPage.h" />
+    <ClInclude Include="TubeScanPage1.h" />
+    <ClInclude Include="TurntablePage.h" />
+    <ClInclude Include="TurnTableScanPage.h" />
+    <ClInclude Include="UltrasonicsSheet.h" />
+    <ClInclude Include="USBKey.h" />
+    <ClInclude Include="USBtoI2C.h" />
+    <ClInclude Include="Users.h" />
+    <ClInclude Include="UsersDlg.h" />
+    <ClInclude Include="uslbar.h" />
+    <ClInclude Include="USLDockablePane.h" />
+    <ClInclude Include="USLFile.h" />
+    <ClInclude Include="USLMFCHeaderCtrl.h" />
+    <ClInclude Include="USLMFCListCtrl.h" />
+    <ClInclude Include="USLMFCToolBar.h" />
+    <ClInclude Include="USLPalette.h" />
+    <ClInclude Include="USLPrint.h" />
+    <ClInclude Include="USLPropertyGridProperty.h" />
+    <ClInclude Include="USLScanner.h" />
+    <ClInclude Include="USLScans.h" />
+    <ClInclude Include="USLThread.h" />
+    <ClInclude Include="USLut.h" />
+    <ClInclude Include="UtTrafficLightPage.h" />
+    <ClInclude Include="V120TrackerPage.h" />
+    <ClInclude Include="Version1.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VertexArray.h" />
+    <ClInclude Include="VerticalBoreScannerPage.h" />
+    <ClInclude Include="ViewBladeThickneessDlg.h" />
+    <ClInclude Include="ViewCommentsDlg.h" />
+    <ClInclude Include="ViewOptionsSheet.h" />
+    <ClInclude Include="ViewPage.h" />
+    <ClInclude Include="ViewSheet.h" />
+    <ClInclude Include="ViewStatsDlg.h" />
+    <ClInclude Include="ViewThicknessCrossSectionDlg.h" />
+    <ClInclude Include="ViewUltrasonicsDlg.h" />
+    <ClInclude Include="ViewValuePage.h" />
+    <ClInclude Include="VolumeAscanPage.h" />
+    <ClInclude Include="VolumeData.h" />
+    <ClInclude Include="VolumeLibraryPage.h" />
+    <ClInclude Include="VolumeOptionsSheet.h" />
+    <ClInclude Include="VolumeViewDlg.h" />
+    <ClInclude Include="WayLinesEditDlg.h" />
+    <ClInclude Include="WayPointsDlg.h" />
+    <ClInclude Include="WindowedSincPage.h" />
+    <ClInclude Include="WorkerThread.h" />
+    <ClInclude Include="WorkSpace.h" />
+    <ClInclude Include="WorkSpaceDlg.h" />
+    <ClInclude Include="WorkSpaceSheet.h" />
+    <ClInclude Include="XMLRulesDlg.h" />
+    <ClInclude Include="ZoomPage.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\air_wate.bmp" />
+    <Image Include="res\air_water_side_0.bmp" />
+    <Image Include="res\air_water_side_1.bmp" />
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\bmp00002.bmp" />
+    <Image Include="res\bmp00003.bmp" />
+    <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\bmp00005.bmp" />
+    <Image Include="res\bmp00006.bmp" />
+    <Image Include="res\bmp00007.bmp" />
+    <Image Include="res\bmp00008.bmp" />
+    <Image Include="res\bmp00009.bmp" />
+    <Image Include="res\bmp00010.bmp" />
+    <Image Include="res\bmp00011.bmp" />
+    <Image Include="res\bmp00012.bmp" />
+    <Image Include="res\bmp00013.bmp" />
+    <Image Include="res\bmp00014.bmp" />
+    <Image Include="res\bmp00015.bmp" />
+    <Image Include="res\bmp00016.bmp" />
+    <Image Include="res\bmp00017.bmp" />
+    <Image Include="res\bmp00018.bmp" />
+    <Image Include="res\bmp00019.bmp" />
+    <Image Include="res\bmp00020.bmp" />
+    <Image Include="res\bmp00021.bmp" />
+    <Image Include="res\bmp00022.bmp" />
+    <Image Include="res\bmp00023.bmp" />
+    <Image Include="res\bmp00024.bmp" />
+    <Image Include="res\bmp00025.bmp" />
+    <Image Include="res\bmp00026.bmp" />
+    <Image Include="res\bmp00027.bmp" />
+    <Image Include="res\bmp00028.bmp" />
+    <Image Include="res\bmp00029.bmp" />
+    <Image Include="res\bmp00030.bmp" />
+    <Image Include="res\bmp00031.bmp" />
+    <Image Include="res\bmp00032.bmp" />
+    <Image Include="res\bmp00033.bmp" />
+    <Image Include="res\bmp00034.bmp" />
+    <Image Include="res\bmp00035.bmp" />
+    <Image Include="res\bmp00036.bmp" />
+    <Image Include="res\bmp00037.bmp" />
+    <Image Include="res\bmp00038.bmp" />
+    <Image Include="res\bmp00039.bmp" />
+    <Image Include="res\bmp00040.bmp" />
+    <Image Include="res\bmp00041.bmp" />
+    <Image Include="res\bmp00042.bmp" />
+    <Image Include="res\bmp00043.bmp" />
+    <Image Include="res\bmp00044.bmp" />
+    <Image Include="res\bmp00045.bmp" />
+    <Image Include="res\bmp00046.bmp" />
+    <Image Include="res\bmp00047.bmp" />
+    <Image Include="res\bmp00048.bmp" />
+    <Image Include="res\bmp00049.bmp" />
+    <Image Include="res\bmp00050.bmp" />
+    <Image Include="res\bmp00051.bmp" />
+    <Image Include="res\bmp00052.bmp" />
+    <Image Include="res\bmp00053.bmp" />
+    <Image Include="res\bmp00054.bmp" />
+    <Image Include="res\bmp00055.bmp" />
+    <Image Include="res\bmp00056.bmp" />
+    <Image Include="res\bmp00057.bmp" />
+    <Image Include="res\bmp00058.bmp" />
+    <Image Include="res\bmp00059.bmp" />
+    <Image Include="res\bmp00060.bmp" />
+    <Image Include="res\bmp00061.bmp" />
+    <Image Include="res\bmp00062.bmp" />
+    <Image Include="res\bmp00063.bmp" />
+    <Image Include="res\bmp00064.bmp" />
+    <Image Include="res\bmp00065.bmp" />
+    <Image Include="res\bmp00066.bmp" />
+    <Image Include="res\bmp00067.bmp" />
+    <Image Include="res\bmp00068.bmp" />
+    <Image Include="res\bmp3_axi.bmp" />
+    <Image Include="res\EndEffectorToolbar.bmp" />
+    <Image Include="res\file_toolbar.bmp" />
+    <Image Include="res\flat_sca.bmp" />
+    <Image Include="res\icon2.ico" />
+    <Image Include="res\icon_pum.ico" />
+    <Image Include="res\operator.bmp" />
+    <Image Include="res\origin_f.bmp" />
+    <Image Include="res\palette_.bmp" />
+    <Image Include="res\polycoor.bmp" />
+    <Image Include="res\position.bmp" />
+    <Image Include="res\profile_.bmp" />
+    <Image Include="res\profile_3D.bmp" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar1.bmp" />
+    <Image Include="res\toolbar2.bmp" />
+    <Image Include="res\toolbar3.bmp" />
+    <Image Include="res\toolbar_.bmp" />
+    <Image Include="res\usl.ico" />
+    <Image Include="res\USLScanner.ico" />
+    <Image Include="res\USL_ICON1.ico" />
+    <Image Include="res\vertical.bmp" />
+    <Image Include="res\view_arc.bmp" />
+    <Image Include="res\WaterPathProbeLengthTipsbmp.bmp" />
+    <Image Include="res\WorldViewToolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="res\cur00001.cur" />
+    <CustomBuild Include="res\cur00002.cur" />
+    <CustomBuild Include="res\cur00003.cur" />
+    <CustomBuild Include="res\cur00004.cur" />
+    <CustomBuild Include="res\cur00005.cur" />
+    <CustomBuild Include="res\cur00006.cur" />
+    <CustomBuild Include="res\cur00007.cur" />
+    <CustomBuild Include="res\cur00008.cur" />
+    <CustomBuild Include="res\cur00009.cur" />
+    <CustomBuild Include="res\cur00010.cur" />
+    <CustomBuild Include="res\cur00011.cur" />
+    <CustomBuild Include="res\cur00012.cur" />
+    <CustomBuild Include="res\cur00013.cur" />
+    <CustomBuild Include="res\cur00014.cur" />
+    <CustomBuild Include="res\cursor1.cur" />
+    <CustomBuild Include="res\hnwse.cur" />
+    <CustomBuild Include="res\USLScanner.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="All Moveto 12 Axis NLR.txt" />
+    <Text Include="All Moveto Foreplane 2.txt" />
+    <Text Include="All Moveto Goodrich Machine 4.txt" />
+    <Text Include="All Moveto.txt" />
+    <Text Include="General M Variables Turbo.txt" />
+    <Text Include="General M Variables.txt" />
+    <Text Include="GKN Alabama Machine 2.txt" />
+    <Text Include="Goodrich Machine 4.txt" />
+    <Text Include="Joystick PLC.txt" />
+    <Text Include="Joystick R Theta.txt" />
+    <Text Include="LeadScrewCompensation.txt" />
+    <Text Include="Origin 12 Axis NLR.txt" />
+    <Text Include="Origin GKN Alabama Machine 2.txt" />
+    <Text Include="Origin Goodrich 4.txt" />
+    <Text Include="Origin R Theta.txt" />
+    <Text Include="Origin Turbo.txt" />
+    <Text Include="Origin.txt" />
+    <Text Include="PLCCs 12 Axis NLR.txt" />
+    <Text Include="PLCCs Goodrich Machine 4.txt" />
+    <Text Include="PLCCs Single Bridge.txt" />
+    <Text Include="PLCCs Without Safety Protocols.txt" />
+    <Text Include="PLCCs.txt" />
+    <Text Include="PolyMoves 12 Axis NLR.txt" />
+    <Text Include="PolyMoves.txt" />
+    <Text Include="Position Plc.txt" />
+    <Text Include="Pump I Variables Without Vane.txt" />
+    <Text Include="Pump I Variables.txt" />
+    <Text Include="PumpIVariables.txt" />
+    <Text Include="RRSingapore I Variables.txt" />
+    <Text Include="Status Plc.txt" />
+    <Text Include="Temp.txt" />
+    <Text Include="Tunning.txt" />
+    <Text Include="Turntable.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="TrackerUnicode.lib" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

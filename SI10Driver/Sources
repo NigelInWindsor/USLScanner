@@ -1,0 +1,37 @@
+#***********************************************************
+#  File: Sources
+#
+#  Specifies build settings and files to compile
+#***********************************************************
+
+
+TARGETNAME = Plx$(PLX_CHIP)
+TARGETPATH = Driver_Plx$(PLX_CHIP)\$(DDKBUILDENV)
+TARGETTYPE = DRIVER
+DRIVERTYPE = WDM
+
+INCLUDES   = .\Include
+
+C_DEFINES  = -DPLX_DRIVER -DPLX_WDM_DRIVER -DPCI$(PLX_CHIP)
+
+
+
+
+#***********************************************************
+# Files to build
+#***********************************************************
+SOURCES = \
+          ApiFunc.c              \
+          Dispatch.c             \
+          Driver.c               \
+          DriverVer.rc           \
+          Eep_9000.c             \
+          GlobalVars.c           \
+          PciFunc.c              \
+          PlugPlay.c             \
+          PlxChipFn.c    \
+          PlxChipApi.c   \
+          PlxInterrupt.c \
+          Power.c                \
+          SuppFunc.c			\
+		  DebugPrint.c			

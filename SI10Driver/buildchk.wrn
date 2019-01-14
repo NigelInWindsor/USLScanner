@@ -1,0 +1,12 @@
+driver.c(695) : warning C4047: 'function' : 'char *' differs in levels of indirection from 'int '
+driver.c(695) : warning C4024: 'DbgPrint' : different types for formal and actual parameter 1
+driver.c(737) : warning C4047: 'function' : 'char *' differs in levels of indirection from 'int '
+driver.c(737) : warning C4024: 'DbgPrint' : different types for formal and actual parameter 1
+plxchipfn.c(194) : warning C4242: '=' : conversion from 'int ' to 'unsigned short ', possible loss of data
+plxchipfn.c(198) : warning C4242: '=' : conversion from 'int ' to 'unsigned short ', possible loss of data
+plxchipfn.c(202) : warning C4242: '=' : conversion from 'int ' to 'unsigned short ', possible loss of data
+plxchipfn.c(206) : warning C4242: '=' : conversion from 'int ' to 'unsigned short ', possible loss of data
+plxchipfn.c(255) : warning C4018: '<' : signed/unsigned mismatch
+plxchipfn.c(299) : warning C4018: '<' : signed/unsigned mismatch
+suppfunc.c(625) : warning C4242: 'function' : conversion from 'int ' to 'unsigned short ', possible loss of data
+suppfunc.c(680) : warning C4242: 'function' : conversion from 'int ' to 'unsigned short ', possible loss of data

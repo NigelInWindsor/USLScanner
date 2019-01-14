@@ -1,0 +1,1220 @@
+OPEN PROG 11 CLEAR		;AXIS 1
+M1=1
+M6=11
+Q2=I124
+I124=$20000			;disable limit switches
+Q1=I126				;backup home offset
+I126=0				;Home Offset = 0
+I113=0				;disable +ve software limit
+I114=0				;disable -ve software limit
+IF(I123<0)
+	I7013=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M17&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7012=10			;Look for falling edge of flag
+		I123=I123 * -1		;Reverse Home direction
+		I126=5000
+		HOME1
+		I123=I123 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7013=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M17&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7012=10			;Look for falling edge of flag
+		I123=I123 * -1		;Reverse Home direction
+		I126=-5000
+		HOME1
+		I123=I123 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7012=6					;Look for rising edge of flag
+HOME1
+I123=I123 * -1			;Reverse Home direction
+I7012=1					;Look for rising CHz
+I126=Q1					;reset home offset
+HOME1
+I124=Q2				;reset limit switches
+I123=I123 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+
+OPEN PROG 12 CLEAR		;AXIS 2
+M1=1
+M6=12
+Q2=I224
+I224=$20000			;disable limit switches
+Q1=I226				;backup home offset
+I226=0				;Home Offset = 0
+I213=0				;disable +ve software limit
+I214=0				;disable -ve software limit
+IF(I223<0)
+	I7023=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=400
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7023=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=-400
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7022=6					;Look for rising edge of flag
+HOME2
+I223=I223 * -1			;Reverse Home direction
+I7022=1					;Look for rising CHz
+I226=Q1					;reset home offset
+HOME2
+I224=Q2				;reset limit switches
+I223=I223 * -1			;Reverse Home direction
+M1=0
+M6=0
+Q13=99
+CLOSE
+
+OPEN PROG 13 CLEAR		;AXIS 3
+M1=1
+M6=13
+Q2=I324
+I324=$20000			;disable limit switches
+Q1=I326				;backup home offset
+I326=0				;Home Offset = 0
+I313=0				;disable +ve software limit
+I314=0				;disable -ve software limit
+IF(I323<0)
+	I7033=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7033=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=-400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7032=6					;Look for rising edge of flag
+HOME3
+I323=I323 * -1			;Reverse Home direction
+I7032=1					;Look for rising CHz
+I326=Q1					;reset home offset
+HOME3
+I324=Q2				;reset limit switches
+I323=I323 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 14 CLEAR		;AXIS 4
+M1=1
+M6=14
+Q2=I424
+I424=$20000			;disable limit switches
+Q1=I426				;backup home offset
+I426=0				;Home Offset = 0
+I413=0				;disable +ve software limit
+I414=0				;disable -ve software limit
+IF(M2&4!=4)
+	IF(I423<0)
+		I7043=2					;Flag==1:+ve limit 2:-ve limit
+		IF(M47&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+			I7042=10			;Look for falling edge of flag
+			I423=I423 * -1		;Reverse Home direction
+			I426=400
+			HOME4
+			I423=I423 * -1		;Reverse Home direction
+		ENDIF
+	ELSE
+		I7043=1					;Flag==1:+ve limit 2:-ve limit
+		IF(M47&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+			I7042=10			;Look for falling edge of flag
+			I423=I423 * -1		;Reverse Home direction
+			I426=-400
+			HOME4
+			I423=I423 * -1		;Reverse Home direction
+		ENDIF
+	ENDIF
+	I7042=6					;Look for rising edge of flag
+	HOME4
+	I423=I423 * -1			;Reverse Home direction
+	I7042=1					;Look for rising CHz
+	I426=Q1					;reset home offset
+	HOME4
+	I423=I423 * -1			;Reverse Home direction
+ELSE
+	I7042=1					;Look for rising CHz
+	I426=Q1					;reset home offset
+	HOME4
+ENDIF
+I424=Q2				;reset limit switches
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 15 CLEAR		;AXIS 5
+M1=1
+M6=15
+Q2=I524
+I524=$20000			;disable limit switches
+Q1=I526				;backup home offset
+I526=0				;Home Offset = 0
+I513=0				;disable +ve software limit
+I514=0				;disable -ve software limit
+IF(I523<0)
+	I7113=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7113=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=-400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7112=6					;Look for rising edge of flag
+HOME5
+I523=I523 * -1			;Reverse Home direction
+I7112=1					;Look for rising CHz
+I526=Q1					;reset home offset
+HOME5
+I524=Q2				;reset limit switches
+I523=I523 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 16 CLEAR		;AXIS 6
+M1=1
+M6=16
+Q2=I624
+I624=$20000			;disable limit switches
+Q1=I626				;backup home offset
+I626=0				;Home Offset = 0
+I613=0				;disable +ve software limit
+I614=0				;disable -ve software limit
+IF(I623<0)
+	I7123=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7123=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=-400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7122=6					;Look for rising edge of flag
+HOME6
+I623=I623 * -1			;Reverse Home direction
+I7122=1					;Look for rising CHz
+I626=Q1					;reset home offset
+HOME6
+I624=Q2				;reset limit switches
+I623=I623 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 17 CLEAR		;AXIS 7
+M1=1
+M6=17
+Q2=I724
+I724=$20000			;disable limit switches
+Q1=I726				;backup home offset
+I726=0				;Home Offset = 0
+I713=0				;disable +ve software limit
+I714=0				;disable -ve software limit
+IF(I723<0)
+	I7133=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=400
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7133=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=-400
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7132=6					;Look for rising edge of flag
+HOME7
+I723=I723 * -1			;Reverse Home direction
+I7132=1					;Look for rising CHz
+I726=Q1					;reset home offset
+HOME7
+I724=Q2				;reset limit switches
+I723=I723 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 18 CLEAR		;AXIS 8
+M1=1
+M6=18
+Q2=I824
+I824=$20000			;disable limit switches
+Q1=I826				;backup home offset
+I826=0				;Home Offset = 0
+I813=0				;disable +ve software limit
+I814=0				;disable -ve software limit
+IF(I823<0)
+	I7143=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7143=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=-400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7142=6					;Look for rising edge of flag
+HOME8
+I823=I823 * -1			;Reverse Home direction
+I7142=1					;Look for rising CHz
+I826=Q1					;reset home offset
+HOME8
+I824=Q2				;reset limit switches
+I823=I823 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 19 CLEAR		;AXIS 9
+M1=1
+M6=19
+Q2=I924
+I924=$20000			;disable limit switches
+Q1=I926				;backup home offset
+I926=0				;Home Offset = 0
+I913=0				;disable +ve software limit
+I914=0				;disable -ve software limit
+IF(I923<0)
+	I7213=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7213=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=-400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7212=6					;Look for rising edge of flag
+HOME9
+I923=I923 * -1			;Reverse Home direction
+I7212=1					;Look for rising CHz
+I926=Q1					;reset home offset
+HOME9
+I924=Q2				;reset limit switches
+I923=I923 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 20 CLEAR		;AXIS 10
+M1=1
+M6=20
+Q2=I1024
+I1024=$20000			;disable limit switches
+Q1=I1026				;backup home offset
+I1026=0				;Home Offset = 0
+I1013=0				;disable +ve software limit
+I1014=0				;disable -ve software limit
+IF(I1023<0)
+	I7223=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7223=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=-400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7222=6					;Look for rising edge of flag
+HOME10
+I1023=I1023 * -1			;Reverse Home direction
+I7222=1					;Look for rising CHz
+I1026=Q1					;reset home offset
+HOME10
+I1024=Q2				;reset limit switches
+I1023=I1023 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 21 CLEAR		;AXIS 11
+M1=1
+M6=21
+Q2=I1124
+I1124=$20000			;disable limit switches
+Q1=I1126				;backup home offset
+I1126=0				;Home Offset = 0
+I1113=0				;disable +ve software limit
+I1114=0				;disable -ve software limit
+IF(I1123<0)
+	I7233=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7233=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=-400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7232=6					;Look for rising edge of flag
+HOME11
+I1123=I1123 * -1			;Reverse Home direction
+I7232=1					;Look for rising CHz
+I1126=Q1					;reset home offset
+HOME11
+I1124=Q2					;reset limit switches
+I1123=I1123 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 22 CLEAR		;AXIS 12
+M1=1
+M6=22
+Q2=I1224
+I1224=$20000			;disable limit switches
+Q1=I1226				;backup home offset
+I1226=0				;Home Offset = 0
+I1213=0				;disable +ve software limit
+I1214=0				;disable -ve software limit
+IF(I1223<0)
+	I7243=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M127&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7242=10			;Look for falling edge of flag
+		I1223=I1223 * -1		;Reverse Home direction
+		I1226=400
+		HOME12
+		I1223=I1223 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7243=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M127&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7242=10			;Look for falling edge of flag
+		I1223=I1223 * -1		;Reverse Home direction
+		I1226=-400
+		HOME12
+		I1223=I1223 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+I7242=6					;Look for rising edge of flag
+HOME12
+I1223=I1223 * -1			;Reverse Home direction
+I7242=1					;Look for rising CHz
+I1226=Q1					;reset home offset
+HOME12
+I1224=Q2				;reset limit switches
+I1223=I1223 * -1			;Reverse Home direction
+M1=0
+M6=0
+CLOSE
+
+OPEN PROG 25 CLEAR ;ALL STARBOARD AXES
+M1=1
+M6=24
+
+Q27=I724			;backup limit switches
+Q28=I824			;backup limit switches
+Q29=I924			;backup limit switches
+Q30=I1024			;backup limit switches
+Q31=I1124			;backup limit switches
+
+I724=$20000			;disable limit switches
+I824=$20000			;disable limit switches
+I924=$20000			;disable limit switches
+I1024=$20000			;disable limit switches
+I1124=$20000			;disable limit switches
+
+Q7=I726				;backup home offset
+Q8=I826				;backup home offset
+Q9=I926				;backup home offset
+Q10=I1026			;backup home offset
+Q11=I1126			;backup home offset
+
+
+I726=0				;Home Offset = 0
+I826=0				;Home Offset = 0
+I926=0				;Home Offset = 0
+I1026=0				;Home Offset = 0
+I1126=0				;Home Offset = 0
+
+I713=0				;disable +ve software limit
+I813=0				;disable +ve software limit
+I913=0				;disable +ve software limit
+I1013=0				;disable +ve software limit
+I1113=0				;disable +ve software limit
+I714=0				;disable -ve software limit
+I814=0				;disable -ve software limit
+I914=0				;disable -ve software limit
+I1014=0				;disable -ve software limit
+I1114=0				;disable -ve software limit
+
+IF(I723<0)
+	I7133=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=400
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7133=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=-400
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I823<0)
+	I7143=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7143=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=-400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I923<0)
+	I7213=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7213=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=-400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I1023<0)
+	I7223=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7223=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=-400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I1123<0)
+	I7233=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7233=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=-400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+I7132=6					;Look for rising edge of flag
+I7142=6					;Look for rising edge of flag
+I7212=6					;Look for rising edge of flag
+I7222=6					;Look for rising edge of flag
+I7232=6					;Look for rising edge of flag
+
+HOME7,8,9,10,11
+
+I723=I723 * -1			;Reverse Home direction
+I823=I823 * -1			;Reverse Home direction
+I923=I923 * -1			;Reverse Home direction
+I1023=I1023 * -1			;Reverse Home direction
+I1123=I1123 * -1			;Reverse Home direction
+
+I7132=1					;Look for Falling edge of flag
+I7142=1					;Look for Falling edge of flag
+I7212=1					;Look for Falling edge of flag
+I7222=1					;Look for Falling edge of flag
+I7232=1					;Look for Falling edge of flag
+
+I726=Q7					;reset home offset
+I826=Q8					;reset home offset
+I926=Q9					;reset home offset
+I1026=Q10					;reset home offset
+I1126=Q11					;reset home offset
+
+HOME7,8,9,10,11
+
+I724=Q27				;restore limit switches
+I824=Q28				;restore limit switches
+I924=Q29				;restore limit switches
+I1024=Q30				;restore limit switches
+I1124=Q31				;restore limit switches
+
+I723=I723 * -1			;Reverse Home direction
+I823=I823 * -1			;Reverse Home direction
+I923=I923 * -1			;Reverse Home direction
+I1023=I1023 * -1			;Reverse Home direction
+I1123=I1123 * -1			;Reverse Home direction
+
+M1=0
+M6=0
+CLOSE
+
+
+
+OPEN PROG 24 CLEAR ;ALL PORT AXES
+M1=1
+M6=25
+
+
+Q22=I224			;backup limit switches
+Q23=I324			;backup limit switches
+Q24=I424			;backup limit switches
+Q25=I524			;backup limit switches
+Q26=I624			;backup limit switches
+
+
+I224=$20000			;disable limit switches
+I324=$20000			;disable limit switches
+I424=$20000			;disable limit switches
+I524=$20000			;disable limit switches
+I624=$20000			;disable limit switches
+
+
+Q2=I226				;backup home offset
+Q3=I326				;backup home offset
+Q4=I426				;backup home offset
+Q5=I526				;backup home offset
+Q6=I626				;backup home offset
+
+
+I226=0				;Home Offset = 0
+I326=0				;Home Offset = 0
+I426=0				;Home Offset = 0
+I526=0				;Home Offset = 0
+I626=0				;Home Offset = 0
+
+
+I213=0				;disable +ve software limit
+I313=0				;disable +ve software limit
+I413=0				;disable +ve software limit
+I513=0				;disable +ve software limit
+I613=0				;disable +ve software limit
+I214=0				;disable -ve software limit
+I314=0				;disable -ve software limit
+I414=0				;disable -ve software limit
+I514=0				;disable -ve software limit
+I614=0				;disable -ve software limit
+
+
+IF(I223<0)
+	I7023=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=400
+		Q13=7
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7023=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=-400
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I323<0)
+	I7033=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7033=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=-400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I423<0)
+	I7043=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M47&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7042=10			;Look for falling edge of flag
+		I423=I423 * -1		;Reverse Home direction
+		I426=400
+		HOME4
+		I423=I423 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7043=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M47&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7042=10			;Look for falling edge of flag
+		I423=I423 * -1		;Reverse Home direction
+		I426=-400
+		HOME4
+		I423=I423 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I523<0)
+	I7113=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7113=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=-400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I623<0)
+	I7123=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7123=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=-400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+
+I7022=6					;Look for rising edge of flag
+I7032=6					;Look for rising edge of flag
+I7042=6					;Look for rising edge of flag
+I7112=6					;Look for rising edge of flag
+I7122=6					;Look for rising edge of flag
+
+HOME2,3,4,5,6
+I223=I223 * -1			;Reverse Home direction
+I323=I323 * -1			;Reverse Home direction
+I423=I423 * -1			;Reverse Home direction
+I523=I523 * -1			;Reverse Home direction
+I623=I623 * -1			;Reverse Home direction
+
+I7022=1					;Look for Falling edge of flag
+I7032=1					;Look for Falling edge of flag
+I7042=1					;Look for Falling edge of flag
+I7112=1					;Look for Falling edge of flag
+I7122=1					;Look for Falling edge of flag
+
+I226=Q2					;reset home offset
+I326=Q3					;reset home offset
+I426=Q4					;reset home offset
+I526=Q5					;reset home offset
+I626=Q6					;reset home offset
+
+HOME2,3,4,5,6
+
+I224=Q22				;restore limit switches
+I324=Q23				;restore limit switches
+I424=Q24				;restore limit switches
+I524=Q25				;restore limit switches
+I624=Q26				;restore limit switches
+
+I223=I223 * -1			;Reverse Home direction
+I323=I323 * -1			;Reverse Home direction
+I423=I423 * -1			;Reverse Home direction
+I523=I523 * -1			;Reverse Home direction
+I623=I623 * -1			;Reverse Home direction
+
+M1=0
+M6=0
+CLOSE
+
+
+OPEN PROG 26 CLEAR ;ALL GKN AXES
+M1=1
+M6=26
+
+
+Q22=I224			;backup limit switches
+Q23=I324			;backup limit switches
+Q24=I424			;backup limit switches
+Q25=I524			;backup limit switches
+Q26=I624			;backup limit switches
+Q27=I724			;backup limit switches
+Q28=I824			;backup limit switches
+Q29=I924			;backup limit switches
+Q30=I1024			;backup limit switches
+Q31=I1124			;backup limit switches
+
+
+I224=$20000			;disable limit switches
+I324=$20000			;disable limit switches
+I424=$20000			;disable limit switches
+I524=$20000			;disable limit switches
+I624=$20000			;disable limit switches
+I724=$20000			;disable limit switches
+I824=$20000			;disable limit switches
+I924=$20000			;disable limit switches
+I1024=$20000			;disable limit switches
+I1124=$20000			;disable limit switches
+
+
+Q2=I226				;backup home offset
+Q3=I326				;backup home offset
+Q4=I426				;backup home offset
+Q5=I526				;backup home offset
+Q6=I626				;backup home offset
+Q7=I726				;backup home offset
+Q8=I826				;backup home offset
+Q9=I926				;backup home offset
+Q10=I1026			;backup home offset
+Q11=I1126			;backup home offset
+
+
+I226=0				;Home Offset = 0
+I326=0				;Home Offset = 0
+I426=0				;Home Offset = 0
+I526=0				;Home Offset = 0
+I626=0				;Home Offset = 0
+I726=0				;Home Offset = 0
+I826=0				;Home Offset = 0
+I926=0				;Home Offset = 0
+I1026=0				;Home Offset = 0
+I1126=0				;Home Offset = 0
+
+
+
+I213=0				;disable +ve software limit
+I313=0				;disable +ve software limit
+I413=0				;disable +ve software limit
+I513=0				;disable +ve software limit
+I613=0				;disable +ve software limit
+I214=0				;disable -ve software limit
+I314=0				;disable -ve software limit
+I414=0				;disable -ve software limit
+I514=0				;disable -ve software limit
+I614=0				;disable -ve software limit
+
+I713=0				;disable +ve software limit
+I813=0				;disable +ve software limit
+I913=0				;disable +ve software limit
+I1013=0				;disable +ve software limit
+I1113=0				;disable +ve software limit
+I714=0				;disable -ve software limit
+I814=0				;disable -ve software limit
+I914=0				;disable -ve software limit
+I1014=0				;disable -ve software limit
+I1114=0				;disable -ve software limit
+
+
+IF(I223<0)
+	I7023=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=400
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7023=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M27&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7022=10			;Look for falling edge of flag
+		I223=I223 * -1		;Reverse Home direction
+		I226=-400
+		HOME2
+		I223=I223 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I323<0)
+	I7033=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7033=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M37&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7032=10			;Look for falling edge of flag
+		I323=I323 * -1		;Reverse Home direction
+		I326=-400
+		HOME3
+		I323=I323 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I423<0)
+	I7043=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M47&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7042=10			;Look for falling edge of flag
+		I423=I423 * -1		;Reverse Home direction
+		I426=400
+		HOME4
+		I423=I423 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7043=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M47&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7042=10			;Look for falling edge of flag
+		I423=I423 * -1		;Reverse Home direction
+		I426=-400
+		HOME4
+		I423=I423 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I523<0)
+	I7113=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7113=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M57&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7112=10			;Look for falling edge of flag
+		I523=I523 * -1		;Reverse Home direction
+		I526=-400
+		HOME5
+		I523=I523 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I623<0)
+	I7123=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7123=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M67&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7122=10			;Look for falling edge of flag
+		I623=I623 * -1		;Reverse Home direction
+		I626=-400
+		HOME6
+		I623=I623 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+Q13=9
+IF(I723<0)
+	Q13=10
+	I7133=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=400
+		Q13=99
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7133=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M77&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7132=10			;Look for falling edge of flag
+		I723=I723 * -1		;Reverse Home direction
+		I726=-400
+		Q13=999
+		HOME7
+		I723=I723 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I823<0)
+	I7143=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7143=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M87&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7142=10			;Look for falling edge of flag
+		I823=I823 * -1		;Reverse Home direction
+		I826=-400
+		HOME8
+		I823=I823 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I923<0)
+	I7213=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7213=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M97&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7212=10			;Look for falling edge of flag
+		I923=I923 * -1		;Reverse Home direction
+		I926=-400
+		HOME9
+		I923=I923 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I1023<0)
+	I7223=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7223=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M107&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7222=10			;Look for falling edge of flag
+		I1023=I1023 * -1		;Reverse Home direction
+		I1026=-400
+		HOME10
+		I1023=I1023 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+IF(I1123<0)
+	I7233=2					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$400000=$400000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ELSE
+	I7233=1					;Flag==1:+ve limit 2:-ve limit
+	IF(M117&$200000=$200000)	;if already on the 200000:+ve limit 400000:-ve limit
+		I7232=10			;Look for falling edge of flag
+		I1123=I1123 * -1		;Reverse Home direction
+		I1126=-400
+		HOME11
+		I1123=I1123 * -1		;Reverse Home direction
+	ENDIF
+ENDIF
+
+
+I7022=6					;Look for rising edge of flag
+I7032=6					;Look for rising edge of flag
+I7042=6					;Look for rising edge of flag
+I7112=6					;Look for rising edge of flag
+I7122=6					;Look for rising edge of flag
+I7132=6					;Look for rising edge of flag
+I7142=6					;Look for rising edge of flag
+I7212=6					;Look for rising edge of flag
+I7222=6					;Look for rising edge of flag
+I7232=6					;Look for rising edge of flag
+
+HOME2,3,4,6,7,8,9,10,11 ;,5
+
+I223=I223 * -1			;Reverse Home direction
+I323=I323 * -1			;Reverse Home direction
+I423=I423 * -1			;Reverse Home direction
+;I523=I523 * -1			;Reverse Home direction
+I623=I623 * -1			;Reverse Home direction
+I723=I723 * -1			;Reverse Home direction
+I823=I823 * -1			;Reverse Home direction
+I923=I923 * -1			;Reverse Home direction
+I1023=I1023 * -1		;Reverse Home direction
+I1123=I1123 * -1		;Reverse Home direction
+
+I7022=1					;Look for Falling edge of flag
+I7032=1					;Look for Falling edge of flag
+I7042=1					;Look for Falling edge of flag
+;I7112=1					;Look for Falling edge of flag
+I7122=1					;Look for Falling edge of flag
+I7132=1					;Look for Falling edge of flag
+I7142=1					;Look for Falling edge of flag
+I7212=1					;Look for Falling edge of flag
+I7222=1					;Look for Falling edge of flag
+I7232=1					;Look for Falling edge of flag
+
+I226=Q2					;reset home offset
+I326=Q3					;reset home offset
+I426=Q4					;reset home offset
+;I526=Q5					;reset home offset
+I626=Q6					;reset home offset
+I726=Q7					;reset home offset
+I826=Q8					;reset home offset
+I926=Q9					;reset home offset
+I1026=Q10					;reset home offset
+I1126=Q11					;reset home offset
+
+HOME2,3,4,6,7,8,9,10,11 ;,5
+
+I224=Q22				;restore limit switches
+I324=Q23				;restore limit switches
+I424=Q24				;restore limit switches
+;I524=Q25				;restore limit switches
+I624=Q26				;restore limit switches
+I724=Q27				;restore limit switches
+I824=Q28				;restore limit switches
+I924=Q29				;restore limit switches
+I1024=Q30				;restore limit switches
+I1124=Q31				;restore limit switches
+
+I223=I223 * -1			;Reverse Home direction
+I323=I323 * -1			;Reverse Home direction
+I423=I423 * -1			;Reverse Home direction
+;I523=I523 * -1			;Reverse Home direction
+I623=I623 * -1			;Reverse Home direction
+I723=I723 * -1			;Reverse Home direction
+I823=I823 * -1			;Reverse Home direction
+I923=I923 * -1			;Reverse Home direction
+I1023=I1023 * -1			;Reverse Home direction
+I1123=I1123 * -1			;Reverse Home direction
+
+M1=0
+M6=0
+CLOSE

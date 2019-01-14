@@ -1,0 +1,54 @@
+[Root]
+CommandCount=7
+FlashEndIndex=3
+DisplayDialog=0
+FileVerbose=ReadbackFlashSWSectionVerbose.txt
+CloseDialog=0
+KeepAlive=0
+DebugWindow=0
+Extend=1
+
+[Command:0]
+CmdType=Memory
+File=TemplateFlashSWSection.txt
+;Alloc=1	=>see Address
+;Size=0x00000000	=> see File
+Address=0x90001000	;value out of the WriteFlashInRam section
+SWSection=1
+
+[Command:1]
+CmdType=Memory
+File=TemplateFlashSWSection.txt
+;Alloc=1	=>see Address
+;Size=0x00000000	=> see File
+Address=0x90002000	;value out of the WriteFlashInRam section
+SWSection=1
+
+[Command:2]
+CmdType=FlashRead
+FlashAddr=0x00700000
+MemIndex=0
+
+[Command:3]
+CmdType=FlashRead
+FlashAddr=0x007E0000
+MemIndex=1
+
+[Command:4]
+CmdType=MemToFile
+File=FlashSWSection_readback_70.txt
+MemIndex=0
+Swap=1
+
+[Command:5]
+CmdType=MemToFile
+File=FlashSWSection_readback_7E.txt
+MemIndex=1
+Swap=1
+
+;[Command:6]
+;CmdType=WriteFlashInRam
+
+[Command:6]
+CmdType=Version
+

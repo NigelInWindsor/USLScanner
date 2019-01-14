@@ -1,0 +1,36 @@
+386_OBJECTS= \
+    $(_OBJ_DIR)\i386\servodriver.res \
+    $(_OBJ_DIR)\i386\debugprint.obj \
+    $(_OBJ_DIR)\i386\init.obj \
+    $(_OBJ_DIR)\i386\dispatch.obj \
+    $(_OBJ_DIR)\i386\deviceio.obj
+
+PASS0_386_OBJECTS=
+
+IA64_OBJECTS= \
+    $(_OBJ_DIR)\ia64\servodriver.res \
+    $(_OBJ_DIR)\ia64\debugprint.obj \
+    $(_OBJ_DIR)\ia64\init.obj \
+    $(_OBJ_DIR)\ia64\dispatch.obj \
+    $(_OBJ_DIR)\ia64\deviceio.obj
+
+PASS0_IA64_OBJECTS=
+
+AMD64_OBJECTS= \
+    $(_OBJ_DIR)\amd64\servodriver.res \
+    $(_OBJ_DIR)\amd64\debugprint.obj \
+    $(_OBJ_DIR)\amd64\init.obj \
+    $(_OBJ_DIR)\amd64\dispatch.obj \
+    $(_OBJ_DIR)\amd64\deviceio.obj
+
+PASS0_AMD64_OBJECTS=
+
+ARM_OBJECTS= \
+    $(_OBJ_DIR)\arm\servodriver.res \
+    $(_OBJ_DIR)\arm\debugprint.obj \
+    $(_OBJ_DIR)\arm\init.obj \
+    $(_OBJ_DIR)\arm\dispatch.obj \
+    $(_OBJ_DIR)\arm\deviceio.obj
+
+PASS0_ARM_OBJECTS=
+

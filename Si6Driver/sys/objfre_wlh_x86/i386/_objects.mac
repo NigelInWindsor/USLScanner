@@ -1,0 +1,20 @@
+MUI_386_OBJECTS= \
+ $O\si6driver.res
+
+386_OBJECTS= \
+ $O\si6driver.res \
+ $O\debugprint.obj \
+ $O\init.obj \
+ $O\dispatch.obj \
+ $O\deviceio.obj
+
+
+_RES_FILE=$O\si6driver.res
+
+
+
+# lowercased
+BASEDIR=c:\winddk\6000
+OBJECT_ROOT=c:\winddk\6000
+MAKEDIR_LOWERCASE=c:\windowsprojects\uslscanner\si6driver\sys
+OBJ_PATH=c:\windowsprojects\uslscanner\si6driver\sys

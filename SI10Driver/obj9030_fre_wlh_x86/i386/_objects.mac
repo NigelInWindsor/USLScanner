@@ -1,0 +1,29 @@
+
+
+386_OBJECTS=\
+ $(OBJ_PATH)\$O\apifunc.obj \
+ $(OBJ_PATH)\$O\dispatch.obj \
+ $(OBJ_PATH)\$O\driver.obj \
+ $(OBJ_PATH)\$O\eep_9000.obj \
+ $(OBJ_PATH)\$O\globalvars.obj \
+ $(OBJ_PATH)\$O\pcifunc.obj \
+ $(OBJ_PATH)\$O\plugplay.obj \
+ $(OBJ_PATH)\$O\plxchipfn.obj \
+ $(OBJ_PATH)\$O\plxchipapi.obj \
+ $(OBJ_PATH)\$O\plxinterrupt.obj \
+ $(OBJ_PATH)\$O\power.obj \
+ $(OBJ_PATH)\$O\suppfunc.obj \
+ $(OBJ_PATH)\$O\debugprint.obj \
+
+
+_RES_FILE=$(OBJ_PATH)\$O\driverver.res
+
+
+
+# lowercased
+BASEDIR=c:\winddk
+OBJECT_ROOT=c:\winddk
+MAKEDIR_LOWERCASE=c:\windowsprojects\uslscanner\si10driver
+OBJ_PATH=c:\windowsprojects\uslscanner\si10driver
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

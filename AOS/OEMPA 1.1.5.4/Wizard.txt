@@ -1,0 +1,95 @@
+# TEMPLATE - SINGLE-CHANNEL - LINEAR
+#Fill in following input parameters, save the file and
+#close notepad to go on!
+
+[Specimen]
+#"Velocity" is the velocity in the specimen (unit=meter/sec).
+Velocity=6300.0 m/s
+#"Wave" is the wave ('L' for Longitudinal and 'T' for Transverse).
+Wave=L
+#"Radius" is 0.0 for a plane (unit=millimeter).
+Radius=0.0 mm
+
+[Wedge]
+#"Enable" should be used if the wedge is used (0 to disable or 1 to enable).
+Enable=0
+#"Velocity" is the velocity in the wedge (unit=meter/sec).
+Velocity=1480.0 m/s
+#"Height" is the probe height over the specimen for the middle of the probe (unit=milliter).
+Height=0.0 mm
+#"Angle" is the probe angle over the specimen (unit=degree).
+Angle=0.0 deg
+
+[Probe]
+#"ElementCount" is the element count (linear phased array).
+ElementCount=128
+#"Pitch" is the element pitch.
+Pitch=1.0 mm
+#"Frequency" is the frequency (used to set the pulse width) unit is Megahertz.
+Frequency=1.00 MHz
+#"Radius" is 0.0 for a plane probe (unit=millimeter).
+Radius=0.0 mm
+
+[Scan\Linear]
+#"Count" is the aperture element count.
+Count=1
+#"DepthEmission" is the emission depth of all apertures (unit=millimeter).
+DepthEmission=100.0 mm
+#"DepthReception" multiples depths is possible for DDF (unit=millimeter).
+#"DepthReception=60.0;80.0;100.0 mm" <= DDF example
+DepthReception=100.0 mm
+#"Angle" is the angle of all apertures (unit=degree).
+Angle=0.0 deg
+#"ElementStart" is the first element of the first aperture.
+ElementStart=1
+#"ElementStop" is the first element of the last aperture.
+ElementStop=1
+#"ElementStep" is the element step.
+ElementStep=1
+#"DepthMode" could be "TrueDepth", "SoundPath" or "TrueDepthBigBar".
+DepthMode=TrueDepth
+
+[Ascan]
+#"Start" is the digitizing start time in microsecond.
+Start=0.000 탎
+#"Range" is the digitizing range in microsecond.
+Range=30.000 탎
+#"TimeSlot" is the time between two pulse shot in microsecond.
+TimeSlot=2000.000 탎
+
+[Cscan]
+#"Count" is the Cscan gate count (range is 0 to 4).
+Count=0
+#"Start[0]" is the start time in microsecond for the first Cscan gate.
+Start[0]=0.000 탎
+Start[1]=0.000 탎
+Start[2]=0.000 탎
+Start[3]=0.000 탎
+#"Range[0]" is the range in microsecond for the first Cscan gate.
+Range[0]=1.000 탎
+Range[1]=1.000 탎
+Range[2]=1.000 탎
+Range[3]=1.000 탎
+#"Threshold[0]" is the threshold in percent for the first Cscan gate.
+Threshold[0]=50.0 %
+Threshold[1]=50.0 %
+Threshold[2]=50.0 %
+Threshold[3]=50.0 %
+#"Rectification[0]" is the Rectification mode for the first Cscan gate.
+#Available values: "Signed", "Unsigned", "UnsignedPositive", "UnsignedNegative"
+Rectification[0]=Signed
+Rectification[1]=Signed
+Rectification[2]=Signed
+Rectification[3]=Signed
+#"ModeAmp[0]" is the Amplitude mode for the first Cscan gate.
+#Available values: "Absolute", "Maximum", "Minimum", "PeakToPeak"
+ModeAmp[0]=Absolute
+ModeAmp[1]=Absolute
+ModeAmp[2]=Absolute
+ModeAmp[3]=Absolute
+#"ModeTof[0]" is the TimeOfFlight mode for the first Cscan gate.
+#Available values: "AmplitudeDetection", "ThresholdCross", "ZeroFirstAfterThresholdCross", "ZeroLastBeforeThresholdCross"
+ModeTof[0]=AmplitudeDetection
+ModeTof[1]=AmplitudeDetection
+ModeTof[2]=AmplitudeDetection
+ModeTof[3]=AmplitudeDetection

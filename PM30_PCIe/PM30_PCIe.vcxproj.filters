@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{16016d1a-086c-4454-8f2a-21b33bc3e03e}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Build">
+      <UniqueIdentifier>{23bf6f04-c07a-4eb0-aa82-2b6b30b703c1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pnp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PM30_PCIe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PM30_PCIe.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PM30_PCIe.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Makefile">
+      <Filter>Build</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Sources">
+      <Filter>Build</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PM30_PCIe.bsc" />
+  </ItemGroup>
+</Project>

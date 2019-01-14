@@ -1,0 +1,604 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#include "verrsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "#include ""verrsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#include ""res\\SectorWeld.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""      // Standard components\r\n"
+    "#if !defined(_AFXDLL)\r\n"
+    "#include ""afxprint.rc""        // printing/print preview resources\r\n"
+    "#include ""afxribbon.rc""        // MFC ribbon and control bar resources\r\n"
+    "#endif\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_DYNAMIC             ICON                    "res\\idr_bsco.ico"
+IDR_MAINFRAME           ICON                    "res\\SectorWeld.ico"
+IDR_SectorWeldTYPE      ICON                    "res\\SectorWeldDoc.ico"
+IDR_BSCOPE              ICON                    "res\\icon1.ico"
+IDR_CSCOPE              ICON                    "res\\icon2.ico"
+IDR_DSCOPE              ICON                    "res\\icon3.ico"
+IDR_DYNAMIC_NC          ICON                    "res\\idr_dyna.ico"
+IDR_ASCOPE              ICON                    "res\\ico00001.ico"
+IDR_DYNAMIC_CSCOPE      ICON                    "res\\idr_csco.ico"
+IDR_HARDWARE_CSCOPE     ICON                    "res\\idr_hwc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+IDR_MAINFRAME_256 TOOLBAR 16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Dialogs",                     ID_FILE_LOAD_DEMO_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "&Load",                       ID_FILE_LOAD_DATA
+        MENUITEM "&Save",                       ID_FILE_SAVE_DATA
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "Views"
+    BEGIN
+        MENUITEM "Dynamic View",                ID_VIEWS_DYNAMIC, INACTIVE
+        MENUITEM "Dynamic NC View",             ID_VIEWS_DYNAMIC_NC, INACTIVE
+        MENUITEM "Dynamic C-scan (SW)",         ID_VIEWS_DYNAMIC_CSCOPE, INACTIVE
+        POPUP "Dynamic Hardware Cscan"
+        BEGIN
+            MENUITEM "C-scan 0 Amplitude",          ID_VIEWS_HARDWARE_CSCOPE_AMP_0
+            MENUITEM "C-scan 1 Amplitude",          ID_VIEWS_HARDWARE_CSCOPE_AMP_1
+            MENUITEM "C-scan 2 Amplitude",          ID_VIEWS_HARDWARE_CSCOPE_AMP_2
+            MENUITEM "C-scan 3 Amplitude",          ID_VIEWS_HARDWARE_CSCOPE_AMP_3
+            MENUITEM SEPARATOR
+            MENUITEM "C-scan 0 Time Of Flight",     ID_VIEWS_HARDWARE_CSCOPE_TOF_0
+            MENUITEM "C-scan 1 Time Of Flight",     ID_VIEWS_HARDWARE_CSCOPE_TOF_1
+            MENUITEM "C-scan 2 Time Of Flight",     ID_VIEWS_HARDWARE_CSCOPE_TOF_2
+            MENUITEM "C-scan 3 Time Of Flight",     ID_VIEWS_HARDWARE_CSCOPE_TOF_3
+        END
+        MENUITEM "A-scan",                      ID_VIEWS_ASCOPE, INACTIVE
+        MENUITEM "B-scan",                      ID_VIEWS_BSCOPE, INACTIVE
+        MENUITEM "C-scan",                      ID_VIEWS_CSCOPE, INACTIVE
+        MENUITEM "D-scan",                      ID_VIEWS_DSCOPE, INACTIVE
+        MENUITEM "B-scan (//)",                 ID_VIEWS_DSCOPE_CORRECTED, INACTIVE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About OEMPASector...",       ID_APP_ABOUT
+    END
+END
+
+IDR_SectorWeldTYPE MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About OEMPASector...",       ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About OEMPASector"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "OEMPASector, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2012",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_DIALOG_ASCOPE_TOOLBAR DIALOGEX 0, 0, 209, 21
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_COMBO_PROBE,3,3,48,47,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_CYCLE,61,3,48,422,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_DISPLAY_MODE,120,3,82,47,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DIALOG_DYNAMIC_SETTING DIALOGEX 0, 0, 124, 363
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "Probe 1",IDC_RADIO_PROBE_1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,14,22,41,10
+    CONTROL         "Probe 2",IDC_RADIO_PROBE_2,"Button",BS_AUTORADIOBUTTON,14,103,41,10
+    CONTROL         "Both probes",IDC_RADIO_PROBE_3,"Button",BS_AUTORADIOBUTTON,14,8,55,10
+    EDITTEXT        IDC_EDIT_CYCLE_QUANTITY_1,59,34,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_POINT_QUANTITY_1,59,50,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_MINIMUM_ANGLE_1,59,66,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_STEP_ANGLE_1,59,82,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_CYCLE_QUANTITY_2,59,115,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_POINT_QUANTITY_2,59,131,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_MINIMUM_ANGLE_2,59,147,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_STEP_ANGLE_2,59,163,49,14,ES_AUTOHSCROLL | WS_DISABLED
+    EDITTEXT        IDC_EDIT_ENCODER_AXIS_LENGTH,7,199,69,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ENCODER_AXIS_STEP,7,230,69,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PIECE_THICKNESS,7,258,69,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_VELOCITY,7,287,69,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SAMPLING_PERIOD,7,317,69,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Apply",IDC_BUTTON_APPLY_SETTING,6,335,111,20
+    LTEXT           "Cycle Qty",IDC_STATIC,18,36,32,8
+    LTEXT           "Point Qty",IDC_STATIC,18,52,31,8
+    LTEXT           "Min Angle",IDC_STATIC,18,68,32,8
+    LTEXT           "Step Angle",IDC_STATIC,18,84,36,8
+    LTEXT           "Encoder Axis Length",IDC_STATIC,7,188,66,8
+    LTEXT           "Encoder Axis Step",IDC_STATIC,7,219,59,8
+    LTEXT           "Piece Thickness",IDC_STATIC,7,247,50,8
+    LTEXT           "Velocity",IDC_STATIC,7,276,26,8
+    LTEXT           "Sampling Period",IDC_STATIC,7,305,51,8
+    GROUPBOX        "",IDC_STATIC,6,22,111,78
+    GROUPBOX        "",IDC_STATIC,7,103,111,78
+    LTEXT           "Cycle Qty",IDC_STATIC,17,117,32,8
+    LTEXT           "Point Qty",IDC_STATIC,17,134,31,8
+    LTEXT           "Min Angle",IDC_STATIC,17,150,32,8
+    LTEXT           "Step Angle",IDC_STATIC,17,166,36,8
+END
+
+IDD_DIALOG_ANALYSIS DIALOGEX 0, 0, 155, 218
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Analysis Tools"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "Probe 1",IDC_RADIO_PROBE_1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,107,7,41,10
+    CONTROL         "Probe 2",IDC_RADIO_PROBE_2,"Button",BS_AUTORADIOBUTTON,107,20,41,10
+    CONTROL         "Both",IDC_RADIO_BOTH_PROBE,"Button",BS_AUTORADIOBUTTON,107,34,31,10
+    GROUPBOX        "",IDC_STATIC,7,6,89,31
+    GROUPBOX        "",IDC_STATIC,7,44,141,122
+    CONTROL         "Slice",IDC_RADIO_SLICE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,12,6,26,10
+    CONTROL         "Gate",IDC_RADIO_GATE,"Button",BS_AUTORADIOBUTTON,13,43,28,10
+    EDITTEXT        IDC_EDIT_Y_POS,36,18,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_Y_POS,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,88,23,11,14
+    EDITTEXT        IDC_EDIT_X_MIN,37,54,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_X_MIN,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,56,11,14
+    EDITTEXT        IDC_EDIT_X_MAX,37,71,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_X_MAX,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,75,11,14
+    EDITTEXT        IDC_EDIT_Y_MIN,37,89,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_Y_MIN,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,94,11,14
+    EDITTEXT        IDC_EDIT_Y_MAX,37,107,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_Y_MAX,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,112,11,14
+    EDITTEXT        IDC_EDIT_Z_MIN,37,125,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_Z_MIN,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,131,11,14
+    EDITTEXT        IDC_EDIT_Z_MAX,37,144,52,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_Z_MAX,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,89,147,11,14
+    LTEXT           "X Min",IDC_STATIC,15,56,18,8
+    LTEXT           "X Max",IDC_STATIC,15,73,20,8
+    LTEXT           "Y Min",IDC_STATIC,15,91,18,8
+    LTEXT           "Y Max",IDC_STATIC,15,109,20,8
+    LTEXT           "Z Min",IDC_STATIC,15,128,18,8
+    LTEXT           "Z Max",IDC_STATIC,15,146,20,8
+    LTEXT           "Y Pos",IDC_STATIC,15,20,18,8
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_X_MIN,93,54,50,14
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_X_MAX,93,71,50,14
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_Y_MIN,93,89,50,14
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_Y_MAX,93,108,50,14
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_Z_MIN,93,126,50,14
+    PUSHBUTTON      "Reset",IDC_BUTTON_RESET_Z_MAX,93,145,50,14
+    COMBOBOX        IDC_COMBO_CYCLE,33,177,29,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "B-scan (//)",IDC_STATIC,7,167,60,27
+    LTEXT           "Cycle",IDC_STATIC,12,179,18,8
+    CONTROL         "Backwall Rebound",IDC_CHECK_BACKWALL_REBOUND,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,17,194,45,15
+    LTEXT           "Cx",IDC_STATIC_CURSOR_X,80,179,8,8
+    GROUPBOX        "Cursors",IDC_STATIC,71,167,77,43
+    EDITTEXT        IDC_EDIT_CURSOR_X,90,176,31,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "mm",IDC_STATIC_CURSOR_UNIT_X,127,179,14,8
+    LTEXT           "Cz",IDC_STATIC_CURSOR_Z,80,195,8,8
+    EDITTEXT        IDC_EDIT_CURSOR_Z,90,192,31,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "mm",IDC_STATIC_CURSOR_UNIT_Z,127,195,14,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,5,4
+ PRODUCTVERSION 1,1,5,4
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Advanced OEM Solutions"
+            VALUE "FileDescription", "OEMPASector"
+            VALUE "FileVersion", "1.0.4.0"
+            VALUE "InternalName", "OEMPASector.exe"
+            VALUE "LegalCopyright", "Advanced OEM Solutions.  All rights reserved."
+            VALUE "OriginalFilename", "OEMPASector.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.4.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_DIALOG_ASCOPE_TOOLBAR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 202
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 14
+    END
+
+    IDD_DIALOG_DYNAMIC_SETTING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 117
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 356
+    END
+
+    IDD_DIALOG_ANALYSIS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 148
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 211
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DIALOG_ASCOPE_TOOLBAR DLGINIT
+BEGIN
+    IDC_COMBO_PROBE, 0x403, 8, 0
+0x7250, 0x626f, 0x2065, 0x0031, 
+    IDC_COMBO_PROBE, 0x403, 8, 0
+0x7250, 0x626f, 0x2065, 0x0032, 
+    IDC_COMBO_DISPLAY_MODE, 0x403, 11, 0
+0x6e4f, 0x2065, 0x4320, 0x6379, 0x656c, "\000" 
+    IDC_COMBO_DISPLAY_MODE, 0x403, 16, 0
+0x654d, 0x6772, 0x2065, 0x6c61, 0x206c, 0x7963, 0x6c63, 0x0065, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "OEMPA Sector"
+    IDR_ASCOPE              "A-scan"
+    IDR_SectorWeldTYPE      "\nOEMPASector\nOEMPASector\n\n\nOEMPASector.Document\nOEMPASector.Document"
+    ID_WINDOW_MANAGER       "&Windows..."
+    IDR_DSCOPE_CORRECTED    "B-scan (//)"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "OEMPASector"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_STATUS_PANE1        "Pane 1"
+    IDS_STATUS_PANE2        "Pane 2"
+    IDS_TOOLBAR_STANDARD    "Standard"
+    IDS_TOOLBAR_CUSTOMIZE   "Customize..."
+    IDR_DYNAMIC             "Dynamic View"
+    IDR_DYNAMIC_NR          "Dynamic View - Non Corrected"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_EDIT_MENU           "Edit"
+    IDR_BSCOPE              "B-scan"
+    IDR_CSCOPE              "C-scan"
+    IDR_DSCOPE              "D-scan"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#include "res\SectorWeld.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"      // Standard components
+#if !defined(_AFXDLL)
+#include "afxprint.rc"        // printing/print preview resources
+#include "afxribbon.rc"        // MFC ribbon and control bar resources
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

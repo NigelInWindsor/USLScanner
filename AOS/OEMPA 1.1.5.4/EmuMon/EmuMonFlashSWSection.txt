@@ -1,0 +1,57 @@
+;this file is used by EmuMon to emulate the flash memory of the device.
+; Speed and SpeedPasscode has been removed (see th etemplate file).
+
+[Root]
+ItemCount=9
+
+[Item:0]
+Name=IPAddress
+Type=string
+Value=192.168.1.11
+
+[Item:1]
+Name=NetMask
+Type=string
+Value=255.255.255.0
+
+[Item:2]
+Name=Gateway
+Type=string
+Value=192.168.1.1
+;please use IP 192.168.1.X with X in range 11 to 51.
+
+[Item:3]
+Name=MacEthernetAddress
+Type=string
+Value=0.10.53.0.1.2
+;specific for each board...
+
+[Item:4]
+Name=RXBoardCount
+Type=string
+Value=4
+;example: 1, 2, 3, 4
+
+[Item:5]
+Name=Multiplexer
+Type=string
+Value=0:0
+;examples: 0:0, 16:128, 32:128. 0:0 if no mux.
+
+[Item:6]
+Name=IOBoard
+Type=string
+Value=false
+;example: 0, 1, false, true
+
+[Item:7]
+Name=SerialNumber
+Type=string
+Value=3232N001
+;each HW have its own serial number
+
+[Item:8]
+Name=BoardName
+Type=string
+Value=3232N001
+;example: by default same as the serial number.

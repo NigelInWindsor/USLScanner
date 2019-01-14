@@ -1,0 +1,267 @@
+// CADLinePage.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "uslscanner.h"
+#include "CADLinePage.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+#include "ViewSheet.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// CCADLinePage property page
+
+IMPLEMENT_DYNCREATE(CCADLinePage, CPropertyPage)
+
+CCADLinePage::CCADLinePage(CWnd* pViewSheet) : CPropertyPage(CCADLinePage::IDD)
+{
+	//{{AFX_DATA_INIT(CCADLinePage)
+		// NOTE: the ClassWizard will add member initialization here
+	//}}AFX_DATA_INIT
+	m_bDlgCreated = false;
+	m_pViewSheet = (CViewSheet*)pViewSheet;
+}
+
+CCADLinePage::~CCADLinePage()
+{
+}
+
+void CCADLinePage::DoDataExchange(CDataExchange* pDX)
+{
+	CPropertyPage::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CCADLinePage)
+	DDX_Control(pDX, IDC_CHECK_LENGTH, m_checkLength);
+	DDX_Control(pDX, IDC_STATIC_FONT_SIZE, m_staticFontSize);
+	DDX_Control(pDX, IDC_STATIC_FONT_NAME, m_staticFontName);
+	DDX_Control(pDX, IDC_STATIC_COLOR, m_staticColor);
+	DDX_Control(pDX, IDC_SPIN_THICKNESS, m_spinWidth);
+	DDX_Control(pDX, IDC_EDIT_THICKNESS, m_editWidth);
+	DDX_Control(pDX, IDC_CHECK_SHOW, m_checkShowLine);
+	DDX_Control(pDX, IDC_CHECK_NODE1_ARROW_OUTSIDE, m_checkNode1ArrowOutside);
+	DDX_Control(pDX, IDC_CHECK_NODE0_ARROW_OUTSIDE, m_checkNode0ArrowOutside);
+	DDX_Control(pDX, IDC_CHECK_NODE1_ARROW, m_checkNode1ArrowInside);
+	DDX_Control(pDX, IDC_CHECK_NODE0_ARROW, m_checkNode0ArrowInside);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CCADLinePage, CPropertyPage)
+	//{{AFX_MSG_MAP(CCADLinePage)
+	ON_WM_VSCROLL()
+	ON_BN_CLICKED(IDC_CHECK_NODE0_ARROW, OnCheckNode0Arrow)
+	ON_BN_CLICKED(IDC_CHECK_NODE1_ARROW, OnCheckNode1Arrow)
+	ON_BN_CLICKED(IDC_CHECK_NODE0_ARROW_OUTSIDE, OnCheckNode0ArrowOutside)
+	ON_BN_CLICKED(IDC_CHECK_NODE1_ARROW_OUTSIDE, OnCheckNode1ArrowOutside)
+	ON_BN_CLICKED(IDC_CHECK_SHOW, OnCheckShow)
+	ON_EN_CHANGE(IDC_EDIT_THICKNESS, OnChangeEditThickness)
+	ON_BN_CLICKED(IDC_BUTTON_FONT, OnButtonFont)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_PAINT()
+	ON_BN_CLICKED(IDC_CHECK_LENGTH, OnCheckLength)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CCADLinePage message handlers
+
+BOOL CCADLinePage::OnInitDialog() 
+{
+	CPropertyPage::OnInitDialog();
+	
+
+	m_spinWidth.SetRange(1,20);
+
+	m_bDlgCreated = true;
+	UpdateAllControls();
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	              // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+
+void CCADLinePage::UpdateAllControls()
+{
+	APP App = (APP) AfxGetApp();
+	if(m_bDlgCreated != true) return;
+
+	CString Buff;
+
+	m_checkNode1ArrowOutside.SetCheck(App->m_LastSettings.nCADFlags & CAD_NODE1_ARROW_O);
+	m_checkNode0ArrowOutside.SetCheck(App->m_LastSettings.nCADFlags & CAD_NODE0_ARROW_O);
+	m_checkNode1ArrowInside.SetCheck(App->m_LastSettings.nCADFlags & CAD_NODE1_ARROW_I);
+	m_checkNode0ArrowInside.SetCheck(App->m_LastSettings.nCADFlags & CAD_NODE0_ARROW_I);
+	m_checkShowLine.SetCheck(App->m_LastSettings.nCADFlags & CAD_SHOW_LINE);
+	m_checkLength.SetCheck(App->m_LastSettings.nCADFlags & CAD_SHOW_LENGTH);
+
+	Buff.Format(_T("%d"),App->m_LastSettings.nCADLineWidth);
+	m_editWidth.SetWindowText(Buff);
+
+	m_spinWidth.SetPos(App->m_LastSettings.nCADLineWidth);
+
+	BlockFill();
+}
+
+void CCADLinePage::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
+{
+	APP App = (APP) AfxGetApp();
+	CSpinButtonCtrl *pSpin = (CSpinButtonCtrl *)pScrollBar;
+	int	nTemp = App->m_LastSettings.nCADLineWidth;
+
+	
+	switch(pSpin->GetDlgCtrlID()) {
+	case IDC_SPIN_THICKNESS:
+		App->m_LastSettings.nCADLineWidth=pSpin->GetPos()&0xffff;
+		if(nTemp - App->m_LastSettings.nCADLineWidth) {
+			m_spinWidth.SetPos(App->m_LastSettings.nCADLineWidth);
+			UpdateAllControls();
+			Invalidate();
+		}
+		break;
+	}
+
+	CPropertyPage::OnVScroll(nSBCode, nPos, pScrollBar);
+}
+
+void CCADLinePage::OnCheckNode0Arrow() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkNode0ArrowInside.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_NODE0_ARROW_I : App->m_LastSettings.nCADFlags &= ~CAD_NODE0_ARROW_I;
+	Invalidate();
+	
+}
+
+void CCADLinePage::OnCheckNode1Arrow() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkNode1ArrowInside.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_NODE1_ARROW_I : App->m_LastSettings.nCADFlags &= ~CAD_NODE1_ARROW_I;
+	Invalidate();
+}
+
+void CCADLinePage::OnCheckNode0ArrowOutside() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkNode0ArrowOutside.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_NODE0_ARROW_O : App->m_LastSettings.nCADFlags &= ~CAD_NODE0_ARROW_O;
+	Invalidate();
+}
+
+void CCADLinePage::OnCheckNode1ArrowOutside() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkNode1ArrowOutside.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_NODE1_ARROW_O : App->m_LastSettings.nCADFlags &= ~CAD_NODE1_ARROW_O;
+	Invalidate();
+}
+
+void CCADLinePage::OnCheckShow() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkShowLine.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_SHOW_LINE : App->m_LastSettings.nCADFlags &= ~CAD_SHOW_LINE;
+	Invalidate();
+}
+
+void CCADLinePage::OnCheckLength() 
+{
+	APP App = (APP) AfxGetApp();
+
+	m_checkLength.GetCheck() ? App->m_LastSettings.nCADFlags |= CAD_SHOW_LENGTH : App->m_LastSettings.nCADFlags &= ~CAD_SHOW_LENGTH;
+	Invalidate();
+}
+
+void CCADLinePage::OnChangeEditThickness() 
+{
+	APP App = (APP) AfxGetApp();
+	CString Buff;
+	int	nTemp = App->m_LastSettings.nCADLineWidth;
+
+	m_editWidth.GetWindowText(Buff);
+	App->m_LastSettings.nCADLineWidth = _ttoi(Buff);
+	if(App->m_LastSettings.nCADLineWidth<1) App->m_LastSettings.nCADLineWidth = 1;
+	if(App->m_LastSettings.nCADLineWidth>20) App->m_LastSettings.nCADLineWidth = 20;
+
+	if(nTemp - App->m_LastSettings.nCADLineWidth) {
+		m_spinWidth.SetPos(App->m_LastSettings.nCADLineWidth);
+		Invalidate();
+	}
+
+}
+
+void CCADLinePage::Invalidate()
+{
+	CViewSheet* pSheet = (CViewSheet*)m_pViewSheet;
+
+	if(pSheet->m_Data.m_nCADElementL>0) {
+		pSheet->m_Data.m_pCADElement[pSheet->m_Data.m_nCADPtr].SetToLastSettings();
+		pSheet->InvalidateChild();
+	}
+}
+
+void CCADLinePage::OnButtonFont() 
+{
+	APP App = (APP) AfxGetApp();
+	CString Buff;
+
+	CFontDialog dlg(&App->m_LastSettings.lfCAD);
+	dlg.m_cf.rgbColors = App->m_LastSettings.rgbCADText;
+	if(dlg.DoModal() == IDOK) {
+		dlg.GetCurrentFont(&App->m_LastSettings.lfCAD);
+		App->m_LastSettings.rgbCADText = dlg.GetColor();
+		Invalidate();
+	}
+}
+
+void CCADLinePage::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	APP App = (APP) AfxGetApp();
+	CRect rr;
+	CColorDialog dlg;
+
+	m_staticColor.GetWindowRect(&rr);
+	ScreenToClient(rr);
+	if(rr.PtInRect(point)) {
+		if(dlg.DoModal()==IDOK) {
+			App->m_LastSettings.rgbCADColor=dlg.GetColor();
+			BlockFill();
+			Invalidate();
+		}
+	}
+	
+	CPropertyPage::OnLButtonDown(nFlags, point);
+}
+
+
+
+void CCADLinePage::BlockFill()
+{
+	APP App = (APP) AfxGetApp();
+	CRect rr;
+	CDC* pDC = GetDC();
+
+	m_staticColor.GetWindowRect(&rr);
+	ScreenToClient(rr);
+
+	CBrush	Brush(App->m_LastSettings.rgbCADColor);
+
+	pDC->FillRect(rr,&Brush);
+
+	ReleaseDC(pDC);
+}
+
+void CCADLinePage::OnPaint() 
+{
+	CPaintDC dc(this); // device context for painting
+	
+
+	BlockFill();
+	// Do not call CPropertyPage::OnPaint() for painting messages
+}
+
+

@@ -1,0 +1,61 @@
+#include <windows.h>
+#include <ntverp.h>
+#include "Plx.h"
+
+
+
+// Remove entries defined in DDK headers
+#undef VER_PRODUCTNAME_STR
+#undef VER_PRODUCTVERSION
+#undef VER_PRODUCTVERSION_STR
+#undef VER_COMPANYNAME_STR
+
+#if defined(PLX_DEBUG)
+    #define PLX_DRV_TYPE                " checked"
+#else
+    #define PLX_DRV_TYPE                ""
+#endif
+
+#if defined(PLX_64BIT)
+    #define PLX_DRV_CPU                 "64"
+#else
+    #define PLX_DRV_CPU                 "32"
+#endif
+
+#define PLX_VER_NAME(chip, cpu, type)   "PLX PCI " #chip " WDM Driver (" cpu "-bit" type ")"
+
+
+#if defined(PCI9030)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9030, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9030.sys"
+#elif defined(PCI9050)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9050, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9050.sys"
+#elif defined(PCI9080)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9080, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9080.sys"
+#elif defined(PCI9054)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9054, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9054.sys"
+#elif defined(PCI9056)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9056, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9056.sys"
+#elif defined(PCI9656)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(9656, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx9656.sys"
+#elif defined(PCI8311)
+    #define VER_FILEDESCRIPTION_STR     PLX_VER_NAME(8311, PLX_DRV_CPU, PLX_DRV_TYPE)
+    #define VER_INTERNALNAME_STR        "Plx8311.sys"
+#endif
+
+
+#define VER_FILETYPE	                VFT_DRV
+#define VER_FILESUBTYPE	                VFT2_DRV_SYSTEM
+#define VER_PRODUCTNAME_STR             "PLX SDK"
+#define VER_PRODUCTVERSION              PLX_SDK_VERSION_MAJOR,PLX_SDK_VERSION_MINOR,PLX_SDK_VERSION_REVISION,0
+#define VER_PRODUCTVERSION_STR          PLX_SDK_VERSION_STRING
+#define VER_COMPANYNAME_STR             "PLX Technology, Inc."
+#define VER_LEGALCOPYRIGHT_STR          PLX_SDK_COPYRIGHT_STRING
+
+
+#include <Common.ver>

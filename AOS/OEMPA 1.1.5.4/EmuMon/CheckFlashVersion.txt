@@ -1,0 +1,11 @@
+;This file can be used to get the version of embedded SW
+
+[Root]
+CommandCount=1
+DisplayDialog=1
+FileVerbose=CheckFlashVersionVerbose.txt
+CloseDialog=1
+KeepAlive=0
+
+[Command:0]
+CmdType=Version

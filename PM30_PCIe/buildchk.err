@@ -1,0 +1,33 @@
+c:\win2000ddk\inc\common.ver (104) : error RC2104 : undefined keyword or key name: VER_FILEDESCRIPTION_STR
+cvtres() : error CVT1101: cannot open objchk\i386\driverver.tmp for reading
+eep_9000.h(72) : error C1189: #error :  ERROR: 'REG_EEPROM_CTRL' not defined
+driver.c(206) : error C2146: syntax error : missing ')' before identifier 'PLX_DRIVER_NAME_UNICODE'
+driver.c(211) : error C2059: syntax error : ')'
+driver.c(253) : error C2146: syntax error : missing ')' before identifier 'PLX_DRIVER_NAME_UNICODE'
+driver.c(258) : error C2059: syntax error : ')'
+driver.c(695) : error C2065: 'PLX_DRIVER_NAME' : undeclared identifier
+driver.c(695) : error C2143: syntax error : missing ')' before 'string'
+driver.c(695) : error C2059: syntax error : ')'
+driver.c(737) : error C2143: syntax error : missing ')' before 'string'
+driver.c(737) : error C2059: syntax error : ')'
+eep_9000.h(72) : error C1189: #error :  ERROR: 'REG_EEPROM_CTRL' not defined
+plugplay.c(384) : error C2146: syntax error : missing ')' before identifier 'PLX_DRIVER_NAME_UNICODE'
+plugplay.c(384) : error C2198: '_wcsicmp' : too few actual parameters
+plugplay.c(402) : error C2143: syntax error : missing '{' before '->'
+plugplay.c(402) : error C2059: syntax error : '->'
+plugplay.c(405) : error C2059: syntax error : 'return'
+plugplay.c(409) : error C2059: syntax error : '}'
+plugplay.c(627) : error C2146: syntax error : missing ')' before identifier 'PLX_DRIVER_NAME_UNICODE'
+plugplay.c(627) : error C2198: '_wcsicmp' : too few actual parameters
+plugplay.c(706) : error C2059: syntax error : 'return'
+plugplay.c(710) : error C2059: syntax error : '}'
+plxchipfn.c(67) : error C2065: 'PCI9030_INT_CTRL_STAT' : undeclared identifier
+plxchipfn.c(194) : error C2065: 'PCI9030_REMAP_SPACE0' : undeclared identifier
+plxchipfn.c(198) : error C2065: 'PCI9030_REMAP_SPACE1' : undeclared identifier
+plxchipfn.c(202) : error C2065: 'PCI9030_REMAP_SPACE2' : undeclared identifier
+plxchipfn.c(206) : error C2065: 'PCI9030_REMAP_SPACE3' : undeclared identifier
+plxchipfn.c(244) : error C2065: 'PLX_CHIP_CONTEXT_TOTAL_REGS' : undeclared identifier
+eep_9000.h(72) : error C1189: #error :  ERROR: 'REG_EEPROM_CTRL' not defined
+plxinterrupt.c(72) : error C2065: 'PCI9030_INT_CTRL_STAT' : undeclared identifier
+suppfunc.c(373) : error C2065: 'DEFAULT_SIZE_COMMON_BUFFER' : undeclared identifier
+suppfunc.c(625) : error C2065: 'CAP_ID_POWER_MAN' : undeclared identifier
