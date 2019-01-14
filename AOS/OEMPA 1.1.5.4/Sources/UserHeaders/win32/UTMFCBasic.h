@@ -1,0 +1,21 @@
+
+#pragma once
+
+#ifdef UTKERNELDRIVER_MFC_EXPORTS
+#define UTKERNEL_MFC_API __declspec(dllexport)
+#define UTKERNEL_MFC_API_ALIGN __declspec(dllexport) __declspec(align(8))
+#else
+#define UTKERNEL_MFC_API __declspec(dllimport)
+#define UTKERNEL_MFC_API_ALIGN __declspec(dllimport) __declspec(align(8))
+#endif
+
+#define WPARAM_EVENT_UPDATE					20000
+#define WPARAM_EVENT_RECALC_LAYOUT			20010
+#define WPARAM_EVENT_RELOAD_LAYOUT_END		20011
+#define WPARAM_EVENT_UPDATE_FROM_FRAME		20100
+#define WPARAM_EVENT_UPDATE_FROM_EXTERNAL	20101
+#define WPARAM_EVENT_UPDATE_LIMIT			20102
+#define WPARAM_EVENT_INIT_TREE_CTRL_OBJECT	20103
+#define WPARAM_EVENT_LANGUAGE_FROM_EXTERNAL	20104
+#define WPARAM_EVENT_EDIT_COMBO_END			20105
+
