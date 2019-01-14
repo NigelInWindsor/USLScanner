@@ -176,16 +176,6 @@ int CUSLut::FindPM30s()
 
 	m_nPM30Count=0;
 
-	//Check SI10 Firmware
-	/*if(FimrwareVersion < 01/02/13) {
-		return m_nPM30Count;
-		}
-	*/
-
-
-	//Range of Possible PM30 addresses are 8C, 8D, 8E, 8F
-	//Go through each discovering if present
-	//Populate m_nPM30Addresses and m_nNumofPM30s
 
 	for(int ii=0;ii<4;ii++){//4
 

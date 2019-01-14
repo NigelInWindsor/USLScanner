@@ -336,7 +336,6 @@ void CAxesPane::OnDblclkListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 		}
 	}
 
-
 	*pResult = 0;
 }
 
