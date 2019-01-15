@@ -29,6 +29,10 @@ void CPM40Page::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_ELAPSED_TIME, m_editElapsedTime);
 	DDX_Control(pDX, IDC_EDIT_IRQ_COUNTS, m_editIrqCounts);
 	DDX_Control(pDX, IDC_EDIT_MAILBOX_MAX_WAIT, m_editMailboxMaxWait);
+	DDX_Control(pDX, IDC_EDIT_COUNTS_TS1, m_editCountsTS1);
+	DDX_Control(pDX, IDC_EDIT_COUNTS_TS2, m_editCountsTS2);
+	DDX_Control(pDX, IDC_EDIT_COUNTS_TS3, m_editCountsTS3);
+	DDX_Control(pDX, IDC_EDIT_GENERAL, m_editGeneral);
 }
 
 
@@ -43,6 +47,7 @@ BEGIN_MESSAGE_MAP(CPM40Page, CPropertyPage)
 	ON_BN_CLICKED(IDC_CHECK_CONNECT_AT_STARTUP, &CPM40Page::OnBnClickedCheckConnectAtStartup)
 	ON_BN_CLICKED(IDC_BUTTON_IRQ_COUNT, &CPM40Page::OnBnClickedButtonIrqCount)
 	ON_BN_CLICKED(IDC_BUTTON_RESET_ALL_TS, &CPM40Page::OnBnClickedButtonResetAllTs)
+	ON_BN_CLICKED(IDC_BUTTON_RESET_COUNTERS, &CPM40Page::OnBnClickedButtonResetCounters)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -119,7 +124,7 @@ void CPM40Page::OnBnClickedButtonConnect()
 
 void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 {
-	CString Buff;
+	CString Buff, Temp;
 	static int nOldConversionCount = -1;
 	static int nOldTimedOutCount = -1;
 	static double dOldElapsedTime = -1.0;
@@ -148,6 +153,31 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 //		m_editMailboxMaxWait.SetWindowTextW(Buff);
 	}
 
+	theApp.m_PM40User.WriteBar0(0x8020, 2);
+	theApp.m_PM40User.WriteBar0(0x8020, 0);
+	int nAddrs = 0x8020;
+	for (int nTS = 0; nTS < 3; nTS++) {
+		Buff.Format(L"TS%d\r\n", nTS + 1);
+		Temp.Format(L"PRF: %d\r\n", theApp.m_PM40User.ReadBar0(nAddrs += 0x04)); Buff += Temp;
+		nAddrs += 0x04;
+		Temp.Format(L"Lock: %d\r\n", theApp.m_PM40User.ReadBar0(nAddrs)); Buff += Temp;
+		nAddrs += 0x04;
+		Temp.Format(L"Acq: %d\r\n", theApp.m_PM40User.ReadBar0(nAddrs)); Buff += Temp;
+		nAddrs += 0x04;
+		switch (nTS) {
+		case 0: m_editCountsTS1.SetWindowTextW(Buff);
+			break;
+		case 1: m_editCountsTS2.SetWindowTextW(Buff);
+			break;
+		case 2: m_editCountsTS3.SetWindowTextW(Buff);
+			break;
+		}
+	}
+
+	Buff.Empty();
+	Temp.Format(L"Acq but not trig %d\r\n", theApp.m_PM40User.m_nTriggerDidntOccur);	Buff += Temp;
+	Temp.Format(L"incorrect timeslot %d\r\n", theApp.m_PM40User.nTimeSlotNumberError);	Buff += Temp;
+	m_editGeneral.SetWindowTextW(Buff);
 
 	CPropertyPage::OnTimer(nIDEvent);
 }
@@ -198,4 +228,11 @@ void CPM40Page::OnBnClickedButtonResetAllTs()
 
 	theApp.m_UtUser.Pr30Command4(&Pr);		//Set write timeslot to 0 == all timeslots
 	theApp.m_UtUser.Pr30Command8(&Pr,0);		//Reset all timeslot content
+}
+
+
+void CPM40Page::OnBnClickedButtonResetCounters()
+{
+	theApp.m_PM40User.WriteBar0(0x8020, 1);
+	theApp.m_PM40User.WriteBar0(0x8020, 0);
 }

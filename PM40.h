@@ -384,9 +384,11 @@ typedef struct _PM40_INFO_STRUCT
 
 class CPM40
 {
-protected:
+public:
 	int		m_nTimedOutCount = 0;
 	int		m_nConversionCount = 0;
+	int		m_nTriggerDidntOccur = 0;
+	int		nTimeSlotNumberError = 0;
 	double m_dArmedAt = 0.0;
 	double m_dConversionCompletedAt= 0.0;
 

@@ -3800,8 +3800,11 @@
 #define IDC_EDIT_IRQ_COUNTS             4102
 #define IDC_BUTTON_IRQ_COUNT            4103
 #define IDC_EDIT_MAILBOX_MAX_WAIT       4104
-#define IDC_BUTTON2                     4105
 #define IDC_BUTTON_RESET_ALL_TS         4105
+#define IDC_BUTTON_RESET_COUNTERS       4106
+#define IDC_EDIT_COUNTS_TS1             4107
+#define IDC_EDIT_COUNTS_TS2             4108
+#define IDC_EDIT_COUNTS_TS3             4109
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6063,7 +6066,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        724
 #define _APS_NEXT_COMMAND_VALUE         34146
-#define _APS_NEXT_CONTROL_VALUE         4106
+#define _APS_NEXT_CONTROL_VALUE         4108
 #define _APS_NEXT_SYMED_VALUE           393
 #endif
 #endif

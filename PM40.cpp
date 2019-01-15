@@ -67,10 +67,14 @@ CPM40::CPM40()
 
 CPM40::~CPM40()
 {
+	TRACE0("PM40 Disconnecting\n");
+
+	FinishWaitThreads();
 	CloseDevice();
 	if (m_pcfgParams) {
 		delete m_pcfgParams;
 	}
+	TRACE0("PM40 Disconnected\n");
 }
 
 bool CPM40::FindDevice()
@@ -531,13 +535,16 @@ bool CPM40::IsConversionComplete(int *nTS)
 	CString Buff;
 	int nFlag = ReadBar0(0x8000);
 
-	if ((nFlag & (ADC_DATA_AVAILABLE | TRIGGER_OCCURED)) == (ADC_DATA_AVAILABLE | TRIGGER_OCCURED)) {
+//	if ((nFlag & (ADC_DATA_AVAILABLE | TRIGGER_OCCURED)) == (ADC_DATA_AVAILABLE | TRIGGER_OCCURED)) {
+	if (nFlag & ADC_DATA_AVAILABLE ) {
 		m_nConversionCount++;
+		if (!(nFlag & TRIGGER_OCCURED)) m_nTriggerDidntOccur++;
+
 		m_dElapsedTime = theApp.m_PM40User.getElapsedSinceLastArmed();
 		if (nTS) {
 			*nTS = ((nFlag >> 8) & 0x0ff) - 1;
 			if (*nTS == -1) {
-				Buff.Format(L"%04x", nFlag);
+				nTimeSlotNumberError++;
 			}
 		}
 		return true;

@@ -49,5 +49,10 @@ public:
 	afx_msg void OnBnClickedButtonIrqCount();
 	CEdit m_editMailboxMaxWait;
 	afx_msg void OnBnClickedButtonResetAllTs();
+	CEdit m_editCountsTS1;
+	CEdit m_editCountsTS2;
+	CEdit m_editCountsTS3;
+	afx_msg void OnBnClickedButtonResetCounters();
+	CEdit m_editGeneral;
 };
 
