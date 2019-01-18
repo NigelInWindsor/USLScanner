@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(CAxesPane, CDockablePane)
 	ON_COMMAND(ID_AXES_DOWNLOADTOPPMAC, &CAxesPane::OnAxesDownloadtoppmac)
 	ON_WM_CONTEXTMENU()
 	ON_MESSAGE(UI_SET_ACCESS_PRIVELAGES, SetAccessPrivelages)
+	ON_COMMAND(ID_AXES_DEFAULT, &CAxesPane::OnAxesDefault)
 END_MESSAGE_MAP()
 
 int CAxesPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -153,11 +154,11 @@ HRESULT CAxesPane::SetAccessPrivelages(WPARAM wp, LPARAM lp)
 void CAxesPane::CreateColumns()
 {
 	int ColumnWidth[30] = { 50, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 };
-	CString ColumnName[30] = { L"#", L"Enable", L"Name", L"Physical #", L"Stepsize", L"In pos Err", L"Max speed", L"Max Accel'", L"Home pos", 
-		L"Home Mode", L"Kin' Offset", L"Min pos", L"Max pos", L"Amplifier", L"Steps/Rev", L"Units"};
+	CString ColumnName[30] = { L"#", L"Enable", L"Name", L"Physical #", L"Stepsize", L"In pos Err", L"Max speed", L"Acceleration", L"Home pos", 
+		L"Fatal F error", L"Home Mode",  L"Kin -ve", L"Kin +ve", L"Amplifier", L"Units"};
 
 	CDC* pDC = m_listAxes.GetDC();
-	m_nNumberColumns = 16;
+	m_nNumberColumns = 15;
 
 	int nColumnCount = (&m_listAxes.GetHeaderCtrl())->GetItemCount();
 	for (int ii = 0; ii < nColumnCount; ii++) m_listAxes.DeleteColumn(0);
@@ -234,10 +235,10 @@ void CAxesPane::OnGetdispinfoListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			swprintf_s(str, 100, L"%d", pAxis->nHomePos);
 			break;
 		case 9:
-			swprintf_s(str, 100, L"%s", (LPCWSTR)m_strHomeMode[pAxis->nHomeMode%3]);
+			swprintf_s(str, 100, L"%.02f", pAxis->fFatalFollowingError);
 			break;
 		case 10:
-			swprintf_s(str, 100, L"%d", pAxis->nOffset);
+			swprintf_s(str, 100, L"%s", (LPCWSTR)m_strHomeMode[pAxis->nHomeMode%3]);
 			break;
 		case 11:
 			swprintf_s(str, 100, L"%.1f", pAxis->fMinKin);
@@ -249,14 +250,7 @@ void CAxesPane::OnGetdispinfoListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			swprintf_s(str, 100, L"%s", (LPCWSTR)m_strAmplifier[pAxis->eAmplifierType % 4]);
 			break;
 		case 14:
-			if (pAxis->dStepsPerRev == 0.0f) {
-				swprintf_s(str, 100, L"%.01f", pAxis->dStepsPerRev);
-			}
-			else {
-				swprintf_s(str, 100, L"%.02f", pAxis->dStepsPerRev);
-			}
-			break;
-		case 15: swprintf(str, 100, L"%s", (LPCWSTR)m_strUnits[MinMax(&pAxis->nUnitSelected, 0, 2)]);
+			swprintf(str, 100, L"%s", (LPCWSTR)m_strUnits[MinMax(&pAxis->nUnitSelected, 0, 2)]);
 			break;
 		}
 	}
@@ -313,10 +307,9 @@ void CAxesPane::OnDblclkListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nHomePos, -100000000, 100000000, 1, L"%d");
 			break;
 		case 9:
-			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nHomeMode, m_strHomeMode, 3);
 			break;
 		case 10:
-			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nOffset, -100000000, 100000000, 1, L"%d");
+			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nHomeMode, m_strHomeMode, 3);
 			break;
 		case 11:
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->fMinKin, -20000.0f, 20000.0f, 1.0, L"%.01f");
@@ -328,9 +321,6 @@ void CAxesPane::OnDblclkListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, (int*)&pAxis->eAmplifierType, m_strAmplifier, 5);
 			break;
 		case 14:
-			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->dStepsPerRev, 0.0f, 10000000.0f, 0.01f, L"%.02f");
-			break;
-		case 15:
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nUnitSelected, m_strUnits, 3);
 			break;
 		}
@@ -361,9 +351,6 @@ LRESULT CAxesPane::ItemChanged(WPARAM wp, LPARAM lp)
 			break;
 		case 6:
 			pAxis->fMaxMoveSpeed = m_fEditValue / (1000.0f * pAxis->fStepSize);
-			break;
-		case 14:
-			pAxis->nStepsPerRev = (int)pAxis->dStepsPerRev;
 			break;
 		}
 	}
@@ -425,4 +412,17 @@ void CAxesPane::OnAxesDownloadtoppmac()
 void CAxesPane::OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/)
 {
 	// TODO: Add your message handler code here
+}
+
+
+void CAxesPane::OnAxesDefault()
+{
+	POSITION pos = m_listAxes.GetFirstSelectedItemPosition();
+	while (pos) {
+		int nAxis = (int)pos - 1;
+		ZeroMemory(&theApp.m_Axes[nAxis], sizeof AxisData);
+		m_listAxes.GetNextSelectedItem(pos);
+	}
+	m_listAxes.RedrawWindow();
+	theApp.SaveTank();
 }

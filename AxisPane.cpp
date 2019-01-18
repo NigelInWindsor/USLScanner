@@ -144,9 +144,10 @@ HRESULT CAxisPane::SetAccessPrivelages(WPARAM wp, LPARAM lp)
 #define ID_SPEED				ID_BASE + 10
 #define	ID_MOVE_SPEED			ID_BASE + 11
 #define	ID_JOG_SPEED			ID_BASE + 12
-#define	ID_HOME_SPEED			ID_BASE + 13
-#define	ID_ACCELERATION			ID_BASE + 14
-#define ID_STEPS_PER_REV		ID_BASE + 15
+#define	ID_JOG_ACCELERATION		ID_BASE + 13
+#define	ID_HOME_SPEED			ID_BASE + 14
+#define	ID_ACCELERATION			ID_BASE + 15
+#define ID_STEPS_PER_REV		ID_BASE + 16
 #define ID_MODULO_ABSOLUTE_MODE	ID_BASE + 17
 #define ID_KINEMATIC_NEGATIVE	ID_BASE + 18
 #define ID_KINEMATIC_POSITIVE	ID_BASE + 19
@@ -239,9 +240,9 @@ int CAxisPane::InitPropList()
 	pPropSpin = new CUSLPropertyGridProperty(_T("Home Speed"), (_variant_t)(int)(0), _T("Specifies step size"), ID_HOME_SPEED, Format, NULL, NULL, (CWnd*)this);
 	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fHomeSpeed, -1000.0f, 1000.0f, 1);
 	pGroup->AddSubItem(pPropSpin);
-	Format.Format(L"%s %ss\x02c9\x0b2", L"%.01f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
+	Format.Format(L"%s %ss\x02c9\x0b2", L"%.02f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
 	pPropSpin = new CUSLPropertyGridProperty(_T("Acceleration"), (_variant_t)(int)(0), _T("Specifies step size"), ID_ACCELERATION, Format, NULL, NULL, (CWnd*)this);
-	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fAcceleration, 0.0f, 3000.0f, 1);
+	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fAcceleration, -100.0f, 3000.0f, 2);
 	pGroup->AddSubItem(pPropSpin);
 
 	m_wndPropList.AddProperty(pGroup);
@@ -249,9 +250,13 @@ int CAxisPane::InitPropList()
 	Buff.Format(L"Joystick");
 	pGroup = new CUSLPropertyGridProperty(Buff, ID_SPEED, FALSE);
 	Format.Format(L"%s %ss\x02c9\x0b9", L"%.01f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
-	pPropSpin = new CUSLPropertyGridProperty(_T("Jog Speed"), (_variant_t)(int)(0), _T("Specifies step size"), ID_JOG_SPEED, Format, NULL, NULL, (CWnd*)this);
+	pPropSpin = new CUSLPropertyGridProperty(_T("Jog Speed"), (_variant_t)(int)(0), _T("Max speed of a J+ move"), ID_JOG_SPEED, Format, NULL, NULL, (CWnd*)this);
 	float fJogSpeed = theApp.m_Axes[m_nAxis].fMaxMoveSpeed * 1000.0f * theApp.m_Axes[m_nAxis].fStepSize;
 	pPropSpin->EnableSpinControl(TRUE, fJogSpeed, 0.1f, 1000.0f, 1);
+	pGroup->AddSubItem(pPropSpin);
+	Format.Format(L"%s %ss\x02c9\x0b2", L"%.02f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
+	pPropSpin = new CUSLPropertyGridProperty(_T("Jog Acceleration"), (_variant_t)(int)(0), _T("Acceleration of a J+ move"), ID_JOG_ACCELERATION, Format, NULL, NULL, (CWnd*)this);
+	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fJoystickAcceleration, -100.0f, 1000.0f, 2);
 	pGroup->AddSubItem(pPropSpin);
 
 	m_wndPropList.AddProperty(pGroup);
@@ -346,6 +351,10 @@ LRESULT CAxisPane::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 		break;
 	case ID_LIMIT_POSITIVE: theApp.m_Axes[m_nAxis].fMaxTravel = pPropSpin->GetFloatSpinValue();
 		break;
+	case ID_ACCELERATION: theApp.m_Axes[m_nAxis].fAcceleration = pUSLProperty->GetFloatSpinValue();
+		break;
+	case ID_JOG_ACCELERATION: theApp.m_Axes[m_nAxis].fJoystickAcceleration = pUSLProperty->GetFloatSpinValue();
+		break;
 
 
 /*
@@ -354,8 +363,6 @@ LRESULT CAxisPane::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 	case ID_JOG_SPEED: theApp.m_Axes[m_nAxis].setJogSpeed(pUSLProperty->GetFloatSpinValue());
 		break;
 	case ID_HOME_SPEED: theApp.m_Axes[m_nAxis].setHomeSpeed(pUSLProperty->GetFloatSpinValue());
-		break;
-	case ID_ACCELERATION: theApp.m_Axes[m_nAxis].setAccelDecel(pUSLProperty->GetFloatSpinValue());
 		break;
 		*/
 	}

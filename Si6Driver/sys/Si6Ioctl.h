@@ -268,7 +268,8 @@ struct	AxisData
 	int		nAxisType;	//Linear, Rotary, Roller
 	float	fMinTravel;
 	float	fMaxTravel;
-	int		nSpare[10];
+	float	fFatalFollowingError;
+	int		nSpare[9];
 
 };
 

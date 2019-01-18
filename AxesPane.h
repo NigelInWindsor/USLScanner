@@ -44,5 +44,6 @@ public:
 	afx_msg void OnAxesSethomevalue();
 	afx_msg void OnAxesDownloadtoppmac();
 	afx_msg void OnContextMenu(CWnd* /*pWnd*/, CPoint /*point*/);
+	afx_msg void OnAxesDefault();
 };
 

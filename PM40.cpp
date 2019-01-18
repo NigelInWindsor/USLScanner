@@ -254,6 +254,7 @@ void CPM40::FinishWaitThreads()
 	if (m_WaitParams.hThreadHandle != 0)
 	{
 		int i = 5;
+//		m_pcfgParams->bRunning = false;
 		UserIRQCancel(m_pcfgParams->cardNum);
 		CloseHandle(m_WaitParams.hThreadHandle);
 		while (m_WaitParams.hThreadHandle != 0)
@@ -671,6 +672,8 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 	delete ThreadParams.Buffer;
 
 	pWaitParams->hThreadHandle = 0;
+	TRACE0("PM40 WaitThreadProc finished correctly\n");
+
 }
 
 

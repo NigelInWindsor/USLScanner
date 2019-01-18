@@ -4343,9 +4343,6 @@ void CFieldBusController::DownloadAxisParameters(int nAxis)
 {
 	CString Buff;
 
-	theApp.m_Axes[nAxis].fJoystickAcceleration = theApp.m_Axes[nAxis].fAcceleration;
-
-
 	Buff.Format(L"Motor[%d].InvAmax=%f", theApp.m_Axes[nAxis].nPhysicalAxis, 1.0f / theApp.m_Axes[nAxis].fAcceleration);
 	SendStr(Buff, _TERMINAL);
 

@@ -4961,6 +4961,7 @@
 #define ID_BUTTON34144                  34144
 #define ID_BUTTON_TIPS_TO_HORIZONTAL    34144
 #define ID_DOCKABLES_AXIS               34145
+#define ID_AXES_DEFAULT                 34146
 #define IDS_SIMPLE_RASTER               61001
 #define IDS_MS_Sans_Serif               61001
 #define IDS_RAPID_RAPID                 61002
@@ -6065,7 +6066,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        724
-#define _APS_NEXT_COMMAND_VALUE         34146
+#define _APS_NEXT_COMMAND_VALUE         34147
 #define _APS_NEXT_CONTROL_VALUE         4108
 #define _APS_NEXT_SYMED_VALUE           393
 #endif

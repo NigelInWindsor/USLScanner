@@ -14294,6 +14294,7 @@ BEGIN
     BEGIN
         MENUITEM "Set Home Pos value",          ID_AXES_SETHOMEVALUE
         MENUITEM "Download to PPMAC",           ID_AXES_DOWNLOADTOPPMAC
+        MENUITEM "Default",                     ID_AXES_DEFAULT
     END
 END
 
