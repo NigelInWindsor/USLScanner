@@ -69,6 +69,8 @@
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;C:\WindowsProjects\USLScannerV5\DataTranslation\Include;vld-10</IncludePath>
     <LibraryPath>Optitrack\Motive\lib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(DXSDK_DIR)Lib\x86;$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release;vld-10;C:\W7DDK\lib\wxp\i386</LibraryPath>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(ProjectDir);$(PATH);$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release</ExecutablePath>
+    <CustomBuildAfterTargets>
+    </CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;</IncludePath>
@@ -169,9 +171,17 @@
       <AdditionalLibraryDirectories>$(NPTRACKINGTOOLS_LIB);C:\WindowsProjects\USLScannerV5.00\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
+      <Command>C:\WindowsProjects\Batch\SignUslScanner.bat</Command>
+      <Message>Post build step: Digital sign</Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>
       </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuild>
+      <Command>
+      </Command>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="3DBladePage.cpp" />

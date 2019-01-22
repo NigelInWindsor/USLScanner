@@ -28,7 +28,7 @@ public:
 	void RotateToFrameNorm(D3DXVECTOR3 *vNormOut,D3DXVECTOR3 *vNormIn);
 	void GetToolCoordinate(D3DXVECTOR3 *pvTool, D3DXVECTOR3 *pvRaw);
 	void GetToolCoordinate(CUSLVertex &pvTool, CUSLVertex &pvRaw);
-	void GetFrameCoordinate(D3DXVECTOR3 *pvFrame, D3DXVECTOR3 *pvRaw);
+	void FrameCoordinateFromWorld(D3DXVECTOR3 * pvFrame, D3DXVECTOR3 * pvRaw);
 	void GetFrameCoordinate(CUSLVertex &pvFrame, CUSLVertex &pvRaw);
 	int	GetRawXYZCoordinate(D3DXVECTOR3 *pvRaw);
 	int GetRawXYZCoordinate(float *pfX,float *pfY,float *pfZ);

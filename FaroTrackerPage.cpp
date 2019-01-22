@@ -540,7 +540,7 @@ void CFaroTrackerPage::OnGetdispinfoListCoords(NMHDR* pNMHDR, LRESULT* pResult)
 	switch(	theApp.m_LastSettings.nFaroTrackerCoordinateDisplayMode ) {
 	default:
 		break;
-	case 1:	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt, &vPt);
+	case 1:	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt, &vPt);
 		break;
 	case 2:	theApp.m_FaroWorkerThread.GetToolCoordinate(&vPt, &vPt);
 		break;
@@ -1021,7 +1021,7 @@ void CFaroTrackerPage::OnGetdispinfoListElements(NMHDR* pNMHDR, LRESULT* pResult
 
 	if(PROFILE->m_vCloud.GetSize()<=0) return;
 	PROFILE->m_vCloud.GetPt(nn, &vPt);
-	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt, &vPt);
+	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt, &vPt);
 
 
 	switch(pDispInfo->item.iSubItem) {
@@ -1073,9 +1073,9 @@ void CFaroTrackerPage::OnClickListElements(NMHDR* pNMHDR, LRESULT* pResult)
 			switch(	theApp.m_LastSettings.nFaroTrackerCoordinateDisplayMode ) {
 			default:
 				break;
-			case 1:	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt[ii], &vPt[ii]);
+			case 1:	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[ii], &vPt[ii]);
 				break;
-			case 2:	theApp.m_FaroWorkerThread.GetToolCoordinate(&vPt[ii], &vPt[ii]);
+			case 2:	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[ii], &vPt[ii]);
 				break;
 			}
 		}
@@ -1090,7 +1090,7 @@ void CFaroTrackerPage::OnClickListElements(NMHDR* pNMHDR, LRESULT* pResult)
 		Buff.LoadString(IDS_Arc);
 		Temp.Format(L"\r\nRadius: %.03f",fRadius);
 		Buff += Temp;
-		theApp.m_FaroWorkerThread.GetFrameCoordinate(&vCenter, &vCenter);
+		theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vCenter, &vCenter);
 		Temp.Format(L"\r\nX:%.03f Y:%.03f Z:%.03f",vCenter.x, vCenter.y, vCenter.z);
 		Buff += Temp;
 		Temp.Format(L"\r\nAngle 1<->2: %.03f",fAngle0 * RAD_TO_DEG);
@@ -1176,7 +1176,7 @@ void CFaroTrackerPage::OnFarocoordsLookatthispoint()
 	nIndex=m_listCoords.GetNextSelectedItem(pos);
 
 	PROFILE->m_vCloud.GetPt(nIndex, &vPt);
-	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt, &vPt);
+	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt, &vPt);
 
 	CMainFrame*  pFrame =  (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	CProfileSheet* pSheet = pFrame->m_pProfileSheet;
@@ -1203,8 +1203,8 @@ void CFaroTrackerPage::OnFarocoordsTooltipOrigin()
 	int nIndex = m_listCoords.GetNextSelectedItem(pos);
 
 	PROFILE->m_vCloud.GetPt(nIndex, &vPt);
-	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt,&vPt);
-	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vFrameOrigin,&theApp.m_FaroWorkerThread.m_vFrameOrigin);
+	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt,&vPt);
+	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vFrameOrigin,&theApp.m_FaroWorkerThread.m_vFrameOrigin);
 	theApp.m_FaroWorkerThread.m_vToolOrigin = vPt - vFrameOrigin;
 
 	m_listCoords.Invalidate();
@@ -1418,8 +1418,8 @@ void CFaroTrackerPage::OnFarocoordsFrameXvector()
 		theApp.m_FaroWorkerThread.m_Element[theApp.m_FaroWorkerThread.m_nElementL-1].GetPt(0,&vPt[0]);
 		theApp.m_FaroWorkerThread.m_Element[theApp.m_FaroWorkerThread.m_nElementL-1].GetPt(1,&vPt[1]);
 		theApp.m_FaroWorkerThread.m_vFrameRotate.z = 0.0f;
-		theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt[0], &vPt[0]);
-		theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt[1], &vPt[1]);
+		theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[0], &vPt[0]);
+		theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[1], &vPt[1]);
 		
 		theApp.m_FaroWorkerThread.m_vFrameRotate.z = 	-atan2f(vPt[1].y-vPt[0].y, vPt[1].x-vPt[0].x);
 
@@ -1436,8 +1436,8 @@ void CFaroTrackerPage::OnFarocoordsFrameYvector()
 		theApp.m_FaroWorkerThread.m_Element[theApp.m_FaroWorkerThread.m_nElementL-1].GetPt(0,&vPt[0]);
 		theApp.m_FaroWorkerThread.m_Element[theApp.m_FaroWorkerThread.m_nElementL-1].GetPt(1,&vPt[1]);
 		theApp.m_FaroWorkerThread.m_vFrameRotate.z = 0.0f;
-		theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt[0], &vPt[0]);
-		theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt[1], &vPt[1]);
+		theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[0], &vPt[0]);
+		theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt[1], &vPt[1]);
 		
 		theApp.m_FaroWorkerThread.m_vFrameRotate.z = PIf/2.0f	- atan2f(vPt[1].y-vPt[0].y, vPt[1].x-vPt[0].x);
 

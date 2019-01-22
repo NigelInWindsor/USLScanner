@@ -203,7 +203,7 @@ void CFaroCoordinateDlg::OnPaint()
 		switch(	theApp.m_LastSettings.nFaroTrackerCoordinateDisplayMode ) {
 		default:	Name.LoadString(IDS_World_coordinates);
 			break;
-		case 1:	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPos, &vPos);
+		case 1:	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPos, &vPos);
 				Name.LoadString(IDS_Frame_coordinates);
 			break;
 		case 2:	theApp.m_FaroWorkerThread.GetToolCoordinate(&vPos, &vPos);

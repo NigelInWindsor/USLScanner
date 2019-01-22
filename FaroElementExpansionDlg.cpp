@@ -133,7 +133,7 @@ void CFaroElementExpansionDlg::UpdateAllControls()
 		switch(	theApp.m_LastSettings.nFaroTrackerCoordinateDisplayMode ) {
 		default:
 			break;
-		case 1:	theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt, &vPt);
+		case 1:	theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt, &vPt);
 			break;
 		case 2:	theApp.m_FaroWorkerThread.GetToolCoordinate(&vPt, &vPt);
 			break;

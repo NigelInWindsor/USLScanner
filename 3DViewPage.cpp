@@ -2153,8 +2153,8 @@ void C3DViewPage::DrawTrackerElements()
 		for(ii=0;ii<PROFILE->m_Edge.GetSize();ii++) {
 			PROFILE->m_Edge.GetPt(ii, 0, &vNode[0]);
 			PROFILE->m_Edge.GetPt(ii, 1, &vNode[1]);
-			theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[0], &vNode[0]);
-			theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[1], &vNode[1]);
+			theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[0], &vNode[0]);
+			theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[1], &vNode[1]);
 			Prim.Draw3DLine(m_pd3dDevice,vNode[0],vNode[1],BLUE3D);
 		}
 
@@ -2170,24 +2170,24 @@ void C3DViewPage::DrawTrackerElements()
 			case VA_LINE:
 			case VA_ANGLE:
 				theApp.m_FaroWorkerThread.m_Element[nElement].GetPt(0,&vNode[0]);
-				theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[0], &vNode[0]);
+				theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[0], &vNode[0]);
 				for(ii=1; ii<theApp.m_FaroWorkerThread.m_Element[nElement].GetSize(); ii++) {
 					theApp.m_FaroWorkerThread.m_Element[nElement].GetPt(ii,&vNode[1]);
-					theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[1], &vNode[1]);
+					theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[1], &vNode[1]);
 					Prim.Draw3DLine(m_pd3dDevice,vNode[0],vNode[1],nColor);
 					vNode[0] = vNode[1];
 				}
 				break;
 			case VA_ARC:
 				theApp.m_FaroWorkerThread.m_Element[nElement].CalculateCircumCenter(&fRadius, &vCenter,NULL,NULL,&vNorm);
-				theApp.m_FaroWorkerThread.GetFrameCoordinate(&vCenter, &vCenter);
+				theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vCenter, &vCenter);
 				theApp.m_FaroWorkerThread.RotateToFrameNorm(&vNorm, &vNorm);
 //				Prim.Draw3DCircle(m_pd3dDevice,vCenter,vNorm,fRadius,nColor);
 
 				theApp.m_FaroWorkerThread.m_Element[nElement].GetPt(0,&vNode[0]);
 				theApp.m_FaroWorkerThread.m_Element[nElement].GetPt(2,&vNode[1]);
-				theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[0], &vNode[0]);
-				theApp.m_FaroWorkerThread.GetFrameCoordinate(&vNode[1], &vNode[1]);
+				theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[0], &vNode[0]);
+				theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vNode[1], &vNode[1]);
 				Prim.Draw3DFan(m_pd3dDevice,vCenter,vNode[0],vNode[1],nColor);
 				break;
 			}
@@ -2195,7 +2195,7 @@ void C3DViewPage::DrawTrackerElements()
 
 		for(nIndex = 0;nIndex<PROFILE->m_vCloud.GetSize();nIndex++) {
 			PROFILE->m_vCloud.GetPt(nIndex, &vPt);
-			theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPt, &vPt);
+			theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPt, &vPt);
 
 			D3DXMatrixTranslation(&matTranslation,vPt.x,vPt.y,vPt.z);
 			D3DXMatrixMultiply(&matCoord,&matTranslation,&m_matWorld);

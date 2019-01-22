@@ -841,7 +841,6 @@ void CWorkerThread::InitializeFrameMatrix()
 	float fYaw = atan2f(m_vFrameNorm.y, m_vFrameNorm.x);
 	float fPitch = acosf(m_vFrameNorm.z);
 
-
 	D3DXMatrixRotationY(&matRotY,fPitch);
 	D3DXMatrixRotationZ(&matRotZ,fYaw);
 	D3DXMatrixRotationZ(&matRotZero,m_vFrameRotate.z);
@@ -858,7 +857,12 @@ void CWorkerThread::InitializeFrameMatrix()
 	*/
 }
 
-void CWorkerThread::GetFrameCoordinate(D3DXVECTOR3 *pvFrame, D3DXVECTOR3 *pvRaw)
+/*
+FrameCoordinateFromWorld
+D3DXVECTOR3 *pvFrame
+D3DXVECTOR3 *pvRaw
+*/
+void CWorkerThread::FrameCoordinateFromWorld(D3DXVECTOR3 *pvFrame, D3DXVECTOR3 *pvRaw)
 {
 
 	InitializeFrameMatrix();
@@ -913,7 +917,7 @@ void CWorkerThread::GetFrameRotateAngles(D3DXVECTOR3 *pvFrameRotate, D3DXVECTOR3
 {
 	D3DXVECTOR3 vFrame;
 
-	GetFrameCoordinate(&vFrame, pvRaw);
+	FrameCoordinateFromWorld(&vFrame, pvRaw);
 
 	pvFrameRotate->x = atan2f(vFrame.z, sqrtf(vFrame.y*vFrame.y + vFrame.x*vFrame.x));
 	pvFrameRotate->y = atan2f(vFrame.z, sqrtf(vFrame.x*vFrame.x + vFrame.y*vFrame.y));
@@ -922,7 +926,7 @@ void CWorkerThread::GetFrameRotateAngles(D3DXVECTOR3 *pvFrameRotate, D3DXVECTOR3
 
 void CWorkerThread::GetToolCoordinate(D3DXVECTOR3 *pvTool, D3DXVECTOR3 *pvRaw)
 {
-	GetFrameCoordinate(pvTool, pvRaw);
+	FrameCoordinateFromWorld(pvTool, pvRaw);
 
 	pvTool->x -= m_vToolOrigin.x;
 	pvTool->y -= m_vToolOrigin.y;

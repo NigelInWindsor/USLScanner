@@ -10029,7 +10029,7 @@ void CMainThread::LeadscrewCompensation()
 			Sleep(1000);
 
 			theApp.m_FaroWorkerThread.GetRawXYZCoordinate(&vPos);
-			theApp.m_FaroWorkerThread.GetFrameCoordinate(&vPos, &vPos);
+			theApp.m_FaroWorkerThread.FrameCoordinateFromWorld(&vPos, &vPos);
 			switch(theApp.m_LastSettings.nLaserAxis) {
 			case 0: fLaserPos = vPos.x;
 				break;
