@@ -3805,6 +3805,7 @@
 #define IDC_EDIT_COUNTS_TS1             4107
 #define IDC_EDIT_COUNTS_TS2             4108
 #define IDC_EDIT_COUNTS_TS3             4109
+#define IDC_LIST_ADDRS                  4109
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6065,9 +6066,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        724
+#define _APS_NEXT_RESOURCE_VALUE        725
 #define _APS_NEXT_COMMAND_VALUE         34147
-#define _APS_NEXT_CONTROL_VALUE         4108
+#define _APS_NEXT_CONTROL_VALUE         4110
 #define _APS_NEXT_SYMED_VALUE           393
 #endif
 #endif

@@ -22,6 +22,9 @@ public:
 	int	m_nPort;
 	CEthernet m_Ethernet;
 	CEthernet* m_pEthernet;
+	CSocketAddr* m_pSocketAddrs = NULL;
+	ADDRINFOT* m_pAddrInfo = NULL;
+
 	
 	void UpdateAllControls();
 	CEthernetPage();
@@ -65,6 +68,8 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	CListCtrl m_listAddrs;
 };
 
 

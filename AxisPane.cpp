@@ -367,9 +367,8 @@ LRESULT CAxisPane::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 		*/
 	}
 
-//	if (lParam == 0x1038bec8) {
-		theApp.m_FBCtrl.DownloadAxisParameters(m_nAxis);
-//	}
+	theApp.m_FBCtrl.DownloadAxisParameters(m_nAxis);
+	theApp.SaveTank();
 
 	return 0;
 

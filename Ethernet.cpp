@@ -13,6 +13,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+#define WINSOCK_DEPRECATED_NO_WARNINGS
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -254,7 +256,7 @@ bool CEthernet::GetAllIPAddress()
 {
 	CString strTemp;
 //	struct hostent *host;
-//	char str[256];
+	char str[256];
 
 //	struct in_addr *ptr; // To retrieve the IP Address 
 
@@ -266,7 +268,7 @@ bool CEthernet::GetAllIPAddress()
 
 	WSADATA wsaData;
 	WSAStartup(MAKEWORD(1,1),&wsaData);
-/*
+
 	if ( hEnum )
 	{
 		DWORD Count = 0xFFFFFFFF;
@@ -305,7 +307,7 @@ bool CEthernet::GetAllIPAddress()
 					}
 					str[ii]=0;
 
-					host = gethostbyname(str);
+/*					host = gethostbyname(str);
 
 					if(host == NULL) continue; 
 					ptr = (struct in_addr *) 
@@ -320,6 +322,7 @@ bool CEthernet::GetAllIPAddress()
 					strTemp.Format(L"%s -->  %d.%d.%d.%d",
 						strFullName,a,b,c,d);
 					AfxMessageBox(strTemp);
+					*/
 				}
 			}
 		}
@@ -327,7 +330,7 @@ bool CEthernet::GetAllIPAddress()
 		delete Buffer;
 		WNetCloseEnum( hEnum ); 
 	}
-	*/
+	
 	WSACleanup();
 
 	return true;

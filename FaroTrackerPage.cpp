@@ -176,6 +176,9 @@ BOOL CFaroTrackerPage::OnInitDialog()
 	FillList();
 	FillElementList();
 
+	//128.128.128.100
+	if (theApp.m_LastSettings.nFaroTrackerIPAddrs == 0) theApp.m_LastSettings.nFaroTrackerIPAddrs = 0x80808064;
+
 	UpdateAllControls();
 
 	m_hBr = CreateSolidBrush(GetSysColor(COLOR_MENU)); // <= create on initDialog
@@ -199,7 +202,11 @@ HBRUSH CFaroTrackerPage::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 void CFaroTrackerPage::OnButtonConnect() 
 {
 	if(theApp.m_pFaroTracker == NULL) {
-		if(CheckAllFilesExist() == false) return;
+		if (CheckAllFilesExist() == false) {
+			CString text = L"\nPlease check that the JRE folder and the jar files are in\nthe current working directory and restart the application.";
+			AfxMessageBox(text, MB_ICONSTOP);
+			return;
+		}
 
 		BeginWaitCursor();
 
@@ -228,7 +235,7 @@ void CFaroTrackerPage::OnButtonConnect()
 		{
 			WCHAR msg[1024];
 			e->getMsg(msg, 1024);
-			CString text = L"\nPlease check that the JRE folder and the jar files are in\nthe current working directory and restart the application.";
+			CString text = L"\nPlease download and install Java\nEnsure USLScanner is digitally signed and running in Administrator mode";
 			wcscat_s(msg, text.GetBuffer(0));
 			AfxMessageBox(msg, MB_ICONSTOP);
 			delete e;
@@ -236,7 +243,6 @@ void CFaroTrackerPage::OnButtonConnect()
 		}
 
 		sockaddr_in Server;
-		//128.128.128.100
 		Server.sin_addr.s_addr = theApp.m_LastSettings.nFaroTrackerIPAddrs;
 		swprintf_s(m_IPAddress, L"%d.%d.%d.%d",Server.sin_addr.S_un.S_un_b.s_b4,Server.sin_addr.S_un.S_un_b.s_b3,Server.sin_addr.S_un.S_un_b.s_b2,Server.sin_addr.S_un.S_un_b.s_b1);
 

@@ -28,6 +28,7 @@ long EthernetCallbackLocal(CWnd* pParent, int nDataSize, char * pData)
 	if(Buff.GetLength()) Temp += "\r\n";
 	Temp += Buff;
 	pDlg->m_editRxStr.SetWindowText(Temp);
+
 	return 0;
 }
 
@@ -44,10 +45,14 @@ CEthernetPage::CEthernetPage() : CPropertyPage(CEthernetPage::IDD)
 	m_bClientServer = false;
 	m_nPort = 20347;
 
+//	m_pSocketAddrs = new CSocketAddr();
+//	m_pAddrInfo = m_pSocketAddrs->GetAddrInfoList();
+
 }
 
 CEthernetPage::~CEthernetPage()
 {
+//	SAFE_DELETE(m_pSocketAddrs);
 }
 
 void CEthernetPage::DoDataExchange(CDataExchange* pDX)
@@ -62,6 +67,7 @@ void CEthernetPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_IPADDRESS_SERVER, m_ipAddress);
 	DDX_Control(pDX, IDC_EDIT_RX, m_editRxStr);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_LIST_ADDRS, m_listAddrs);
 }
 
 
