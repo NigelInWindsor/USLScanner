@@ -816,7 +816,7 @@ void CPmac::EnableAxis(int nAxisStruct,int nPhysicalAxisOffset, char cCoordAxis)
 
 	if((theApp.m_Axes[nAxisStruct].bAvailable==TRUE) && (DoesAxisNeedHoming(nAxisStruct)==FALSE)) {
 		switch(theApp.m_Axes[nAxisStruct].eAmplifierType) {
-		default: theApp.m_Axes[nAxisStruct].eAmplifierType = (AmplifierType)0;
+		default:
 			Buff.Format(_T("#%d->%c#%dj/"),theApp.m_Axes[nAxisStruct].nPhysicalAxis + nPhysicalAxisOffset,cCoordAxis ,theApp.m_Axes[nAxisStruct].nPhysicalAxis + nPhysicalAxisOffset);
 			break;
 		case GeoBrick:
@@ -834,7 +834,7 @@ void CPmac::EnableAxis(int nAxisStruct)
 
 	if((theApp.m_Axes[nAxisStruct].bAvailable==TRUE) && (DoesAxisNeedHoming(nAxisStruct)==FALSE)) {
 		switch(theApp.m_Axes[nAxisStruct].eAmplifierType) {
-		default: theApp.m_Axes[nAxisStruct].eAmplifierType = (AmplifierType)0;
+		default:
 			Buff.Format(_T("#%dj/"),theApp.m_Axes[nAxisStruct].nPhysicalAxis);
 			break;
 		case GeoBrick:

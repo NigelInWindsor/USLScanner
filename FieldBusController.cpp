@@ -3030,7 +3030,7 @@ void CFieldBusController::EnableAxis(int nAxisStruct,int nPhysicalAxisOffset, CS
 
 	if(theApp.m_Axes[nAxisStruct].bAvailable==TRUE) {
 		switch(theApp.m_Axes[nAxisStruct].eAmplifierType) {
-		default: theApp.m_Axes[nAxisStruct].eAmplifierType = (AmplifierType)0;
+		default:
 			Buff.Format(_T("#%d->%s#%dj/"),theApp.m_Axes[nAxisStruct].nPhysicalAxis + nPhysicalAxisOffset,strCoordAxis ,theApp.m_Axes[nAxisStruct].nPhysicalAxis + nPhysicalAxisOffset);
 			break;
 		case GeoBrick:
@@ -4365,6 +4365,9 @@ void CFieldBusController::DownloadAxisParameters(int nAxis)
 	SendStr(Buff, _TERMINAL);
 
 	Buff.Format(L"Mtr%dSF=%f", theApp.m_Axes[nAxis].nPhysicalAxis, 1.0f/theApp.m_Axes[nAxis].fStepSize);
+	SendStr(Buff, _TERMINAL);
+
+	Buff.Format(L"Motor[%d].FatalFeLimit=%d", theApp.m_Axes[nAxis].nPhysicalAxis, (int)(theApp.m_Axes[nAxis].fFatalFollowingError / theApp.m_Axes[nAxis].fStepSize));
 	SendStr(Buff, _TERMINAL);
 
 	Buff.Format(L"Motor[%d].MinPos=%d", theApp.m_Axes[nAxis].nPhysicalAxis, (int)(theApp.m_Axes[nAxis].fMinTravel / theApp.m_Axes[nAxis].fStepSize));

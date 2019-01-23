@@ -2995,6 +2995,10 @@ void CViewPage::OnContextMenu(CWnd* pWnd, CPoint point)
 				Buff.LoadString(IDS_Brain);
 				pPopup->ModifyMenu(id,MF_BYCOMMAND,id,Language + _T(" + ") + Buff);
 			}
+			if (!(theApp.m_Tank.nMachineFeatures & _MACHINE_SIDE1)) {
+				pPopup->EnableMenuItem(ID_VIEW_GOTORIGHT, MF_GRAYED | MF_BYCOMMAND);
+				pPopup->EnableMenuItem(ID_VIEW_GOTOBOTH, MF_GRAYED | MF_BYCOMMAND);
+			}
 
 			pPopup->EnableMenuItem( ID_VIEW_COPYAREATOENVELOPE   , MF_GRAYED|MF_BYCOMMAND);
 			if(IsPtInAnnotation(m_ptClient) == -1) pPopup->EnableMenuItem( ID_VIEW_DELETEANNOTATION   , MF_GRAYED|MF_BYCOMMAND);
@@ -3740,6 +3744,7 @@ void CViewPage::GotoPoint(int nSide)
 			case DUAL_ROBOT_9_PLUS_9:
 			case SPX_ROBOT:
 			case TANK_5AXIS:
+			case TANK_6AXIS:
 			case QUICKSTEP_FLATBED:
 				theApp.m_Motors.IntelligentGotoSurfaceCoord(&CpSurface, nSide, theApp.m_LastSettings.nDangerPlaneMoveMask);
 				break;

@@ -71,6 +71,7 @@
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(ProjectDir);$(PATH);$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release</ExecutablePath>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;</IncludePath>

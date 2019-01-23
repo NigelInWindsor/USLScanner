@@ -602,7 +602,7 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 	PCFG_PARAMS         pcfgParams = pWaitParams->pcfgParams;
 	UINT32              status;
 	THREAD_PARAMS		ThreadParams;
-	int nSlot;
+	int nSlot, nExpectedSlot;
 
 	for (nSlot = 0; nSlot < 256; nSlot++) theApp.m_UtUser.m_TS[nSlot].nIrqCount = 0;
 
@@ -635,13 +635,19 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 
 	int nPollingIrq = 0;
 
+	nExpectedSlot = 0;
 	while (pcfgParams->bRunning)
 	{
 		switch (nPollingIrq) {
 		case 0:
 			if (theApp.m_PM40User.IsConversionComplete(&nSlot)) {
-				theApp.m_PM40User.ReadTrace(&ThreadParams, nSlot);
+				theApp.m_PM40User.ReadTrace(&ThreadParams, nExpectedSlot);
 				theApp.m_PM40User.ArmADC();
+				if (nExpectedSlot != nSlot) theApp.m_PM40User.m_nExpectedSlotNumberWrong++;
+//				if(nSlot == 0) nExpectedSlot = nSlot;
+				nExpectedSlot++;
+				nExpectedSlot %= theApp.m_UtUser.m_Global.Mux.nMaxTimeslots;
+
 			}
 			if (theApp.m_PM40User.getElapsedSinceLastArmed() > 0.1) {
 				theApp.m_PM40User.IncrementTimedOutCount();

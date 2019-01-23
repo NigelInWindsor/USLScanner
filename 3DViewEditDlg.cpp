@@ -2973,6 +2973,7 @@ void C3DViewEditDlg::OnList3dGotoLeft()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
+	case TANK_6AXIS:
 	case QUICKSTEP_FLATBED:
 		theApp.m_Motors.IntelligentGotoSurfaceCoord(&CpSurface, 1, theApp.m_LastSettings.nDangerPlaneMoveMask);
 		break;
@@ -4141,6 +4142,7 @@ void C3DViewEditDlg::OnHolesGotoViadangerplane()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
+	case TANK_6AXIS:
 	case QUICKSTEP_FLATBED:
 		switch(theApp.m_nSide0Orientation) {
 		case 0:	theApp.m_PmacUser.m_nScanSide = PROFILE->m_nScanSide = 1;

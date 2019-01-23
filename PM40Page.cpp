@@ -177,6 +177,8 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 	Buff.Empty();
 	Temp.Format(L"Acq but not trig %d\r\n", theApp.m_PM40User.m_nTriggerDidntOccur);	Buff += Temp;
 	Temp.Format(L"incorrect timeslot %d\r\n", theApp.m_PM40User.nTimeSlotNumberError);	Buff += Temp;
+	Temp.Format(L"expected Slot number wrong %d\r\n", theApp.m_PM40User.m_nExpectedSlotNumberWrong);	Buff += Temp;
+	
 	m_editGeneral.SetWindowTextW(Buff);
 
 	CPropertyPage::OnTimer(nIDEvent);

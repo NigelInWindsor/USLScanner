@@ -385,6 +385,7 @@ typedef struct _PM40_INFO_STRUCT
 class CPM40
 {
 public:
+	int		m_nExpectedSlotNumberWrong = 0;
 	int		m_nTimedOutCount = 0;
 	int		m_nConversionCount = 0;
 	int		m_nTriggerDidntOccur = 0;

@@ -223,7 +223,7 @@ void CAxesPane::OnGetdispinfoListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			}
 			break;
 		case 5:
-			swprintf_s(str, 100, L"%.02f", (float)pAxis->nPositionError * pAxis->fStepSize);
+			swprintf_s(str, 100, L"%.03f", (float)pAxis->nPositionError * pAxis->fStepSize);
 			break;
 		case 6:
 			swprintf_s(str, 100, L"%.01f", pAxis->fMaxMoveSpeed * 1000.0f * pAxis->fStepSize);
@@ -294,7 +294,7 @@ void CAxesPane::OnDblclkListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			break;
 		case 5:
 			m_fEditValue = (float)pAxis->nPositionError * pAxis->fStepSize;
-			m_pListItemEdit->Create(CListItemEdit::IDD, this, &m_fEditValue, 0.0f, 20.0f, 1.0e-2f, L"%.02f");
+			m_pListItemEdit->Create(CListItemEdit::IDD, this, &m_fEditValue, 0.0f, 20.0f, 1.0e-3f, L"%.03f");
 			break;
 		case 6:
 			m_fEditValue = pAxis->fMaxMoveSpeed * 1000.0f * pAxis->fStepSize;
@@ -307,6 +307,7 @@ void CAxesPane::OnDblclkListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nHomePos, -100000000, 100000000, 1, L"%d");
 			break;
 		case 9:
+			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->fFatalFollowingError, 0.0f, 100.0f, 0.01f, L"%.02f");
 			break;
 		case 10:
 			m_pListItemEdit->Create(CListItemEdit::IDD, this, &pAxis->nHomeMode, m_strHomeMode, 3);

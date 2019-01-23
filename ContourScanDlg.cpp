@@ -313,6 +313,7 @@ void CContourScanPage::OnButtonStart()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
+	case TANK_6AXIS:
 	case QUICKSTEP_FLATBED:
 	case TWIN_TOWER_KINEMATIC:
 		if(theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {

@@ -143,7 +143,6 @@ void CAxisStatusPane::ChangeFontSize()
 
 void CAxisStatusPane::CreateColumns()
 {
-	int ColumnWidth[30] = { 50, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 };
 	CString ColumnName[30] = { L"Axis", L"Enable", L"In Pos", L"Fault", L"Encoder", L" Pos ", L"Homed", L"Min", L"Max", L"Soft", L"Hard" };
 
 	CDC* pDC = m_listStatus.GetDC();
@@ -151,9 +150,8 @@ void CAxisStatusPane::CreateColumns()
 
 	for (int ii = 0; ii < nNumberColumns; ii++) {
 		CSize size = pDC->GetTextExtent(ColumnName[ii] + L"XX");
-		if (ii >= 5) {
-			size.cx *= 2;
-			m_listStatus.InsertColumn(ii, ColumnName[ii], LVCFMT_RIGHT, size.cx);
+		if (ii == 5) {
+			m_listStatus.InsertColumn(ii, ColumnName[ii], LVCFMT_RIGHT, size.cx * 2);
 		}
 		else {
 			m_listStatus.InsertColumn(ii, ColumnName[ii], LVCFMT_CENTER, size.cx);
@@ -196,8 +194,6 @@ void CAxisStatusPane::FillList()
 
 void CAxisStatusPane::OnTimer(UINT_PTR nIDEvent)
 {
-	int nRow = 0;
-
 	for (int nRow = 0; nRow < m_nNumberRows; nRow++) {
 
 		AxisData* pAxis = &theApp.m_Axes[m_nAxisList[nRow]];
@@ -207,6 +203,12 @@ void CAxisStatusPane::OnTimer(UINT_PTR nIDEvent)
 			}
 			else {
 				m_listStatus.setCellColor(nRow, 3, RGB(0, 0, 0), RGB(255, 255, 255));
+			}
+			if (pAxis->nStatus & PMAC_HARD_LIMIT) {
+				m_listStatus.setCellColor(nRow, 10, RGB(255, 255, 0), RGB(200, 0, 0));
+			}
+			else {
+				m_listStatus.setCellColor(nRow, 10, RGB(0, 0, 0), RGB(255, 255, 255));
 			}
 
 			m_nOldStatus[m_nAxisList[nRow]] = theApp.m_Axes[m_nAxisList[nRow]].nStatus;
@@ -256,6 +258,7 @@ void CAxisStatusPane::OnGetdispinfoListStatus(NMHDR *pNMHDR, LRESULT *pResult)
 		case 9:
 			break;
 		case 10:
+			pAxis->nStatus & PMAC_HARD_LIMIT ? swprintf_s(str, 100, L"X") : swprintf_s(str, 100, L"%s", L"-");
 			break;
 		}
 	}
