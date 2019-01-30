@@ -112,11 +112,14 @@ CViewSheet::~CViewSheet()
 	SAFE_DELETE( m_pCADSheet );
 	SAFE_DELETE( m_pDataPropertiesDlg );
 	SAFE_DELETE( m_pInclusionsSheet );
+	SAFE_DELETE( m_pwndEditGeneralButton );
+
 }
 
 
 BEGIN_MESSAGE_MAP(CViewSheet, CResizableSheet)
 	//{{AFX_MSG_MAP(CViewSheet)
+	ON_REGISTERED_MESSAGE(AFX_WM_RESETTOOLBAR, OnToolbarReset)
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_WM_CREATE()
@@ -207,6 +210,7 @@ BEGIN_MESSAGE_MAP(CViewSheet, CResizableSheet)
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipNotify)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipNotify)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -258,20 +262,75 @@ void CViewSheet::OnClose()
 }
 void CViewSheet::OnDestroy()
 {
-
-	
-
 	GetWindowRect(theApp.m_LastSettings.RectWindowPos[IDD_VIEW + m_nScanLineDirection]);
 
 	CResizableSheet::OnDestroy();
 
 	*m_pDlg	= NULL;
-
 }
 
 int CViewSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	
+	CRect rect;
+	CMenu* pPopup = NULL;
+	m_pMenu = new CMenu;
+	m_pMenu->LoadMenu(IDR_VIEW_SHEET_MENU);
+
+	m_pwndEditGeneralButton = new CMFCToolBarEditBoxButton(
+		IDC_EDIT_GENERAL,
+		GetCmdMgr()->GetCmdImage(IDC_EDIT_GENERAL, FALSE),
+		WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, 180);
+
+
+	if (m_Data.m_nNumberVolumeImages == 0) {
+		pPopup = m_pMenu->GetSubMenu(3);
+		pPopup->EnableMenuItem(ID_VOLUME_VIEW, MF_GRAYED | MF_BYCOMMAND);
+	}
+
+	SetMenu(m_pMenu);
+
+	if (CResizableSheet::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	CResizableSheet::m_bToolBar = TRUE;
+
+	CMFCToolBar::EnableQuickCustomization();
+	CList<UINT, UINT> lstBasicCommands;
+	lstBasicCommands.AddTail(IDC_EDIT_GENERAL);
+	CMFCToolBar::SetBasicCommands(lstBasicCommands);
+
+	m_wndArchiveToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_VIEW_ARCHIVE_TOOLBAR);
+	m_wndArchiveToolBar.LoadToolBar(IDR_VIEW_ARCHIVE_TOOLBAR, 0, 0, TRUE /* Is locked */);
+	m_wndArchiveToolBar.SetPaneStyle(m_wndArchiveToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
+	m_wndArchiveToolBar.SetPaneStyle(m_wndArchiveToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
+	m_wndArchiveToolBar.SetOwner(this);
+	m_wndArchiveToolBar.SetRouteCommandsViaFrame(false);
+
+	m_wndToolsToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_VIEW_TOOLS_TOOLBAR);
+	m_wndToolsToolBar.LoadToolBar(IDR_VIEW_TOOLS_TOOLBAR, 0, 0, TRUE /* Is locked */);
+	m_wndToolsToolBar.SetPaneStyle(m_wndToolsToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
+	m_wndToolsToolBar.SetPaneStyle(m_wndToolsToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
+	m_wndToolsToolBar.SetOwner(this);
+	m_wndToolsToolBar.SetRouteCommandsViaFrame(false);
+
+
+	CRect rrClient, rr, rectEdit;
+	GetClientRect(rrClient);
+
+	int cyTlb = m_wndArchiveToolBar.CalcFixedLayout(FALSE, TRUE).cy;
+
+	m_wndArchiveToolBar.SetWindowPos(NULL, rrClient.left, rrClient.top, m_wndArchiveToolBar.CalcFixedLayout(FALSE, TRUE).cx, cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);			m_wndArchiveToolBar.GetWindowRect(rr);
+	m_wndToolsToolBar.SetWindowPos(NULL, rr.right, rrClient.top, m_wndToolsToolBar.CalcFixedLayout(FALSE, TRUE).cx, cyTlb, SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW);	m_wndToolsToolBar.GetWindowRect(rr);
+
+
+	EnableStackedTabs(FALSE);
+
+	return 0;
+
+}
+/*
+int CViewSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
 	CRect rect;
 	CMenu* pPopup = NULL;
 	m_pMenu = new CMenu;
@@ -341,9 +400,9 @@ int CViewSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	EnableStackedTabs(FALSE);
 
-
 	return 0;
 }
+*/
 
 BOOL CViewSheet::OnInitDialog()
 {
@@ -739,33 +798,6 @@ void CViewSheet::OnToolsValue()
 
 }
 
-void CViewSheet::EditTextSetWindowText(CString Buff)
-{
-
-	CEdit* pEdit = (CEdit* ) m_wndDialogBar.GetDlgItem(IDC_EDIT_TEXT);
-	pEdit->SetWindowText(Buff);
-
-}
-
-void CViewSheet::EditTextGetWindowText(CString &pBuff)
-{
-
-	CEdit* pEdit = (CEdit* ) m_wndDialogBar.GetDlgItem(IDC_EDIT_TEXT);
-	pEdit->GetWindowText(pBuff);
-
-}
-
-void CViewSheet::OnChangeEditEditText()
-{
-	
-	CString Buff;
-
-	if( (m_nToolOption==TOOL_HISTOGRAM) && (theApp.m_LastSettings.nHistogramStyle == HISTOGRAM_CIRCLE_STYLE) ) {
-		EditTextGetWindowText(Buff);
-		_WTOF(Buff,theApp.m_LastSettings.fHistogramCircleSize);
-	}
-
-}
 
 
 void CViewSheet::InitializeFromProfile(int nScanType)
@@ -1285,10 +1317,11 @@ void CViewSheet::SetToolBarCheckedState()
 		m_nToolOption==TOOL_CROSS_SECTION ? m_wndToolsToolBar.SetButtonStyle(nIndex,TBBS_CHECKED) : m_wndToolsToolBar.SetButtonStyle(nIndex,0);
 
 
-	if((nIndex=m_wndToolsToolBar.CommandToIndex(ID_VOLUME_VIEW))>=0) {
+	if((nIndex=m_wndToolsToolBar.CommandToIndex(ID_VIEW_VOLUME))>=0) {
 		((m_pVolumeView!=NULL) &&  (m_Data.m_bHeaderForVolumeIsValid==TRUE)) ? m_wndToolsToolBar.SetButtonStyle(nIndex,TBBS_CHECKED) : m_wndToolsToolBar.SetButtonStyle(nIndex,0);
 		if(m_Data.m_nNumberVolumeImages==0)  {
-			m_wndToolsToolBar.GetToolBarCtrl().SetState(ID_VOLUME_VIEW,0);
+			m_wndToolsToolBar.SetButtonStyle(nIndex, TBBS_DISABLED);
+//			m_wndToolsToolBar.GetToolBarCtrl().SetState(ID_VOLUME_VIEW,0);
 		}
 	}
 	if((nIndex=m_wndToolsToolBar.CommandToIndex(ID_WAYPOINTS_VIEW))>=0)
@@ -2609,4 +2642,57 @@ page_found:
 	m_Name[nPage].Format(_T("(Phase overlay) %s"),	m_Name[nSrc]);
 	SetTabNames();
 
+}
+
+afx_msg LRESULT CViewSheet::OnToolbarReset(WPARAM wp, LPARAM)
+{
+	UINT uiToolBarId = (UINT)wp;
+
+	int nReplaced;
+
+	m_pwndEditGeneralButton->SetContextMenuID(IDC_EDIT_GENERAL);
+	m_pwndEditGeneralButton->CanBeStretched();
+	m_pwndEditGeneralButton->HaveHotBorder();
+	m_pwndEditGeneralButton->SetFlatMode(true);
+	m_pwndEditGeneralButton->SetStyle(TBBS_PRESSED);
+	m_pwndEditGeneralButton->SetContents(L"Hello world");
+
+	nReplaced = m_wndArchiveToolBar.ReplaceButton(IDC_EDIT_GENERAL, *m_pwndEditGeneralButton);
+
+	return 0;
+}
+
+void CViewSheet::EditTextSetWindowText(CString Buff)
+{
+	CMFCToolBarEditBoxButton::SetContentsAll(IDC_EDIT_GENERAL, Buff);
+}
+
+void CViewSheet::EditTextGetWindowText(CString &pBuff)
+{
+	CEdit *pEdit = m_pwndEditGeneralButton->GetEditBox();
+	pEdit->GetWindowTextW(pBuff);
+}
+
+void CViewSheet::OnChangeEditEditText()
+{
+	CString Buff;
+
+	if ((m_nToolOption == TOOL_HISTOGRAM) && (theApp.m_LastSettings.nHistogramStyle == HISTOGRAM_CIRCLE_STYLE)) {
+		EditTextGetWindowText(Buff);
+		_WTOF(Buff, theApp.m_LastSettings.fHistogramCircleSize);
+	}
+}
+
+
+void CViewSheet::OnSize(UINT nType, int cx, int cy)
+{
+	CResizableSheet::OnSize(nType, cx, cy);
+
+	CMFCToolBarButton *pButton = m_wndArchiveToolBar.GetButton(m_wndArchiveToolBar.CommandToIndex(IDC_EDIT_GENERAL));
+	if (pButton && pButton->GetHwnd()) {
+//		CRect rr = pButton->Rect();
+//		rr.top -= 4;
+//		rr.bottom += 4;
+//		pButton->SetRect(rr);
+	}
 }

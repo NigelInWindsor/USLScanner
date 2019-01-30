@@ -2943,6 +2943,9 @@
     <Image Include="res\WaterPathProbeLengthTipsbmp.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\toolbar5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Pump I Variables.txt">

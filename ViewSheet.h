@@ -55,12 +55,14 @@ public:
 	CViewOptionsSheet* m_pViewOptionsSheet;
 	CCADTableDlg* m_pCADTableDlg;
 	CDataExportRulesDlg* m_pDataExportRulesDlg;
-	CToolBar	m_wndPaletteToolBar;
-	CToolBar	m_wndCADToolBar;
-	CToolBar	m_wndOrientationToolBar;
-	CToolBar    m_wndArchiveToolBar;
-	CToolBar    m_wndToolsToolBar;
-	CDialogBar	m_wndDialogBar;
+	CMFCToolBar	m_wndPaletteToolBar;
+	CMFCToolBar	m_wndCADToolBar;
+	CMFCToolBar	m_wndOrientationToolBar;
+	CMFCToolBar    m_wndArchiveToolBar;
+	CMFCToolBar    m_wndToolsToolBar;
+	CMFCToolBar    m_wndEditToolBar;
+	CMFCToolBarEditBoxButton *m_pwndEditGeneralButton = NULL;
+//	CDialogBar	m_wndDialogBar;
 	CReBar		m_wndRebar;
 	CMenu		*m_pMenu;
 	CDetailsPage* m_pDetailsPage;
@@ -239,8 +241,11 @@ protected:
 	afx_msg void OnFileMosaic();
 	afx_msg void OnButtonSquash();
 	afx_msg void OnViewInclusions();
+	afx_msg LRESULT OnToolbarReset(WPARAM wp, LPARAM);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 /////////////////////////////////////////////////////////////////////////////

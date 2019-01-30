@@ -106,6 +106,7 @@ BEGIN_MESSAGE_MAP(CViewPage, CResizablePage)
 	ON_WM_SETCURSOR()
 	ON_WM_CONTEXTMENU()
 	ON_WM_MOUSEWHEEL()
+	ON_COMMAND(ID_VIEW_PROPERTIES, OnViewProperties)
 	ON_COMMAND(ID_VIEW_PALETTE_1, OnViewPalette1)
 	ON_COMMAND(ID_VIEW_PALETTE_2, OnViewPalette2)
 	ON_COMMAND(ID_VIEW_PALETTE_3, OnViewPalette3)
@@ -1048,6 +1049,7 @@ void CViewPage::DrawGraticule(CPaintDC *pDC)
 	float	fStep=100.0f;
 	int	nTextStep=500;
 	int ii;
+	int nLine = 0;
 	float xx,yy,fXSize,fYSize,fFastScanSize,fFastIncrement,fDivisor;
 	int	pnx,pny;
 	CString Buff;
@@ -1073,7 +1075,21 @@ void CViewPage::DrawGraticule(CPaintDC *pDC)
 	pDC->FillRect(&rr,&brushBK);
 
 	if((theApp.m_LastSettings.nViewGraticuleStyle & (GRATICULE_BOTTOM | GRATICULE_RIGHT | GRATICULE_LEFT | GRATICULE_TOP)) == 0) return;
-	m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,0);
+	if (m_pData->m_nFastAxis != 5) {
+		nLine = 0;
+	}
+	else {
+		switch (theApp.m_LastSettings.nRAxisGraticuleMode) {
+		case 0:
+		case 1:
+		case 3: nLine = 0;
+			break;
+		case 2: nLine = m_pData->m_nNumberLines - 1;
+			break;
+		}
+	}
+
+	m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,nLine);
 	theApp.m_LastSettings.nMeasurementUnits==0 ? fDivisor = 10.0f : fDivisor = 12.0f;
 
 	GetGraticuleSize(&fXSize,&fYSize,&fStep,&nTextStep,theApp.m_fUnits);
@@ -1256,8 +1272,21 @@ void CViewPage::DrawGraticule(CPaintDC *pDC)
 void CViewPage::GetGraticuleSize(float *fXSize, float *fYSize,float *fStep,int *nTextStep,float fUnits)
 {
 	float fTemp,fFastScanSize,fFastIncrement;
+	int nLine = 0;
 
-	m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,0);
+	if (m_pData->m_nFastAxis == 5) {
+		switch (theApp.m_LastSettings.nRAxisGraticuleMode) {
+		case 0:
+		case 1:
+		case 3: nLine = 0;
+			break;
+		case 2: nLine = m_pData->m_nNumberLines - 1;
+			break;
+		}
+	}
+
+
+	m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,nLine);
 
 	*fXSize = fFastIncrement * (float)m_prrSamples->Width() * fUnits;
 	*fYSize = m_pData->m_fSlowIncrement *  (float)m_prrSamples->Height() * fUnits;
@@ -1266,11 +1295,11 @@ void CViewPage::GetGraticuleSize(float *fXSize, float *fYSize,float *fStep,int *
 
 	switch(theApp.m_LastSettings.nMeasurementUnits) {
 	case 0:
-		*fStep = 500.0;
-		*nTextStep=1000;
+		*fStep = 200.0;
+		*nTextStep=200;
 		if(fTemp<=1000) {
 			*fStep = 100.0;
-			*nTextStep=500;
+			*nTextStep=100;
 		};
 		if(fTemp<=500) {
 			*fStep = 100.0;
@@ -1911,7 +1940,7 @@ void CViewPage::DrawRuler(CPaintDC* pDC)
 	if(m_nToolOption!=TOOL_RULER) return;
 
 	CPen penBkRuler(PS_SOLID,1,GetSysColor(COLOR_INFOBK));
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush brushBkRuler(GetSysColor(COLOR_INFOBK));
 	CBrush* pOldBrush = pDC->SelectObject(&brushBkRuler);
@@ -2052,6 +2081,11 @@ void CViewPage::DrawRuler(CPaintDC* pDC)
 	}
 
 	CPoint ptCenter;
+	CFont FontText;
+	theApp.m_LastSettings.lfViewGraticule.lfEscapement = 0;
+	FontText.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
+	CFont* pOldFont = pDC->SelectObject(&FontText);
+
 	theApp.FormatLength(m_fRulerLength,1,Length);
 	switch(theApp.m_LastSettings.nRulerFlagMode) {
 	case 0:
@@ -2066,6 +2100,7 @@ void CViewPage::DrawRuler(CPaintDC* pDC)
 		TextBoxAtPt(pDC,m_strRuler,ptCenter);
 		break;
 	}
+	pDC->SelectObject(pOldFont);
 
 	pDC->SelectObject(pOldBrush);
 	pDC->SelectObject(pOldPen);
@@ -2080,7 +2115,7 @@ void CViewPage::DrawCrossSectionLine(CPaintDC* pDC)
 	if(m_nToolOption!=TOOL_CROSS_SECTION) return;
 
 	CPen penBkRuler(PS_SOLID,1,GetSysColor(COLOR_INFOBK));
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 
 	D3DXVECTOR2 Line1Pt1,Line1Pt2,Line2Pt1,Line2Pt2;
@@ -2183,7 +2218,7 @@ void CViewPage::DrawPolygon(CPaintDC *pDC)
 	if(m_pData->m_nPolygonL <=0) return;
 	if(m_pData->m_pPolygon==NULL) return;
 
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 
 	for(int nP=0;nP<m_pData->m_nPolygonL;nP++) {
@@ -2219,8 +2254,8 @@ void CViewPage::DrawHistogram(CPaintDC* pDC)
 	if(m_nToolOption!=TOOL_HISTOGRAM) return;
 	CViewSheet* pViewSheet = (CViewSheet*)m_pParent;
 
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
-	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
+	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush brushBkRuler(GetSysColor(COLOR_INFOBK));
 	CBrush* pOldBrush = pDC->SelectObject(&brushBkRuler);
@@ -2431,8 +2466,8 @@ void CViewPage::DrawZoomVariable(CPaintDC* pDC)
 	if(m_nToolOption!=TOOL_ZOOM_VARIABLE) return;
 	CViewSheet* pViewSheet = (CViewSheet*)m_pParent;
 
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
-	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
+	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush brushBkRuler(GetSysColor(COLOR_INFOBK));
 	CBrush* pOldBrush = pDC->SelectObject(&brushBkRuler);
@@ -3002,6 +3037,7 @@ void CViewPage::OnContextMenu(CWnd* pWnd, CPoint point)
 
 			pPopup->EnableMenuItem( ID_VIEW_COPYAREATOENVELOPE   , MF_GRAYED|MF_BYCOMMAND);
 			if(IsPtInAnnotation(m_ptClient) == -1) pPopup->EnableMenuItem( ID_VIEW_DELETEANNOTATION   , MF_GRAYED|MF_BYCOMMAND);
+			pPopup->AppendMenuW(MF_STRING, ID_VIEW_PROPERTIES, L"Properties");
 			pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, pt.x, pt.y,this);
 			break;
 
@@ -3100,7 +3136,6 @@ void CViewPage::OnViewPalette1()
 
 	CMainFrame*  pFrame =  (CMainFrame*)AfxGetApp()->m_pMainWnd;
 	pFrame->ChangePalletteNumber(m_nImageType,m_nPaletteNumber);
-
 }
 
 void CViewPage::OnViewPalette2()
@@ -3289,7 +3324,7 @@ void CViewPage::DrawDiagZeroCrossings(CPaintDC *pDC)
 	double dOldValue=0;
 	CPoint pt;
 	int nCoordL;
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CRgn rgn;
 	CRect rect,rr;
 
@@ -3298,7 +3333,7 @@ void CViewPage::DrawDiagZeroCrossings(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -3367,7 +3402,7 @@ void CViewPage::DrawDiagDirChange(CPaintDC *pDC)
 	int nCoordL;
 	double dir;
 
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CRgn rgn;
 	CRect rect,rr;
 
@@ -3376,7 +3411,7 @@ void CViewPage::DrawDiagDirChange(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -3503,7 +3538,7 @@ void CViewPage::DrawProfileWaypoints(CPaintDC *pDC)
 	double dOldValue=0;
 	CPoint pt;
 
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CRgn rgn;
 	CRect rect,rr;
 
@@ -3514,7 +3549,7 @@ void CViewPage::DrawProfileWaypoints(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -3558,7 +3593,7 @@ void CViewPage::DrawProfileTaughtLines(CPaintDC *pDC)
 	CFont Font;
 	CPoint pt;
 	CString Buff;
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CRgn rgn;
 	CRect rect,rr;
 
@@ -3571,7 +3606,7 @@ void CViewPage::DrawProfileTaughtLines(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -3856,7 +3891,7 @@ void CViewPage::DrawTessellation(CPaintDC* pDC)
 	/*
 	if(theApp.m_nTessL<=0) return;
 
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 
 	for(int nT=0;nT<theApp.m_nTessL;nT++) {
@@ -3892,7 +3927,7 @@ void CViewPage::OnTimer(UINT nIDEvent)
 	CCoord	CpSurface,CpHead;
 	CPoint	point(-1,-1);
 	CDC* pDC = GetDC();
-	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen=pDC->SelectObject(&pen);
 	CBitmap *pOldBitmap;
 	CBitmap	bmp,bmpCrossHair;
@@ -4110,7 +4145,7 @@ void CViewPage::DrawProfileBraneLines(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -4307,7 +4342,7 @@ void CViewPage::DrawCAD(CPaintDC *pDC,int nDevice)
 	CSize size;
 
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -4643,11 +4678,13 @@ float CViewPage::ComputeRulerStats(CString *pBuff)
 	CCoord Cp0,Cp1,Cp;
 	CPoint pt,pt0,pt1;
 	CString Message,Width,Height,Length;;
-	float fLength,fCircumferance,fAngle,fStep;
+	float fLength,fCircumferance,fAngle,fStep,fX0,fX1;
 	int nTemp,nn;
 	CViewSheet* pViewSheet = (CViewSheet*)m_pParent;
 	CString Buff;
 	float fFastScanSize,fFastIncrement,fRadialLength,fTangentalLength;
+
+	fLength = 0.0f;
 
 	ClientToWorld(m_rrRuler.TopLeft(),&Cp0);
 	ClientToWorld(m_rrRuler.BottomRight(),&Cp1);
@@ -4708,9 +4745,15 @@ float CViewPage::ComputeRulerStats(CString *pBuff)
 			pBuff->Format(_T("Angle:%.02f%s"),fAngle,DEGREES);
 			break;
 		case 6://Circumferential distance
-			m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,0);
-			fAngle=fabs(Cp0.Side0.fR - Cp1.Side0.fR);
-			fLength = fFastScanSize * fAngle / 360.0f;
+			ClientToSample(m_rrRuler.TopLeft(), &pt0);
+			m_pData->GetFastScanSizeIncrement(&fFastScanSize, &fFastIncrement, pt0.y);
+			fX0 = fFastScanSize * (float)pt0.x / (float)m_pData->m_nSamplesLine;
+
+			ClientToSample(m_rrRuler.BottomRight(), &pt1);
+			m_pData->GetFastScanSizeIncrement(&fFastScanSize, &fFastIncrement, pt1.y);
+			fX1 = fFastScanSize * (float)pt1.x / (float)m_pData->m_nSamplesLine;
+
+			fLength = fabs(fX1 - fX0);
 			theApp.FormatLength(fLength,1,Length);
 			pBuff->Format(_T("Length:%s"),Length);
 			break;
@@ -4723,7 +4766,7 @@ float CViewPage::ComputeRulerStats(CString *pBuff)
 			pt1.y+=m_pData->m_nScanStartLine;
 			fLength = m_pData->m_fSlowScanSize / (float)m_pData->m_nNumberLines * (float)abs(pt0.y-pt1.y);
 			theApp.FormatLength(fLength,1,Length);
-			pBuff->Format(_T("Tangental Length:%s"),Length);
+			pBuff->Format(_T("Perpendicular Length:%s"),Length);
 			break;
 		case 8:
 			m_pData->GetFastScanSizeIncrement(&fFastScanSize,&fFastIncrement,0);
@@ -4824,7 +4867,7 @@ void CViewPage::DrawProfileEnvelopeLines(CPaintDC *pDC)
 	Font.CreateFontIndirect(&theApp.m_LastSettings.lfViewGraticule);
 	CFont* pOldFont = pDC->SelectObject(&Font);
 	pDC->SetBkMode(TRANSPARENT);
-	pDC->SetTextColor(theApp.m_LastSettings.rgbRuler);
+	pDC->SetTextColor(theApp.m_LastSettings.rgbRulerLine);
 
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -5762,7 +5805,7 @@ void CViewPage::DrawInclusions(CPaintDC* pDC)
 	if(m_nToolOption!=TOOL_INCLUSION) return;
 	CViewSheet* pViewSheet = (CViewSheet*)m_pParent;
 
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
 
 	CPen* pOldPen = pDC->SelectObject(&pen);
 
@@ -5866,4 +5909,8 @@ void CViewPage::Vector2IntersectionPt(D3DXVECTOR2 Line1Point1, D3DXVECTOR2 Line1
 
 }
 
-
+void CViewPage::OnViewProperties()
+{
+	FRAME;
+	pFrame->SendMessage(UI_SHOW_PROPERTIES_PANE, NULL, View_Ruler);
+}

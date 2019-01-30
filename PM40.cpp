@@ -478,6 +478,7 @@ int CPM40::MailboxTx(int nValue, int *pnCheckSum)
 	};
 	if (m_nMaxMailboxWait < timeout) m_nMaxMailboxWait = timeout;
 	WriteBar0(0x8820, nValue);				//0x8020
+	m_nTotalMailboxBytesSent++;
 
 	if (nValue & 0x80) {
 		*pnCheckSum = nValue;
@@ -485,7 +486,9 @@ int CPM40::MailboxTx(int nValue, int *pnCheckSum)
 	else {
 		*pnCheckSum += nValue;
 	}
-	if (nValue == 0xff) m_nTotalCommandsSent++;
+	if (nValue == 0xff) {
+		m_nTotalCommandsSent++;
+	}
 
 	return TRUE;
 }
@@ -501,7 +504,6 @@ void CPM40::ConfigureADC()
 
 void CPM40::ConfigureWidthDelay(TimeSlotData *pTS, int nBoardNumber)
 {
-
 	for (int nDivisor = 1; nDivisor < 30; nDivisor++) {
 		float fSamplePeriod = 1.0f / (250.0e-3f / (float)nDivisor);
 		int nNumberSamples = (int)((float)pTS->Adc.nWidth / fSamplePeriod);
@@ -543,10 +545,11 @@ bool CPM40::IsConversionComplete(int *nTS)
 
 		m_dElapsedTime = theApp.m_PM40User.getElapsedSinceLastArmed();
 		if (nTS) {
-			*nTS = ((nFlag >> 8) & 0x0ff) - 1;
-			if (*nTS == -1) {
+			*nTS = ((nFlag >> 8) & 0x0ff);
+			if (*nTS <= 0 || *nTS > theApp.m_UtUser.m_Global.Mux.nMaxTimeslots) {
 				nTimeSlotNumberError++;
 			}
+			*nTS = *nTS - 1;
 		}
 		return true;
 	}
@@ -638,13 +641,20 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 	nExpectedSlot = 0;
 	while (pcfgParams->bRunning)
 	{
+		theApp.m_PM40User.HardwareReset();
+
 		switch (nPollingIrq) {
 		case 0:
 			if (theApp.m_PM40User.IsConversionComplete(&nSlot)) {
-				theApp.m_PM40User.ReadTrace(&ThreadParams, nExpectedSlot);
+
+				if (nExpectedSlot != nSlot) {
+					theApp.m_PM40User.WriteBar0(0x83FC, nSlot + 1);
+					theApp.m_PM40User.m_nExpectedSlotNumberWrong++;
+					nExpectedSlot = nSlot;
+				}
+
+				theApp.m_PM40User.ReadTrace(&ThreadParams, nSlot);
 				theApp.m_PM40User.ArmADC();
-				if (nExpectedSlot != nSlot) theApp.m_PM40User.m_nExpectedSlotNumberWrong++;
-//				if(nSlot == 0) nExpectedSlot = nSlot;
 				nExpectedSlot++;
 				nExpectedSlot %= theApp.m_UtUser.m_Global.Mux.nMaxTimeslots;
 
@@ -828,4 +838,14 @@ UINT CPM40PendForInterrupt(LPVOID pParam)
 	TRACE0("SI10x64 Interrupt callback finished\n");
 
 	return 0;
+}
+
+
+void CPM40::HardwareReset()
+{
+	if (m_bReset == true) {
+		WriteBar0(0x8800 + 0x3FC, 0xA55AA55A);
+		WriteBar0(0x8800 + 0x3FC, 0x55AA55A5);
+		m_bReset = false;
+	}
 }

@@ -255,10 +255,10 @@ bool CEthernet::Disconnect()
 bool CEthernet::GetAllIPAddress()
 {
 	CString strTemp;
-//	struct hostent *host;
+	struct hostent *host;
 	char str[256];
 
-//	struct in_addr *ptr; // To retrieve the IP Address 
+	struct in_addr *ptr; // To retrieve the IP Address 
 
 	DWORD dwScope = RESOURCE_CONTEXT;
 	NETRESOURCE *NetResource = NULL;
@@ -280,10 +280,10 @@ bool CEthernet::GetAllIPAddress()
 
 		char szHostName[200];
 		unsigned int i;
-
+		int nLoop = 0;
 		for ( i = 0; 
 			i < BufferSize/sizeof(NETRESOURCE); 
-			i++, NetResource++ )
+			i++, NetResource++ ,nLoop++)
 		{
 			if ( NetResource->dwUsage == 
 				RESOURCEUSAGE_CONTAINER && 
@@ -307,7 +307,7 @@ bool CEthernet::GetAllIPAddress()
 					}
 					str[ii]=0;
 
-/*					host = gethostbyname(str);
+					host = gethostbyname(str);
 
 					if(host == NULL) continue; 
 					ptr = (struct in_addr *) 
@@ -322,7 +322,7 @@ bool CEthernet::GetAllIPAddress()
 					strTemp.Format(L"%s -->  %d.%d.%d.%d",
 						strFullName,a,b,c,d);
 					AfxMessageBox(strTemp);
-					*/
+					
 				}
 			}
 		}
@@ -466,4 +466,45 @@ CString CEthernet::FormatPktData(int nIndex)
 		m_PktArray[nIndex].FormatData(&Buff);
 	}
 	return Buff;
+}
+
+bool CEthernet::Ping()
+{
+	WSADATA wsaData;
+	// Initialize Winsock
+	int wret = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (wret != 0) {
+		printf("WSAStartup failed: %d\n", wret);
+		return 1;
+	}
+	if (AfxSocketInit(&wsaData) == FALSE) {
+		AfxMessageBox(L"Failed to Initialize Sockets");
+	}
+
+	DWORD dwError;
+	struct hostent *remoteHost;
+	char host_addr[] = "128.128.128.100"; //or any other IP
+	struct in_addr addr = { 0 };
+
+	addr.s_addr = inet_addr(host_addr);
+	if (addr.s_addr == INADDR_NONE) {
+		printf("The IPv4 address entered must be a legal address\n");
+		return 1;
+	}
+	else
+		remoteHost = gethostbyaddr((char *)&addr, 4, AF_INET);
+
+
+	if (remoteHost == NULL) {
+		dwError = WSAGetLastError();
+		if (dwError != 0)
+			printf("error: %d", dwError);
+	}
+	else {
+		printf("Hostname: %s\n", remoteHost->h_name);
+	}
+
+//	WSACleanup();
+
+	return true;
 }

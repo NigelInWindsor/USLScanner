@@ -219,6 +219,7 @@ protected:
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
 	afx_msg void OnViewGotowithLiftoff();
+	afx_msg void OnViewProperties();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

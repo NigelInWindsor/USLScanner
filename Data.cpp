@@ -2117,6 +2117,7 @@ void CData::CollectComplexDataWithProbeOffsets()
 	int nn,gg,tt,pp,bb,nTS,nPtr0,nPtr1,nPtr;
 	int	nGStop,nGStart,nPath,nTrigPos,nAxis;
 	int	nStart,nFinish,nVolumePtr,nSample,nLine,nNominalLine;
+	int nLookAhead;
 
 	m_bModified = TRUE;
 	int	nArraySize = m_nSamplesLine * m_nNumberLines;
@@ -2125,9 +2126,11 @@ void CData::CollectComplexDataWithProbeOffsets()
 
 	switch(m_nCollectAxis) {
 	default: nAxis = m_nCollectAxis;
+		nLookAhead = 1;
 		break;
 	case 5:
 	case 6:
+		nLookAhead = 10;
 		switch(theApp.m_nUseTurntableOrRollers) {
 		default: nAxis = 5;
 			break;
@@ -2179,7 +2182,7 @@ void CData::CollectComplexDataWithProbeOffsets()
 		MinMax(m_nLastPtr[ m_TS[nTS].nScanLine ], 0, m_nPtr[ m_TS[nTS].nScanLine ]);
 
 		nPtr0 = m_nPtr[ m_TS[nTS].nScanLine ];
-		theApp.m_Thread.m_nDir==0 ? nPtr1 = m_nPtr[ m_TS[nTS].nScanLine ]+2 :	nPtr1 = m_nPtr[ m_TS[nTS].nScanLine ]-2;
+		theApp.m_Thread.m_nDir==0 ? nPtr1 = m_nPtr[ m_TS[nTS].nScanLine ]+ nLookAhead :	nPtr1 = m_nPtr[ m_TS[nTS].nScanLine ]- nLookAhead;
 		MinMax(&nPtr1,0,nArraySize - 1);
 		if (nPtr1 < nPtr0) {
 			int nTemp = nPtr0;
@@ -9592,7 +9595,7 @@ void CData::ImportAllEnvelopesFromProfile()
 		for(nLine=0;nLine<m_nEnvelopeLineL;nLine++) {
 			m_pEnvelopeLine[nLine] = &PROFILE->m_EnvelopeLine[nLine];
 			m_pEnvelopeLine[nLine].m_nOffOn = 1;
-			m_pEnvelopeLine[nLine].m_rgb = theApp.m_LastSettings.rgbRuler;
+			m_pEnvelopeLine[nLine].m_rgb = theApp.m_LastSettings.rgbRulerLine;
 		}
 	}
 	m_bThreadEnabled=TRUE;

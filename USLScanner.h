@@ -404,6 +404,8 @@ enum PropertiesList {
 	UtSubset,
 	UtCopy,
 	PositionDisplay,
+	View_Ruler,
+	View_Histogram,
 };
 
 
@@ -709,6 +711,7 @@ enum AccessLevel {
 #define UI_INVALIDATE_OPTIMIZE_PANE			0x8027
 #define UI_ITEMCHANGED						0x8028
 #define UI_SET_ACCESS_PRIVELAGES			0x8029
+#define	UI_INVALIDATE_VIEW_SHEETS			0x802A
 
 #define	WM_ITEMCHANGED	100
 #define WM_ITEMFINISHED 101
@@ -1288,10 +1291,7 @@ public:
 	COLORREF	rgbViewGraticuleColor;
 	LOGFONT	 lfViewGraticule;
 
-	int		nRulerWidth;
-	COLORREF	rgbRuler;
-	int		nRulerStyle;
-	int		nRulerTextMode;
+	int											nAnotherSpare[4];
 
 	int		nHistogramAbsoluteCummulative;
 	LOGFONT	lfHistogram;
@@ -1375,7 +1375,7 @@ public:
 
 	int		nPlaceComponentInScanner;
 
-	float	fRulerScale;
+	float							NotUsedAgain;
 	int		nMeasurementUnits;
 	int		nImageEdge[8];
 	int		nMuxVersion;
@@ -1942,6 +1942,16 @@ public:
 	float		fDeltaThickness;
 	float		fDeltaWaterPath;
 	float		fDeltaScanIncrement;
+
+	LOGFONT		lfRuler;
+	int			nRulerWidth;
+	COLORREF	rgbRulerLine;
+	COLORREF	rgbRulerText;
+	COLORREF	rgbRulerBk;
+	int			nRulerStyle;
+	int			nRulerTextMode;
+	float		fRulerScale;
+	int				nRulerSpare[6];
 
 	int		nSpare[100];
 };

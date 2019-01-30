@@ -116,7 +116,7 @@ void CDiscsShaftsPage::UpdateAllControls()
 	Buff.Format(_T("%.02f%s"), PROFILE->m_fFastIncrement, DEGREES);
 	m_editFastIncrement.SetWindowText(Buff);
 
-	Buff.Format(_T("%.01f mm"), PROFILE->m_fSlowIncrement);
+	Buff.Format(_T("%.02f mm"), PROFILE->m_fSlowIncrement);
 	m_editSlowIncrement.SetWindowText(Buff);
 
 	Buff.Format(_T("%d"), PROFILE->m_nScanResumeLine + 1);

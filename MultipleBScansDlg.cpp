@@ -686,7 +686,7 @@ void CMultipleBScansDlg::DrawRuler(CDC *pDC, CRect rr, int nDevice)
 
 	CPen penBlack(PS_SOLID,1,RGB(0,0,0));
 	CPen penWhite(PS_SOLID,20,RGB(255,255,255));
-	CPen penRuler(PS_SOLID,2,theApp.m_LastSettings.rgbRuler);
+	CPen penRuler(PS_SOLID,2,theApp.m_LastSettings.rgbRulerLine);
 	CRect	rectRuler;
 	CString Buff;
 	CSize size;
@@ -834,7 +834,7 @@ void CMultipleBScansDlg::OnBscanColour()
 	CMFCColorDialog dlg;
 
 	if(dlg.DoModal()==IDOK) {
-		theApp.m_LastSettings.rgbRuler=dlg.GetColor();
+		theApp.m_LastSettings.rgbRulerLine=dlg.GetColor();
 		Invalidate(FALSE);
 	};
 	

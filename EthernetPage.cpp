@@ -80,6 +80,8 @@ BEGIN_MESSAGE_MAP(CEthernetPage, CPropertyPage)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_BUTTON_CLEAR, OnButtonClear)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON_REFRESH_ADDRS_LIST, &CEthernetPage::OnBnClickedButtonRefreshAddrsList)
+	ON_BN_CLICKED(IDC_BUTTON_PING, &CEthernetPage::OnBnClickedButtonPing)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -242,4 +244,20 @@ BOOL CEthernetPage::PreTranslateMessage(MSG* pMsg)
 	}
 	
 	return CPropertyPage::PreTranslateMessage(pMsg);
+}
+
+
+void CEthernetPage::OnBnClickedButtonRefreshAddrsList()
+{
+	CEthernet Ethernet;
+
+	Ethernet.GetAllIPAddress();
+}
+
+
+void CEthernetPage::OnBnClickedButtonPing()
+{
+	CEthernet Ethernet;
+
+	Ethernet.Ping();
 }

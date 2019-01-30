@@ -354,6 +354,7 @@
 #define IDD_IMPORT_TOOLPATHS_DLG        392
 #define ID_AXIS_PANEWND                 392
 #define IDR_RB_IMPORT_MENU              393
+#define ID_VIEW_PROPERTIES              393
 #define IDR_IMPORT_TOOLBAR              394
 #define IDD_3D_DESIGN_PAGE              396
 #define IDR_3D_DESIGN_TOOLBAR           398
@@ -590,6 +591,8 @@
 #define IDR_WP_PL_TIPS                  715
 #define IDD_PM40_PAGE                   718
 #define IDD_DISCS_SHAFTS_PAGE           720
+#define IDR_TOOLBAR5                    725
+#define IDR_RB_UT_COPY_MENU             727
 #define IDC_STATIC_VERSION              1000
 #define IDC_STATIC_VIEW                 1000
 #define IDC_ATTENUATION                 1000
@@ -3806,6 +3809,10 @@
 #define IDC_EDIT_COUNTS_TS2             4108
 #define IDC_EDIT_COUNTS_TS3             4109
 #define IDC_LIST_ADDRS                  4109
+#define IDC_BUTTON_REFRESH_ADDRS_LIST   4110
+#define IDC_BUTTON2                     4111
+#define IDC_BUTTON_PING                 4111
+#define IDC_BUTTON_HW_RESET             4111
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -4963,6 +4970,9 @@
 #define ID_BUTTON_TIPS_TO_HORIZONTAL    34144
 #define ID_DOCKABLES_AXIS               34145
 #define ID_AXES_DEFAULT                 34146
+#define ID_VIEW_EDIT_TOOLBAR            34148
+#define ID_UT_ALLTRUE                   34149
+#define ID_UT_ALLFALSE                  34150
 #define IDS_SIMPLE_RASTER               61001
 #define IDS_MS_Sans_Serif               61001
 #define IDS_RAPID_RAPID                 61002
@@ -6066,9 +6076,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        725
-#define _APS_NEXT_COMMAND_VALUE         34147
-#define _APS_NEXT_CONTROL_VALUE         4110
-#define _APS_NEXT_SYMED_VALUE           393
+#define _APS_NEXT_RESOURCE_VALUE        728
+#define _APS_NEXT_COMMAND_VALUE         34151
+#define _APS_NEXT_CONTROL_VALUE         4112
+#define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif

@@ -399,7 +399,7 @@ void CZoomPage::InitializeViewVariables(CPaintDC* pDC,CRect* prr)
 
 void CZoomPage::DrawActiveArea(CPaintDC *pDC)
 {
-	CPen PenActive(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen PenActive(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	CPen PenGrey(PS_SOLID,1,RGB(120,120,120));
 	CPen* pOldPen = pDC->SelectObject(&PenGrey);
 	CRect rr;

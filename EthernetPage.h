@@ -70,6 +70,8 @@ protected:
 
 public:
 	CListCtrl m_listAddrs;
+	afx_msg void OnBnClickedButtonRefreshAddrsList();
+	afx_msg void OnBnClickedButtonPing();
 };
 
 

@@ -312,6 +312,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_MESSAGE(UI_INVALIDATE_FOR_ROLLER_KINEMATICS, &CMainFrame::UpdateAxes)
 	ON_MESSAGE(UI_INVALIDATE_OPTIMIZE_PANE, &CMainFrame::InvalidateOptimizePane)
 	ON_MESSAGE(UI_SET_ACCESS_PRIVELAGES, &CMainFrame::SetAccessPrivelages)
+	ON_MESSAGE(UI_INVALIDATE_VIEW_SHEETS, &CMainFrame::InvalidateViewSheets)
 
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipNotify)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipNotify)
@@ -1012,9 +1013,14 @@ void CMainFrame::OnSetFocus(CWnd* pOldWnd)
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
+	if (nCode == AFX_WM_RESETTOOLBAR) {
+		ASSERT(0);
+	}
+
 	// let the view have first crack at the command
 	if (m_wndView.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
+
 
 
 	// otherwise, do default handling
@@ -1495,6 +1501,7 @@ void CMainFrame::OnFileOpen()
 				if(m_pViewSheet[nn]->m_bCompatibleFile == true) {
 					m_pViewSheet[nn]->Create(this);
 					AfxGetApp()->AddToRecentFileList(FilePath);
+
 				} else {
 					SAFE_DELETE( m_pViewSheet[nn] );
 				};
@@ -7884,3 +7891,27 @@ HRESULT CMainFrame::InvalidateOptimizePane(WPARAM wp, LPARAM lp)
 }
 
 
+
+
+BOOL CMainFrame::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	if (message == AFX_WM_RESETTOOLBAR) {
+		for (int nn = 0; nn < MAX_NUMBER_VIEWS; nn++) {
+			if (m_pViewSheet[nn]) {
+				m_pViewSheet[nn]->SendMessage(message, wParam, lParam);
+			}
+		};
+	}
+
+	return CFrameWndEx::OnWndMsg(message, wParam, lParam, pResult);
+}
+
+HRESULT CMainFrame::InvalidateViewSheets(WPARAM wParam, LPARAM lParam)
+{
+	for (int nn = 0; nn < MAX_NUMBER_VIEWS; nn++) {
+		if (m_pViewSheet[nn]) {
+			m_pViewSheet[nn]->InvalidateChild();
+		}
+	};
+	return NULL;
+}

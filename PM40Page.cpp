@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CPM40Page, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_IRQ_COUNT, &CPM40Page::OnBnClickedButtonIrqCount)
 	ON_BN_CLICKED(IDC_BUTTON_RESET_ALL_TS, &CPM40Page::OnBnClickedButtonResetAllTs)
 	ON_BN_CLICKED(IDC_BUTTON_RESET_COUNTERS, &CPM40Page::OnBnClickedButtonResetCounters)
+	ON_BN_CLICKED(IDC_BUTTON_HW_RESET, &CPM40Page::OnBnClickedButtonHwReset)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -145,7 +146,7 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 		m_editElapsedTime.SetWindowTextW(Buff);
 	}
 //	if (nOldMaxMailboxWait - theApp.m_PM40User.m_nMaxMailboxWait) {
-		Buff.Format(L"%d %d", nOldMaxMailboxWait = theApp.m_PM40User.m_nMaxMailboxWait, nOldTotalCommandsSent = theApp.m_PM40User.m_nTotalCommandsSent);
+		Buff.Format(L"%d", nOldMaxMailboxWait = theApp.m_PM40User.m_nMaxMailboxWait);
 		m_editMailboxMaxWait.SetWindowTextW(Buff);
 //	}
 	if (nOldTotalCommandsSent - theApp.m_PM40User.m_nTotalCommandsSent) {
@@ -175,9 +176,12 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	Buff.Empty();
-	Temp.Format(L"Acq but not trig %d\r\n", theApp.m_PM40User.m_nTriggerDidntOccur);	Buff += Temp;
-	Temp.Format(L"incorrect timeslot %d\r\n", theApp.m_PM40User.nTimeSlotNumberError);	Buff += Temp;
+	Temp.Format(L"Acq but not trig %d\r\n", theApp.m_PM40User.m_nTriggerDidntOccur);					Buff += Temp;
+	Temp.Format(L"incorrect timeslot %d\r\n", theApp.m_PM40User.nTimeSlotNumberError);					Buff += Temp;
 	Temp.Format(L"expected Slot number wrong %d\r\n", theApp.m_PM40User.m_nExpectedSlotNumberWrong);	Buff += Temp;
+	Temp.Format(L"Number of maibox bytes %d\r\n", theApp.m_PM40User.m_nTotalMailboxBytesSent);				Buff += Temp;
+	Temp.Format(L"Number of mailbox commands %d\r\n", theApp.m_PM40User.m_nTotalCommandsSent);				Buff += Temp;
+
 	
 	m_editGeneral.SetWindowTextW(Buff);
 
@@ -237,4 +241,10 @@ void CPM40Page::OnBnClickedButtonResetCounters()
 {
 	theApp.m_PM40User.WriteBar0(0x8020, 1);
 	theApp.m_PM40User.WriteBar0(0x8020, 0);
+}
+
+
+void CPM40Page::OnBnClickedButtonHwReset()
+{
+	theApp.m_PM40User.m_bReset = true;
 }

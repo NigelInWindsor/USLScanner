@@ -482,6 +482,10 @@ void CScope::FillScopeArrayShort(int nSlot, __int16 *pSrc, int nAcqLength, bool 
 	int *pnRfAverage;
 	int *pnSum;
 
+	if (nSlot < 0 || nSlot >= 257) {
+		ASSERT(0);
+	}
+
 	MinMax(&nAverages, 0, 5);
 	AllocateAverageSpace(nSlot, nAverages);
 

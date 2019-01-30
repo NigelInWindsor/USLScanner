@@ -102,19 +102,15 @@ C3DViewEditDlg::C3DViewEditDlg(int nToolBarStyles)	: CResizablePage(C3DViewEditD
 		break;
 	}
 
-
 	m_fRotatePtX = 0.0f;
 	m_fRotatePtY = 0.0f;
 	m_fRotatePtZ = 0.0f;
-
-
 
 	m_bDisplayIsometric = FALSE;
 	m_bDisplayFrame = TRUE;
 	m_bDisplayDangerZone = TRUE;
 	m_nNormal=0;
 	m_nEditLinesEnvelope = 0;
-
 
 	m_nMinLine=0;
 	m_nMaxLine=0;
@@ -415,9 +411,9 @@ int C3DViewEditDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	m_wndFileToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_FILE_TOOLBAR);
-	m_wndFileToolBar.LoadToolBar(IDR_FILE_TOOLBAR, 0, 0, TRUE /* Is locked */);
-	m_wndFileToolBar.SetPaneStyle(m_wndFileToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
-	m_wndFileToolBar.SetPaneStyle(m_wndFileToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
+	m_wndFileToolBar.LoadToolBar(IDR_FILE_TOOLBAR, 0, 0, TRUE);
+		//	m_wndFileToolBar.SetPaneStyle(m_wndFileToolBar.GetPaneStyle() | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY);
+		//	m_wndFileToolBar.SetPaneStyle(m_wndFileToolBar.GetPaneStyle() & ~(CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
 	m_wndFileToolBar.SetOwner(this);
 	m_wndFileToolBar.SetRouteCommandsViaFrame(false);
 

@@ -89,7 +89,7 @@ BOOL CRulerPage::OnInitDialog()
 		//Add to String table
 		m_listRulerText.AddString(_T("Circumferential Angle"));
 		m_listRulerText.AddString(_T("Circumferential Distance"));
-		m_listRulerText.AddString(_T("Tangental Distance"));
+		m_listRulerText.AddString(_T("Perpendicular Distance"));
 		m_listRulerText.AddString(_T("Surface Distance"));
 	}else{
 		Buff.LoadString(IDS_Ruler_Length_XXX); m_listRulerText.AddString(Buff);
@@ -160,7 +160,7 @@ void CRulerPage::OnPaint()
 	m_staticWidth0.GetWindowRect(&rr);
 	ScreenToClient(&rr);
 	dc.Rectangle(rr);
-	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	pOldPen=dc.SelectObject(&pen1);
 	dc.MoveTo(rr.left+4,rr.CenterPoint().y);
 	dc.LineTo(rr.right-4,rr.CenterPoint().y);
@@ -169,7 +169,7 @@ void CRulerPage::OnPaint()
 	ScreenToClient(&rr);
 	dc.SelectObject(pOldPen);
 	dc.Rectangle(rr);
-	CPen pen2(PS_SOLID,2,theApp.m_LastSettings.rgbRuler);
+	CPen pen2(PS_SOLID,2,theApp.m_LastSettings.rgbRulerLine);
 	dc.SelectObject(&pen2);
 	dc.MoveTo(rr.left+4,rr.CenterPoint().y);
 	dc.LineTo(rr.right-4,rr.CenterPoint().y);
@@ -178,7 +178,7 @@ void CRulerPage::OnPaint()
 	ScreenToClient(&rr);
 	dc.SelectObject(pOldPen);
 	dc.Rectangle(rr);
-	CPen pen3(PS_SOLID,3,theApp.m_LastSettings.rgbRuler);
+	CPen pen3(PS_SOLID,3,theApp.m_LastSettings.rgbRulerLine);
 	dc.SelectObject(&pen3);
 	dc.MoveTo(rr.left+4,rr.CenterPoint().y);
 	dc.LineTo(rr.right-4,rr.CenterPoint().y);
@@ -209,7 +209,7 @@ void CRulerPage::OnPaint()
 
 	m_staticColor.GetWindowRect(&rr);
 	ScreenToClient(&rr);
-	dc.FillRect(&rr,&CBrush(theApp.m_LastSettings.rgbRuler));
+	dc.FillRect(&rr,&CBrush(theApp.m_LastSettings.rgbRulerLine));
 
 	m_staticStyleLine.GetWindowRect(&rr);
 	ScreenToClient(&rr);
@@ -265,7 +265,7 @@ void CRulerPage::OnLButtonDown(UINT nFlags, CPoint point)
 	ScreenToClient(&rr);
 	if(rr.PtInRect(point)) {
 		if(dlg.DoModal()==IDOK) {
-			theApp.m_LastSettings.rgbRuler=dlg.GetColor();
+			theApp.m_LastSettings.rgbRulerLine=dlg.GetColor();
 			Invalidate(FALSE);
 		};
 	}

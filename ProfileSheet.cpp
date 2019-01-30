@@ -253,7 +253,6 @@ void CProfileSheet::SetWindowTitle()
 		if((nPos=Buff.ReverseFind('.')) > -1) {
 			Buff.GetBufferSetLength(nPos);
 		}
-
 	} else {
 		Buff = PROFILE->m_strDescription;
 	}
@@ -314,9 +313,7 @@ void CProfileSheet::OnFileNew()
 		PROFILE->m_nComponentDescription = CIRCULAR;
 	}
 
-
 	UpdateAllPages();
-	
 }
 
 void CProfileSheet::OnTtlistAdd() 

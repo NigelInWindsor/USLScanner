@@ -54,5 +54,6 @@ public:
 	CEdit m_editCountsTS3;
 	afx_msg void OnBnClickedButtonResetCounters();
 	CEdit m_editGeneral;
+	afx_msg void OnBnClickedButtonHwReset();
 };
 

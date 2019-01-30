@@ -1290,7 +1290,7 @@ void CVolumeViewDlg::RenderCross(CDC* pDC, CPoint point,int nAction)
 	CRect rr;
 	m_staticView.GetWindowRect(rr);
 	ScreenToClient(rr);
-	CPen pen(PS_SOLID,1, theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,1, theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 
 	pDC->MoveTo(point.x,rr.top);
@@ -3155,7 +3155,7 @@ void CVolumeViewDlg::DrawRuler(CPaintDC *pDC, int nWhich)
 
 
 	CPen penBkRuler(PS_SOLID,1,GetSysColor(COLOR_INFOBK));
-	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRuler);
+	CPen pen(PS_SOLID,theApp.m_LastSettings.nRulerWidth,theApp.m_LastSettings.rgbRulerLine);
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush brushBkRuler(GetSysColor(COLOR_INFOBK));
 	CBrush* pOldBrush = pDC->SelectObject(&brushBkRuler);

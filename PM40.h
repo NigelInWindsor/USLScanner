@@ -385,6 +385,7 @@ typedef struct _PM40_INFO_STRUCT
 class CPM40
 {
 public:
+	bool	m_bReset = false;
 	int		m_nExpectedSlotNumberWrong = 0;
 	int		m_nTimedOutCount = 0;
 	int		m_nConversionCount = 0;
@@ -450,8 +451,10 @@ public:
 	VOID ReadTrace(PTHREAD_PARAMS params, int nSlot);
 	BOOL RegisterInterruptCallback();
 	void DeRegisterInterruptCallback();
+	void HardwareReset();
 	int m_nMaxMailboxWait = 0;
 	int m_nMailboxFailed = 0;
+	unsigned int m_nTotalMailboxBytesSent = 0;
 	unsigned int m_nTotalCommandsSent = 0;
 	double m_dElapsedTime = 0.0;
 

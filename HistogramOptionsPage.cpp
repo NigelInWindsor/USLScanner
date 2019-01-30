@@ -142,7 +142,7 @@ void CHistogramOptionsPage::OnPaint()
 	int	ii,yy,xx,nSum;
 	CRect rr;
 	CPen* pOldPen;
-	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRuler);
+	CPen pen1(PS_SOLID,1,theApp.m_LastSettings.rgbRulerLine);
 	
 	for(ii=0;ii<2;ii++) {
 		switch(ii) {

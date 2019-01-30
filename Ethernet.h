@@ -90,6 +90,7 @@ class CEthernet
 {
 public:
 	CString FormatPktData(int nIndex);
+	bool Ping();
 	CString GetPktDataSize(int nIndex);
 	CString FormatPktTime(int nIndex);
 	CString GetPktTxRx(int nIndex);

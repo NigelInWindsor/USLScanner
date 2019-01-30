@@ -595,6 +595,8 @@ public:
 	afx_msg void OnUpdateDockablesOptimize(CCmdUI *pCmdUI);
 	afx_msg void OnDockablesAxis();
 	afx_msg void OnUpdateDockablesAxis(CCmdUI *pCmdUI);
+	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+	afx_msg HRESULT InvalidateViewSheets(WPARAM wParam, LPARAM lParam);
 };
 
 /////////////////////////////////////////////////////////////////////////////
