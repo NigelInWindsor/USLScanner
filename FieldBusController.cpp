@@ -437,20 +437,25 @@ UINT FieldBusStartUpThread(LPVOID pParam)
 		nLoop--;
 		Sleep(500);
 	}
+	if (pParent->m_bStartUpThreadEnabled == TRUE) {
+		//You shouldn't ever get here, but if you do
+		//Start the field bus anyway. Clearly something went wrong with the previous bit
+		pParent->SendStr(L"Enable PLC 1\r\n", _TERMINAL);
+		Sleep(1000);
+		theApp.m_Ethercat.StartFieldBus();		
+	}
 
-	if (pParent->m_bStartUpThreadEnabled == FALSE) {
-		switch (theApp.m_Tank.nScannerDescription) {
-		default:
-			for (int i = 0; i < 20; i++) {
-				if (theApp.m_Axes[i].bAvailable == TRUE)
-					pParent->DownloadAxisParameters(i);
-			}
-			break;
-		case DUAL_ROBOT_9_PLUS_9:
-		case DUAL_ROBOT:
-		case SINGLE_ROBOT:
-			break;
+	switch (theApp.m_Tank.nScannerDescription) {
+	default:
+		for (int i = 0; i < 20; i++) {
+			if (theApp.m_Axes[i].bAvailable == TRUE)
+				pParent->DownloadAxisParameters(i);
 		}
+		break;
+	case DUAL_ROBOT_9_PLUS_9:
+	case DUAL_ROBOT:
+	case SINGLE_ROBOT:
+		break;
 	}
 	pParent->m_bStartUpThreadFinished = TRUE;
 

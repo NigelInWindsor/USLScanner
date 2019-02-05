@@ -374,6 +374,7 @@ void CDiscsShaftsPage::OnDeltaposSpinFastIndex(NMHDR *pNMHDR, LRESULT *pResult)
 	PROFILE->m_fFastIncrement += ((float)pNMUpDown->iDelta * theApp.m_LastSettings.fDeltaScanIncrement);
 	GenerateScanProfile();
 	UpdateAllControls();
+	m_editFastIncrement.SetFocus();
 	*pResult = 0;
 }
 
@@ -385,6 +386,7 @@ void CDiscsShaftsPage::OnDeltaposSpinIncrement1(NMHDR *pNMHDR, LRESULT *pResult)
 	PROFILE->m_fSlowIncrement += ((float)pNMUpDown->iDelta * theApp.m_LastSettings.fDeltaScanIncrement);
 	GenerateScanProfile();
 	UpdateAllControls();
+	m_editSlowIncrement.SetFocus();
 	*pResult = 0;
 }
 

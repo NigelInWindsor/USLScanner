@@ -94,7 +94,7 @@ bool CUSLut::StartDriver(bool bEnableUSLDriver,bool bEnableUSlDriverInterrupts)
 	if(bEnableUSLDriver == true) {
 		GetHandleToDevice(2000);
 		if( m_hUSL==INVALID_HANDLE_VALUE) {
-			MessageBox(NULL,_T("Failed to Allocate Hardware Resource\r\n USL Device Driver"),_T("Error"),NULL);
+//			MessageBox(NULL,_T("Failed to Allocate Hardware Resource\r\n USL Device Driver"),_T("Error"),NULL);
 			return FALSE;
 		} else {
 			char	Version[40];

@@ -639,6 +639,7 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 	int nPollingIrq = 0;
 
 	nExpectedSlot = 0;
+	int nTemp = 0;
 	while (pcfgParams->bRunning)
 	{
 		theApp.m_PM40User.HardwareReset();
@@ -648,7 +649,8 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 			if (theApp.m_PM40User.IsConversionComplete(&nSlot)) {
 
 				if (nExpectedSlot != nSlot) {
-					theApp.m_PM40User.WriteBar0(0x83FC, nSlot + 1);
+					nTemp = nExpectedSlot + 1;
+					theApp.m_PM40User.WriteBar0(0x83FC, ( nTemp << 8) + (nSlot + 1));
 					theApp.m_PM40User.m_nExpectedSlotNumberWrong++;
 					nExpectedSlot = nSlot;
 				}
