@@ -75,6 +75,7 @@ BEGIN_MESSAGE_MAP(CLSABScanDlg, CDialog)
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipNotify)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipNotify)
+	ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -155,7 +156,7 @@ BOOL CLSABScanDlg::OnInitDialog()
 	int nNumberFocalLaws = theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws();
 	theApp.m_LSA.ApplyFocalLaws(nNumberFocalLaws, theApp.m_PhasedArray[PORTSIDE].getTxAperture(), theApp.m_PhasedArray[PORTSIDE].getTxFirstElement(), false, 0, nScanPitch, theApp.m_PhasedArray[PORTSIDE].getElementPitch());
 	theApp.m_PhasedArray[PORTSIDE].setNumberFocalLaws(nNumberFocalLaws);
-	theApp.m_PhasedArray[PORTSIDE].CalculateFocalLawVertices();
+//	theApp.m_PhasedArray[PORTSIDE].CalculateFocalLawVertices();
 
 	m_nRectification=0;
 
@@ -545,17 +546,22 @@ void CLSABScanDlg::DrawGates(CDC* pDC,CRect rr)
 
 void CLSABScanDlg::DrawFrameRate(CDC *pDC, CRect rr)
 {
-	
 	CString Buff;
 	int nFocalLawCount;
 
-	if ((nFocalLawCount = theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws()) > 0) {
-		Buff.Format(L"Frame rate = %d per second", theApp.m_nRealTotalPRF / theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws());
-		CSize size = pDC->GetTextExtent(Buff);
-		pDC->SetTextColor(RGB(200, 200, 200));
-		pDC->SetBkMode(TRANSPARENT);
-		pDC->TextOut(rr.Width() - size.cx - 3, rr.Height() - size.cy, Buff);
+	if (theApp.m_AOSPhasedArray.IsConnected() == true) {
+		Buff.Format(L"Frame rate = %d per second", theApp.m_AOSPhasedArray.getFrameRate());
 	}
+	else {
+		if ((nFocalLawCount = theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws()) > 0) {
+			Buff.Format(L"Frame rate = %d per second", theApp.m_nRealTotalPRF / theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws());
+		}
+	}
+
+	CSize size = pDC->GetTextExtent(Buff);
+	pDC->SetTextColor(RGB(200, 200, 200));
+	pDC->SetBkMode(TRANSPARENT);
+	pDC->TextOut(rr.Width() - size.cx - 3, rr.Height() - size.cy, Buff);
 }
 
 void CLSABScanDlg::DrawDeltaWp(CDC *pDC, CRect rr)
@@ -607,7 +613,7 @@ void CLSABScanDlg::OnLButtonDown(UINT nFlags, CPoint point)
 		if(nSlot>=nSweepWidth) nSlot = nSweepWidth-1;
 		theApp.m_LSA.m_nScopeViewLaw = nSlot;
 		theApp.m_UtUser.m_Global.nTimeSlot = nSlot;
-		pFrame->SendMessage(UI_UPDATE_LSA_UT_PAGE);
+		pFrame->SendMessage(UI_FOCAL_LAW_CHANGED, _UPDATE_PHASED_ARRAY_SHEET | _UPDATE_ULTRASONICS_SHEET, NULL);
 	}
 	
 	CDialog::OnLButtonDown(nFlags, point);
@@ -793,4 +799,69 @@ void CLSABScanDlg::OnButtonFrameRate()
 {
 	theApp.m_LastSettings.nLSAMask & LSA_DISPLAY_FRAME_RATE ? theApp.m_LastSettings.nLSAMask &= ~LSA_DISPLAY_FRAME_RATE : theApp.m_LastSettings.nLSAMask |= LSA_DISPLAY_FRAME_RATE;
 	SetToolBarCheckedState();
+}
+
+
+BOOL CLSABScanDlg::PreTranslateMessage(MSG* pMsg)
+{
+	FRAME;
+	int nStep = 0;
+
+	if (pMsg->message == WM_KEYDOWN) {
+
+		CPoint pt;
+		CRect rr;
+
+		switch (pMsg->wParam) {
+		case 37://LeftKeyPressed
+			break;
+		case 39://RightKeyPressed
+			break;
+		case 38://UpKeyPressed
+			theApp.m_LastSettings.nLSAMask & LSA_INVERT_BSCAN ? nStep = 1 : nStep = -1;
+			break;
+		case 40://DownKeyPressed
+			theApp.m_LastSettings.nLSAMask & LSA_INVERT_BSCAN ? nStep = -1 : nStep = 1;
+			break;
+		case 34://PageDown
+			theApp.m_LastSettings.nLSAMask & LSA_INVERT_BSCAN ? nStep = -10 : nStep = 10;
+			break;
+		case 33://PageUp
+			theApp.m_LastSettings.nLSAMask & LSA_INVERT_BSCAN ? nStep = 10 : nStep = -10;
+			break;
+		case 36://Home
+			break;
+		case 35://Home
+			break;
+
+		default:
+			return TRUE;
+			break;
+		}
+
+		if (nStep) {
+			theApp.m_LSA.m_nScopeViewLaw += nStep;
+			theApp.m_UtUser.m_Global.nTimeSlot = MinMax(&theApp.m_LSA.m_nScopeViewLaw, 0, theApp.m_LSA.m_nActualLawsL - 1);
+			pFrame->SendMessage(UI_FOCAL_LAW_CHANGED, _UPDATE_PHASED_ARRAY_SHEET | _UPDATE_ULTRASONICS_SHEET, NULL);
+			return true;
+		}
+	}
+
+	return CDialog::PreTranslateMessage(pMsg);
+}
+
+
+BOOL CLSABScanDlg::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	FRAME;
+	int nStep = 0;
+
+	zDelta > 0 ? nStep=-1 : nStep=1;
+	if (theApp.m_LastSettings.nLSAMask & LSA_INVERT_BSCAN) nStep *= -1;
+
+	theApp.m_LSA.m_nScopeViewLaw += nStep;
+	theApp.m_UtUser.m_Global.nTimeSlot = MinMax(&theApp.m_LSA.m_nScopeViewLaw, 0, theApp.m_LSA.m_nActualLawsL - 1);
+	pFrame->SendMessage(UI_FOCAL_LAW_CHANGED, _UPDATE_PHASED_ARRAY_SHEET | _UPDATE_ULTRASONICS_SHEET, NULL);
+
+	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
 }

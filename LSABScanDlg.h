@@ -84,6 +84,9 @@ protected:
 	afx_msg void OnButtonFrameRate();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 };
 
 //{{AFX_INSERT_LOCATION}}

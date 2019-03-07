@@ -185,6 +185,7 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 	
 	m_editGeneral.SetWindowTextW(Buff);
 
+
 	CPropertyPage::OnTimer(nIDEvent);
 }
 
@@ -247,4 +248,15 @@ void CPM40Page::OnBnClickedButtonResetCounters()
 void CPM40Page::OnBnClickedButtonHwReset()
 {
 	theApp.m_PM40User.m_bReset = true;
+}
+
+
+void CPM40Page::OnEnChangeRichedit21()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CPropertyPage::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
 }

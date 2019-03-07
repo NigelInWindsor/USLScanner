@@ -553,7 +553,7 @@ bool CPM40::IsConversionComplete(int *nTS)
 		}
 		return true;
 	}
-	return false;
+	return true;
 }
 
 #define PM30_MAILBOX_EMPTY	0x010000
@@ -654,7 +654,6 @@ void WaitThreadProc(PWAIT_THREAD_PARAMS pWaitParams)
 					theApp.m_PM40User.m_nExpectedSlotNumberWrong++;
 					nExpectedSlot = nSlot;
 				}
-
 				theApp.m_PM40User.ReadTrace(&ThreadParams, nSlot);
 				theApp.m_PM40User.ArmADC();
 				nExpectedSlot++;

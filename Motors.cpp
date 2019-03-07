@@ -249,7 +249,7 @@ void CMotors::GetSurfacePos(CCoord *pCpSurface,int nFL)
 		}
 	}
 	if(theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {
-		pCpSurface->Side0.pt += theApp.m_PhasedArray[0].m_FL[CURRENT_FL].vecPt;
+		pCpSurface->Side0.pt += theApp.m_PhasedArray[0].getFocalLawPos(RX_FL, CURRENT_FL);
 	}
 
 }

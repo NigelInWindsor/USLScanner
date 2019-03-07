@@ -15,9 +15,12 @@ CPhasedArraySheet::CPhasedArraySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT 
 {
 	m_pDlg = pDlg;
 
+	m_pPhasedArrayFocalLawsPage = NULL;
 	m_pPhasedArrayProbePage = NULL;
 	m_pAOSPhasedArrayUTPage = NULL;
-	m_pParksMcClellanPage = NULL;
+
+	m_pPhasedArrayFocalLawsPage = new CPhasedArrayFocalLawsDlg();
+	AddPage(m_pPhasedArrayFocalLawsPage);
 
 	m_pPhasedArrayProbePage = new CPhasedArrayProbeDlg();
 	AddPage(m_pPhasedArrayProbePage);
@@ -25,18 +28,15 @@ CPhasedArraySheet::CPhasedArraySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT 
 	m_pAOSPhasedArrayUTPage = new CAOSPhasedArrayUTPage();
 	AddPage(m_pAOSPhasedArrayUTPage);
 
-	m_pParksMcClellanPage = new CParksMcClellanPage();
-	AddPage(m_pParksMcClellanPage);
-
 }
 
 
 
 CPhasedArraySheet::~CPhasedArraySheet()
 {
+	SAFE_DELETE(m_pPhasedArrayFocalLawsPage);
 	SAFE_DELETE(m_pPhasedArrayProbePage);
 	SAFE_DELETE(m_pAOSPhasedArrayUTPage);
-	SAFE_DELETE(m_pParksMcClellanPage);
 }
 
 
@@ -82,4 +82,21 @@ BOOL CPhasedArraySheet::OnInitDialog()
 	EnableSaveRestore(_T("PhasedArraySheet"), TRUE, TRUE);
 
 	return bResult;
+}
+
+
+void CPhasedArraySheet::UpdateAllPages()
+{
+	if(m_pPhasedArrayFocalLawsPage) m_pPhasedArrayFocalLawsPage->UpdateAllControls();
+	if(m_pPhasedArrayProbePage) m_pPhasedArrayProbePage->UpdateAllControls();
+	if(m_pAOSPhasedArrayUTPage) m_pAOSPhasedArrayUTPage->UpdateAllControls();
+
+}
+
+void CPhasedArraySheet::UpdateActivePage()
+{
+	CPropertyPage *pPage = GetActivePage();
+	if (m_pPhasedArrayFocalLawsPage && pPage == m_pPhasedArrayFocalLawsPage) m_pPhasedArrayFocalLawsPage->UpdateAllControls();
+	if (m_pPhasedArrayProbePage && pPage == m_pPhasedArrayProbePage) m_pPhasedArrayProbePage->UpdateAllControls();
+	if (m_pAOSPhasedArrayUTPage && pPage == m_pAOSPhasedArrayUTPage) m_pAOSPhasedArrayUTPage->UpdateAllControls();
 }

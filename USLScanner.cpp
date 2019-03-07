@@ -187,7 +187,7 @@ CUSLScannerApp theApp;
 
 BOOL CUSLScannerApp::InitInstance()
 {
-///////////////////////////////////////////////////////////////////////////////
+// TODO: call AfxInitRichEdit2() to initialize richedit2 library.\n"///////////////////////////////////////////////////////////////////////////////
 	CString Buff,FilePath;
 	char Identifier[60]={"Ultrasonic Sciences Ltd USLScanner"};
 	char str[60];
@@ -434,7 +434,7 @@ BOOL CUSLScannerApp::InitInstance()
 	m_FBCtrl.Initialize();
 
 	if (m_Si10Userx64.Initialize()) {
-
+		m_Si10User.SetGPIOIRQMode();
 	}
 	else {
 
@@ -651,19 +651,15 @@ BOOL CUSLScannerApp::InitInstance()
 	AndonEvent(MachineOkay, L"Succesully started");
 	
 
-return true;
-/*
+
 	CEvaluationDlg dlg;
-	if(dlg.GetHowManyDaysLeft()<=0) {
+	if (dlg.IsCodeRequired() == true) {
 		dlg.DoModal();
-		if(dlg.GetHowManyDaysLeft()<=0) {
+		if (dlg.IsCodeRequired() == true) {
 			pFrame->SendMessage(WM_CLOSE);
 		}
-	} else if(dlg.GetHowManyDaysLeft()<=30) {
-		Buff.Format(_T("You only have %d days left of your license\nRenew your license using File >> Update License"),dlg.GetHowManyDaysLeft());
-		MessageBox(NULL,Buff,_T("Warning"), NULL);
 	}
-*/
+
 	return TRUE;
 }
 /*

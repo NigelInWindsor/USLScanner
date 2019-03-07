@@ -71,7 +71,7 @@
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(ProjectDir);$(PATH);$(MSBuildProjectDirectory)\AOS\OEMPA 1.1.5.4\Sources\UTKernel\Win32\Release</ExecutablePath>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(DXSDK_DIR)\Include;Optitrack\Motive\inc;</IncludePath>
@@ -257,7 +257,9 @@
     <ClCompile Include="CoordV3.cpp" />
     <ClCompile Include="CopyCoordsDlg.cpp" />
     <ClCompile Include="CorrelationPage.cpp" />
+    <ClCompile Include="CPhasedArrayFocalLawsDlg.cpp" />
     <ClCompile Include="CPhasedArraySheet.cpp" />
+    <ClCompile Include="CPing.cpp" />
     <ClCompile Include="CPoint4.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CtrlPropertiesDlg.cpp" />
@@ -703,6 +705,8 @@
     <ClInclude Include="CoordV3.h" />
     <ClInclude Include="CopyCoordsDlg.h" />
     <ClInclude Include="CorrelationPage.h" />
+    <ClInclude Include="CPhasedArrayFocalLawsDlg.h" />
+    <ClInclude Include="CPing.h" />
     <ClInclude Include="CPoint4.h" />
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CPhasedArraySheet.h" />

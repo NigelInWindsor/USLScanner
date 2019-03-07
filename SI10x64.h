@@ -83,5 +83,6 @@ public:
 	BOOL RegisterInterruptCallback();
 	void DeRegisterInterruptCallback();
 	ULONG & getISRCount();
+	ULONG & getIRQSource();
 };
 

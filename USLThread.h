@@ -10,7 +10,7 @@ public:
 	~CUSLThread();
 	void Initialize(CString Name, AFX_THREADPROC pfnThreadProc, LPVOID pParam, int nRefreshRate_ms = 100, int nPriority = THREAD_PRIORITY_NORMAL);
 
-	CCriticalSection	m_CriticalSection;
+	CRITICAL_SECTION	m_CriticalSection;
 
 	HANDLE m_hSemaphore;
 	HANDLE m_hEvent;

@@ -9,12 +9,13 @@ class CAOSPhasedArrayUTPage : public CPropertyPage
 
 	// Construction
 public:
-	bool m_bThreadEnabled;
-	HANDLE m_hEvent;
+	bool	m_bThreadEnabled;
+	HANDLE	m_hEvent;
 	CWinThread* m_pThread;
-	int m_nUpdateHardware;
-	HBRUSH m_hBr;
-	HANDLE m_hSemaphore;
+	int		m_nUpdateHardware;
+	HBRUSH	m_hBr;
+	HANDLE	m_hSemaphore;
+	int		m_nDacIndex;
 	
 
 public:
@@ -32,6 +33,8 @@ public:
 	virtual BOOL OnKillActive();
 	void StartThread();
 	void SuspendThread();
+	void UpdateAllControls();
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 														//}}AFX_VIRTUAL
@@ -41,7 +44,6 @@ protected:
 	//{{AFX_MSG(CAOSPhasedArrayPage)
 	virtual BOOL OnInitDialog();
 	afx_msg HBRUSH OnCtlColor(CDC * pDC, CWnd * pWnd, UINT nCtlColor);
-	void UpdateAllControls();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -69,14 +71,17 @@ public:
 	afx_msg void OnEnChangeEditMaxFilterFrequency();
 	afx_msg void OnEnChangeEditMinFilterFrequency();
 	CComboBox m_comboFilterType;
-	afx_msg void OnCbnSelchangeComboFilterType();
-	afx_msg void OnBnClickedButtonApply();
-	CComboBox m_comboDisplayMode;
-	afx_msg void OnCbnSelchangeComboDisplayMode();
-	afx_msg void OnPaint();
 	void RenderFrequency(CPaintDC * pDC);
 	void RenderPhase(CPaintDC * pDC);
+	void CreateColumnsDAC();
+	void FillListDAC();
+	CComboBox m_comboDisplayMode;
 	CStatic m_staticView;
+	CListCtrl m_listDAC;
+	afx_msg void OnCbnSelchangeComboFilterType();
+	afx_msg void OnBnClickedButtonApply();
+	afx_msg void OnCbnSelchangeComboDisplayMode();
+	afx_msg void OnPaint();
 	afx_msg void OnDeltaposSpinMinFilterFrequency(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposSpinMaxFilterFrequency(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposSpinRipple(NMHDR *pNMHDR, LRESULT *pResult);
@@ -84,4 +89,7 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
 	afx_msg void OnDeltaposSpinFilterGain(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnLvnGetdispinfoListDacList(NMHDR *pNMHDR, LRESULT *pResult);
+	CComboBox m_comboDacMode;
+	afx_msg void OnCbnSelchangeComboDacMode();
 };

@@ -128,21 +128,12 @@ protected:
 	afx_msg void OnButtonElements();
 	afx_msg void OnButtonFocalLaws();
 	afx_msg void OnSelchangeComboNumberElements();
-	afx_msg void OnEnChangeEditLastTxElement();
-	afx_msg void OnEnChangeEditFirstTxElement();
 	afx_msg void OnChangeEditFocalLength();
 	afx_msg void OnSelchangeComboDelayAlogorithm();
-	afx_msg void OnDeltaposSpinFocalLength(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDeltaposSpinElementPitch(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnEnChangeEditTxAperture();
-	afx_msg void OnEnChangeEditRxAperture();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg	void OnCbnSelchangeComboTxPitch();
-	afx_msg void OnCbnSelchangeComboRxPitch();
-	afx_msg void OnEnChangeEditFirstRxElement();
-	afx_msg void OnEnChangeEditLastRxElement();
 	afx_msg void OnPaint();
 	CStatic m_staticView;
 	afx_msg void OnEnChangeEditWedgeAngle();
@@ -156,24 +147,10 @@ public:
 	CSpinButtonCtrl m_spinTxBeamAngle;
 	CEdit m_editRxBeamAngle;
 	CSpinButtonCtrl m_spinRxBeamAngle;
-	afx_msg void OnEnChangeEditTxBeamAngle();
-	afx_msg void OnEnChangeEditRxBeamAngle();
-	afx_msg void OnDeltaposSpinTxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnDeltaposSpinRxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult);
 	void RenderDelays(CDC * pDC, CRect * rr);
 	CStatic m_staticDelays;
 	CEdit m_editTxFocalLength;
 	CSpinButtonCtrl m_spinTxFocalLength;
-	afx_msg void OnEnChangeEditTxFocalLength();
-	afx_msg void OnEnChangeEditRxFocalLength0();
-	afx_msg void OnEnChangeEditRxFocalLength1();
-	afx_msg void OnEnChangeEditRxFocalLength2();
-	afx_msg void OnEnChangeEditRxFocalLength3();
-	afx_msg void OnDeltaposSpinTxFocalLength(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnDeltaposSpinRxFocalLength0(NMHDR * pNMHDR, LRESULT * pResult);
-	afx_msg void OnDeltaposSpinRxFocalLength1(NMHDR * pNMHDR, LRESULT * pResult);
-	afx_msg void OnDeltaposSpinRxFocalLength2(NMHDR * pNMHDR, LRESULT * pResult);
-	afx_msg void OnDeltaposSpinRxFocalLength3(NMHDR * pNMHDR, LRESULT * pResult);
 	afx_msg void OnButtonRxEqualTx();
 	afx_msg void OnButtonDownloadToHardWare();
 	virtual BOOL OnSetActive();

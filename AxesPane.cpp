@@ -193,7 +193,6 @@ void CAxesPane::OnGetdispinfoListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 	int	nRow = pDispInfo->item.iItem;
 	const wchar_t Tick = 0x2714;
 
-
 	str[0] = 0;
 
 	if (nRow >= 0 && nRow < 32) {

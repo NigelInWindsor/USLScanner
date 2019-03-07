@@ -2498,8 +2498,7 @@ void CData::CollectComplexDataPhasedArray()
 	for(nFl = 0; nFl < m_nNumberProbesPerImage; nFl++) {
 
 		CpSurface = CpFirstSurface;
-		CpSurface.Side0.pt += theApp.m_PhasedArray[0].m_FL[nFl].vecPt;
-
+		CpSurface.Side0.pt += theApp.m_PhasedArray[0].getFocalLawPos(RX_FL, nFl);
 
 		if(PROFILE->m_nLineIncrementMode == FIXED_INC) {
 			nLine = nFl + (theApp.m_Thread.m_nScanLine-PROFILE->m_nScanStartLine)/PROFILE->m_nLineIncrement;

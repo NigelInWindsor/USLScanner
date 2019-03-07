@@ -7,6 +7,7 @@
 #define U_PULSE_WIDTH	0x0004
 #define U_PRF			0x0008
 #define	U_RECTIFY		0x0010
+#define U_DAC			0x0020
 
 IMPLEMENT_DYNCREATE(CAOSPhasedArrayUTPage, CPropertyPage)
 
@@ -47,6 +48,8 @@ void CAOSPhasedArrayUTPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_DISPLAY_MODE, m_comboDisplayMode);
 	DDX_Control(pDX, IDC_STATIC_FREQUENCY, m_staticView);
 	DDX_Control(pDX, IDC_SPIN_FILTER_GAIN, m_editspinFilterGain);
+	DDX_Control(pDX, IDC_LIST_DAC_LIST, m_listDAC);
+	DDX_Control(pDX, IDC_COMBO_DAC_MODE, m_comboDacMode);
 }
 
 
@@ -77,6 +80,8 @@ BEGIN_MESSAGE_MAP(CAOSPhasedArrayUTPage, CPropertyPage)
 ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_FILTER_GAIN, &CAOSPhasedArrayUTPage::OnDeltaposSpinFilterGain)
+	ON_NOTIFY(LVN_GETDISPINFO, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnLvnGetdispinfoListDacList)
+	ON_CBN_SELCHANGE(IDC_COMBO_DAC_MODE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboDacMode)
 END_MESSAGE_MAP()
 
 void CAOSPhasedArrayUTPage::OnClose()
@@ -115,6 +120,10 @@ BOOL CAOSPhasedArrayUTPage::OnInitDialog()
 	Buff.LoadStringW(IDS_Frequency);	m_comboDisplayMode.AddString(Buff);
 	Buff.LoadStringW(IDS_ImpulseResponce);	m_comboDisplayMode.AddString(Buff);
 
+	Buff.LoadStringW(IDS_Off);			m_comboDacMode.AddString(Buff);
+	Buff.LoadStringW(IDS_Main_Bang);	m_comboDacMode.AddString(Buff);
+	Buff.LoadStringW(IDS_Interface);	m_comboDacMode.AddString(Buff);
+
 	m_editspinPulseWidth.Init(theApp.m_PhasedArray[PORTSIDE].getPulseWidth(), 0.0f, 1000.0e-9f, 5.0e-9f, 1.0e-9f, L"%.0f ns");
 	m_editspinPRF.Init((float)theApp.m_UtUser.m_Global.nPrf, 0.0f, 10000.0f, 10.0f, 1.0f, L"%.0f Hz");
 	m_editspinAnalogueGain.Init(theApp.m_PhasedArray[PORTSIDE].getAnalogueGain(), 0.0f, 47.7f, 0.1f, 1.0f, L"%.01f dB");
@@ -125,6 +134,8 @@ BOOL CAOSPhasedArrayUTPage::OnInitDialog()
 	m_editspinStopGain.Init(theApp.m_PhasedArray[PORTSIDE].m_fStopGain, 0.0f, 50.0f, 0.5f, 1.0f, L"%.01f dB");
 	m_editspinFilterGain.Init((float)theApp.m_PhasedArray[PORTSIDE].m_nFilterGain,1.0f,24.0f,1.0f,1.0f,L"%.0f");
 
+	CreateColumnsDAC();
+	FillListDAC();
 
 	UpdateAllControls();
 
@@ -155,10 +166,13 @@ void CAOSPhasedArrayUTPage::UpdateAllControls()
 	m_comboDisplayMode.SetCurSel(theApp.m_LastSettings.nPAFilterDisplayMode &= 1);
 	m_comboRectify.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getRectification());
 	m_comboFilterType.SetCurSel(theApp.m_PhasedArray[PORTSIDE].m_eFilterType);
+	m_comboDacMode.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getDacMode());
 
 	theApp.m_PhasedArray[PORTSIDE].getFilterType() < BANDPASS ? bFlag = true : bFlag = false;
 	((CEditSpinCtrl*)GetDlgItem(IDC_SPIN_MAX_FILTER_FREQUENCY))->SetReadOnly(bFlag);
 	((CEditSpinCtrl*)GetDlgItem(IDC_SPIN_RIPPLE))->SetReadOnly(true);
+
+	m_listDAC.Invalidate(false);
 }
 
 BOOL CAOSPhasedArrayUTPage::OnSetActive()
@@ -166,7 +180,7 @@ BOOL CAOSPhasedArrayUTPage::OnSetActive()
 	theApp.m_LastSettings.nLastPhasedArrayTab = ((CPropertySheet*)GetParent())->GetActiveIndex();
 
 	StartThread();
-
+	UpdateAllControls();
 
 	return CPropertyPage::OnSetActive();
 }
@@ -221,6 +235,11 @@ UINT AOSUTThread(LPVOID pParam)
 			if (pParent->m_nUpdateHardware & U_RECTIFY) {
 				theApp.m_PhasedArray[PORTSIDE].setRectification(theApp.m_PhasedArray[PORTSIDE].getRectification(), true);
 				pParent->m_nUpdateHardware &= ~U_RECTIFY;
+			}
+
+			if (pParent->m_nUpdateHardware & U_DAC) {
+				theApp.m_PhasedArray[PORTSIDE].setAllDacVariables();
+				pParent->m_nUpdateHardware &= ~U_DAC;
 			}
 		}
 		ReleaseSemaphore(pParent->m_hSemaphore, 1, NULL);
@@ -349,6 +368,8 @@ void CAOSPhasedArrayUTPage::OnBnClickedButtonApply()
 void CAOSPhasedArrayUTPage::OnCbnSelchangeComboDisplayMode()
 {
 	theApp.m_LastSettings.nPAFilterDisplayMode = m_comboDisplayMode.GetCurSel();
+	Invalidate(false);
+
 }
 
 
@@ -690,4 +711,70 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinFilterGain(NMHDR *pNMHDR, LRESULT *pRe
 	theApp.m_PhasedArray[PORTSIDE].m_nFilterGain = (int)m_editspinFilterGain.GetValue();
 	*pResult = 0;
 	Invalidate(false);
+}
+
+
+void CAOSPhasedArrayUTPage::CreateColumnsDAC()
+{
+	CString ColumnName[3] = { L"#",L"Delay mm", L"Gain" };
+	int ColumnWidth[3] = { 0,60,50 };
+	CRect rr;
+
+	ColumnName[1] = L"\x0b5s";
+	ColumnName[2] = L"dB";
+
+	m_listDAC.GetWindowRect(&rr);
+	rr.right -= 22;
+
+	// Delete all of the columns.
+	int nColumnCount = m_listDAC.GetHeaderCtrl()->GetItemCount();
+	for (int ii = 0; ii < nColumnCount; ii++) {
+		m_listDAC.DeleteColumn(0);
+	}
+
+	m_listDAC.InsertColumn(0, ColumnName[0], LVCFMT_LEFT, 0);
+	m_listDAC.InsertColumn(1, ColumnName[1], LVCFMT_LEFT, rr.Width() / 2 - 1);
+	m_listDAC.InsertColumn(2, ColumnName[2], LVCFMT_LEFT, rr.Width() / 2 - 2);
+
+	m_listDAC.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+
+}
+
+void CAOSPhasedArrayUTPage::FillListDAC()
+{
+	CString	Buff;
+
+	m_listDAC.DeleteAllItems();
+	for (int ii = 0; ii < 16; ii++) {
+		Buff.Format(_T("%d"), ii + 1);
+		m_listDAC.InsertItem(ii, Buff.GetBuffer(255), ii);
+	};
+	m_listDAC.EnsureVisible(m_nDacIndex, FALSE);
+	m_listDAC.SetItemState(m_nDacIndex, LVIS_SELECTED, LVIS_SELECTED);
+	m_listDAC.SetFocus();
+}
+
+void CAOSPhasedArrayUTPage::OnLvnGetdispinfoListDacList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+	static	WCHAR str[100];
+
+	str[0] = 0;
+	switch (pDispInfo->item.iSubItem) {
+	case 0:	swprintf_s(str, _T("%d"), pDispInfo->item.iItem + 1);
+		break;
+	case 1:	swprintf_s(str, _T("%.02f"), theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][pDispInfo->item.iItem]);
+		break;
+	case 2:	swprintf_s(str, _T("%.02f"), theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][pDispInfo->item.iItem]);
+		break;
+	}
+	pDispInfo->item.pszText = str;
+	*pResult = 0;
+}
+
+
+void CAOSPhasedArrayUTPage::OnCbnSelchangeComboDacMode()
+{
+	theApp.m_PhasedArray[PORTSIDE].setDacMode(m_comboDacMode.GetCurSel());
+	m_nUpdateHardware |= U_DAC;
 }

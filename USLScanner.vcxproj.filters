@@ -1320,6 +1320,12 @@
     <ClCompile Include="DiscsShaftsPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPhasedArrayFocalLawsDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CPing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="USLScanner.rc">
@@ -2648,6 +2654,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DiscsShaftsPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPhasedArrayFocalLawsDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

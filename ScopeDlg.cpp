@@ -149,14 +149,22 @@ void CScopeDlg::OnDestroy()
 
 BOOL CScopeDlg::OnInitDialog()
 {
-
 	CDialog::OnInitDialog();
 	CString Buff;
+
+	if (theApp.m_AOSPhasedArray.isConnected() == TRUE) {
+		theApp.m_LSA.m_bDevicePresent = TRUE;
+		theApp.m_LastSettings.nDesiredDevice = PHASED_ARRAY;
+	}
+	else {
+		theApp.m_LSA.m_bDevicePresent = false;
+		theApp.m_LastSettings.nDesiredDevice = NOT_PHASED_ARRAY;
+	}
+
 
 	if(theApp.m_Scope.m_fMaxRange<1e-6f) theApp.m_Scope.m_fMaxRange=1e-6f;
 
 	pGate = &theApp.m_UtUser.m_TS[m_nTimeSlot].Gate;
-
 
 	m_scrollbarDelayWidth.SetMax((int)(theApp.m_Scope.m_fMaxRange/1e-9f));
 	m_scrollbarDelayWidth.SetMin(0);
@@ -380,9 +388,6 @@ void CScopeDlg::DrawGTrace(int nDisplayDevice,CUSLFile* pFile)
 	Font.CreateFontIndirect(&lf);
 
 	ASSERT(pDC);
-
-	theApp.m_LSA.m_bDevicePresent = false;
-	theApp.m_LastSettings.nDesiredDevice = NOT_PHASED_ARRAY;
 
 
 	if(((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
@@ -1409,7 +1414,6 @@ HRESULT CScopeDlg::RefreshScopeDisplay(WPARAM, LPARAM)
 
 void CScopeDlg::SetRfInputType(int nType)
 {
-
 	theApp.m_Scope.m_nRfType=nType;
 }
 
@@ -1845,6 +1849,7 @@ void CScopeDlg::OnScopeStoredacpoint()
 {
 	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
 	Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30;
+	CPhasedArrayProbe* pPA = &theApp.m_PhasedArray[PORTSIDE];
 	int	nT = pPr30->nDacTable;
 	int	nStart,ii,jj;
 	CRect rr;
@@ -1853,10 +1858,6 @@ void CScopeDlg::OnScopeStoredacpoint()
 	m_staticView.GetWindowRect(&rr);
 	ScreenToClient(&rr);
 	ScreenToClient(&m_ptClient);
-
-	unsigned char cMask = 1;
-	cMask <<= m_nTimeSlot;
-	if(!(theApp.m_Scope.m_cDisplayDACPtsMask & cMask)) return;
 
 	if(FindDACStartPt(&nStart) == FALSE) return;
 
@@ -1882,60 +1883,106 @@ void CScopeDlg::OnScopeStoredacpoint()
 	}
 	fGain = (float)(20.0 * log10(theApp.m_LastSettings.fDACRefAmplitude/fGain));
 
-	for(ii=0;ii<64;ii++) {
-		if(fabs(fDelay-pPr30->fDacDelay[nT][ii])<0.1) {
-			pPr30->fDacDelay[nT][ii]=fDelay;
-			pPr30->fDacGain[nT][ii]=fGain;
-			DacTableChanged();
-			return;
-		}
-	}
-	for(ii=0;ii<63;ii++) {
-		if((fDelay>pPr30->fDacDelay[nT][ii]) && (fDelay<pPr30->fDacDelay[nT][ii+1])) {
-			for(jj=63;jj>(ii+1);jj--) {
-				pPr30->fDacDelay[nT][jj]=pPr30->fDacDelay[nT][jj-1];
-				pPr30->fDacGain[nT][jj]=pPr30->fDacGain[nT][jj-1];
+	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+		for (ii = 0; ii < 64; ii++) {
+			if (fabs(fDelay - pPA->m_fDacDelay[0][ii]) < 0.1) {
+				pPA->m_fDacDelay[0][ii] = fDelay;
+				pPA->m_fDacGain[0][ii] = fGain;
+				DacTableChanged();
+				return;
 			}
-			pPr30->fDacDelay[nT][ii+1]=fDelay;
-			pPr30->fDacGain[nT][ii+1]=fGain;
-			DacTableChanged();
-			return;
+		}
+		for (ii = 0; ii < 63; ii++) {
+			if ((fDelay > pPA->m_fDacDelay[0][ii]) && (fDelay < pPA->m_fDacDelay[0][ii + 1])) {
+				for (jj = 63; jj > (ii + 1); jj--) {
+					pPA->m_fDacDelay[0][jj] = pPA->m_fDacDelay[0][jj - 1];
+					pPA->m_fDacGain[0][jj] = pPA->m_fDacGain[0][jj - 1];
+				}
+				pPA->m_fDacDelay[0][ii + 1] = fDelay;
+				pPA->m_fDacGain[0][ii + 1] = fGain;
+				DacTableChanged();
+				return;
+			}
+		}
+		for (ii = 1; ii < 64; ii++) {
+			if (pPA->m_fDacDelay[0][ii] == 0.0) {
+				pPA->m_fDacDelay[0][ii] = fDelay;
+				pPA->m_fDacGain[0][ii] = fGain;
+				DacTableChanged();
+				return;
+			}
 		}
 	}
-	for(ii=1;ii<64;ii++) {
-		if(pPr30->fDacDelay[nT][ii]==0.0) {
-			pPr30->fDacDelay[nT][ii]=fDelay;
-			pPr30->fDacGain[nT][ii]=fGain;
-			DacTableChanged();
-			return;
+	else {
+		for (ii = 0; ii < 64; ii++) {
+			if (fabs(fDelay - pPr30->fDacDelay[nT][ii]) < 0.1) {
+				pPr30->fDacDelay[nT][ii] = fDelay;
+				pPr30->fDacGain[nT][ii] = fGain;
+				DacTableChanged();
+				return;
+			}
+		}
+		for (ii = 0; ii < 63; ii++) {
+			if ((fDelay > pPr30->fDacDelay[nT][ii]) && (fDelay < pPr30->fDacDelay[nT][ii + 1])) {
+				for (jj = 63; jj > (ii + 1); jj--) {
+					pPr30->fDacDelay[nT][jj] = pPr30->fDacDelay[nT][jj - 1];
+					pPr30->fDacGain[nT][jj] = pPr30->fDacGain[nT][jj - 1];
+				}
+				pPr30->fDacDelay[nT][ii + 1] = fDelay;
+				pPr30->fDacGain[nT][ii + 1] = fGain;
+				DacTableChanged();
+				return;
+			}
+		}
+		for (ii = 1; ii < 64; ii++) {
+			if (pPr30->fDacDelay[nT][ii] == 0.0) {
+				pPr30->fDacDelay[nT][ii] = fDelay;
+				pPr30->fDacGain[nT][ii] = fGain;
+				DacTableChanged();
+				return;
+			}
 		}
 	}
-
 }
 
 void CScopeDlg::OnScopeDisplaydacpoints()
 {
-	unsigned char cMask = 1;
-	cMask <<= m_nTimeSlot;
-
-	theApp.m_Scope.m_cDisplayDACPtsMask & cMask ? theApp.m_Scope.m_cDisplayDACPtsMask &= ~cMask : theApp.m_Scope.m_cDisplayDACPtsMask |= cMask;
+	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+		theApp.m_Scope.m_cDisplayDACPtsMask & 1 ? theApp.m_Scope.m_cDisplayDACPtsMask = 0 : theApp.m_Scope.m_cDisplayDACPtsMask = 1;
+	}
+	else {
+		unsigned char cMask = 1;
+		cMask <<= m_nTimeSlot;
+		theApp.m_Scope.m_cDisplayDACPtsMask & cMask ? theApp.m_Scope.m_cDisplayDACPtsMask &= ~cMask : theApp.m_Scope.m_cDisplayDACPtsMask |= cMask;
+	}
 }
 
 
 bool CScopeDlg::FindDACStartPt(int *nStart)
 {
 	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
-	Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30;
 	int xx;
 	*nStart = -1;
+	int nDacTriggerThreshold = 0;
+	int nDacBlanking = 0;
+
+	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+		nDacBlanking = theApp.m_PhasedArray[PORTSIDE].m_nDacBlanking;
+		nDacTriggerThreshold = theApp.m_PhasedArray[PORTSIDE].m_nDacTriggerThreshold = 50;
+	}
+	else {
+		nDacBlanking = theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30.nDacBlanking;
+		nDacTriggerThreshold = theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30.nDacTriggerThreshold;
+	}
+
 	if(theApp.m_LastSettings.nDacMaxThreshold == 0) theApp.m_LastSettings.nDacMaxThreshold = 100;
 
-	float fBlanking_ns = (float)(pPr30->nDacBlanking * 100);
+	float fBlanking_ns = (float)(nDacBlanking * 100);
 	xx = (int)((fBlanking_ns - (float)pAdc->nDelay) / pAdc->fSamplePeriod);
 
 	if(xx<0) xx=0;
 	
-	int nThreshold = MulDiv(pPr30->nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold, 100);
+	int nThreshold = MulDiv(nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold, 100);
 
 	for( ;xx<(int)pAdc->nAcqLength;xx++) {
 		if(theApp.m_Scope.m_RFTrace[m_nTimeSlot][xx] > nThreshold) {
@@ -1947,15 +1994,23 @@ bool CScopeDlg::FindDACStartPt(int *nStart)
 }
 
 
-void CScopeDlg::DrawDacPts(CDC *pDC,CRect rr)
+void CScopeDlg::DrawDacPts(CDC *pDC, CRect rr)
 {
-	unsigned char cMask = 1;
-	cMask <<= m_nTimeSlot;
-	if(!(theApp.m_Scope.m_cDisplayDACPtsMask & cMask)) return;
+	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+		DrawDacPtsPhasedArray(pDC, rr);
+	}
+	else {
+		DrawDacPtsPR(pDC, rr);
+	}
 
+}
+
+void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
+{
+	if (theApp.m_Scope.m_cDisplayDACPtsMask == 0) return;
+
+	CPhasedArrayProbe* pPA = &theApp.m_PhasedArray[PORTSIDE];
 	int	nStart;
-	Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30;
-	int	nT = pPr30->nDacTable;
 	int	ii,nPnX,nPnY;
 	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
 	float fGain,fDelay;
@@ -1968,20 +2023,20 @@ void CScopeDlg::DrawDacPts(CDC *pDC,CRect rr)
 	CPen *pOldPen = pDC->SelectObject(&penWhite);
 	//Put the crosses up
 	for(ii=0;ii<64;ii++) {
-		if(pPr30->fDacDelay[nT][ii]!=0.0) {
-			fDelay = pPr30->fDacDelay[nT][ii];
+		if(pPA->m_fDacDelay[0][ii]!=0.0) {
+			fDelay = pPA->m_fDacDelay[0][ii];
 			switch(theApp.m_LastSettings.nDacDelayUnits) {
-			case 0:	fDelay = pPr30->fDacDelay[nT][ii] * 1000;		//ns
+			case 0:	fDelay = pPA->m_fDacDelay[0][ii] * 1000;		//ns
 				break;
-			case 1:	fDelay = pPr30->fDacDelay[nT][ii] / (float)theApp.m_LastSettings.nWaterVelocity * 2000000.0f;		//mm
+			case 1:	fDelay = pPA->m_fDacDelay[0][ii] / (float)theApp.m_LastSettings.nWaterVelocity * 2000000.0f;		//mm
 				break;
-			case 2:	fDelay = pPr30->fDacDelay[nT][ii] / (float)theApp.m_LastSettings.nMaterialVelocity * 2000000.0f;		//mm
+			case 2:	fDelay = pPA->m_fDacDelay[0][ii] / (float)theApp.m_LastSettings.nMaterialVelocity * 2000000.0f;		//mm
 				break;
 			}
 
 			nPnX = (int)(fDelay/pAdc->fSamplePeriod) + nStart;
 			nPnX = MulDiv(nPnX,rr.Width(),pAdc->nAcqLength);
-			fGain = theApp.m_LastSettings.fDACRefAmplitude / (float)pow(10.0,(double)pPr30->fDacGain[nT][ii]/20.0);
+			fGain = theApp.m_LastSettings.fDACRefAmplitude / (float)pow(10.0,(double)pPA->m_fDacGain[0][ii]/20.0);
 			switch(pAdc->nRfType) {
 			case RFTYPELINEAR:
 				nPnY = (rr.top+rr.bottom)/2 - (int)((fGain*(float)rr.Height()/2.0f)/100.0f);
@@ -2000,7 +2055,7 @@ void CScopeDlg::DrawDacPts(CDC *pDC,CRect rr)
 		}
 	}
 	//draw dac threshold and curve
-	int nPercentage = MulDiv(pPr30->nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold,127);
+	int nPercentage = MulDiv(pPA->m_nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold,127);
 	int nZeroLevel;
 	switch(pAdc->nRfType) {
 	case RFTYPELINEAR:
@@ -2014,7 +2069,7 @@ void CScopeDlg::DrawDacPts(CDC *pDC,CRect rr)
 		break;
 	}
 
-	float fBlanking_ns = (float)(pPr30->nDacBlanking * 100) - (theApp.m_Scope.m_fMainBangConstant * 1e9f);
+	float fBlanking_ns = (float)(pPA->m_nDacBlanking * 100) - (theApp.m_Scope.m_fMainBangConstant * 1e9f);
 	int xx = (int)((fBlanking_ns - (float)pAdc->nDelay) / pAdc->fSamplePeriod);
 	nPnX = MulDiv(xx, rr.Width(), pAdc->nAcqLength);
 	if(nPnX<0) nPnX = 0;
@@ -2044,15 +2099,112 @@ void CScopeDlg::DrawDacPts(CDC *pDC,CRect rr)
 
 }
 
+void CScopeDlg::DrawDacPtsPR(CDC *pDC, CRect rr)
+{
+	unsigned char cMask = 1;
+	cMask <<= m_nTimeSlot;
+	if (!(theApp.m_Scope.m_cDisplayDACPtsMask & cMask)) return;
+
+	int	nStart;
+	Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30;
+	int	nT = pPr30->nDacTable;
+	int	ii, nPnX, nPnY;
+	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
+	float fGain, fDelay;
+
+
+	if (FindDACStartPt(&nStart) == FALSE) return;
+
+	CPen penWhite(PS_SOLID, 1, RGB(255, 255, 255));
+	CPen penGrey(PS_SOLID, 1, RGB(128, 128, 128));
+	CPen *pOldPen = pDC->SelectObject(&penWhite);
+	//Put the crosses up
+	for (ii = 0; ii < 64; ii++) {
+		if (pPr30->fDacDelay[nT][ii] != 0.0) {
+			fDelay = pPr30->fDacDelay[nT][ii];
+			switch (theApp.m_LastSettings.nDacDelayUnits) {
+			case 0:	fDelay = pPr30->fDacDelay[nT][ii] * 1000;		//ns
+				break;
+			case 1:	fDelay = pPr30->fDacDelay[nT][ii] / (float)theApp.m_LastSettings.nWaterVelocity * 2000000.0f;		//mm
+				break;
+			case 2:	fDelay = pPr30->fDacDelay[nT][ii] / (float)theApp.m_LastSettings.nMaterialVelocity * 2000000.0f;		//mm
+				break;
+			}
+
+			nPnX = (int)(fDelay / pAdc->fSamplePeriod) + nStart;
+			nPnX = MulDiv(nPnX, rr.Width(), pAdc->nAcqLength);
+			fGain = theApp.m_LastSettings.fDACRefAmplitude / (float)pow(10.0, (double)pPr30->fDacGain[nT][ii] / 20.0);
+			switch (pAdc->nRfType) {
+			case RFTYPELINEAR:
+				nPnY = (rr.top + rr.bottom) / 2 - (int)((fGain*(float)rr.Height() / 2.0f) / 100.0f);
+				break;
+			case RFTYPERECTIFIED:
+			case RFTYPELOG:
+				nPnY = rr.bottom - (int)((fGain*(float)rr.Height()) / 100.0f);
+				break;
+			}
+			m_ptDac[ii].x = nPnX;
+			m_ptDac[ii].y = nPnY;
+			pDC->MoveTo(nPnX - 3, nPnY - 3);
+			pDC->LineTo(nPnX + 4, nPnY + 4);
+			pDC->MoveTo(nPnX - 3, nPnY + 3);
+			pDC->LineTo(nPnX + 4, nPnY - 4);
+		}
+	}
+	//draw dac threshold and curve
+	int nPercentage = MulDiv(pPr30->nDacTriggerThreshold - 128, theApp.m_LastSettings.nDacMaxThreshold, 127);
+	int nZeroLevel;
+	switch (pAdc->nRfType) {
+	case RFTYPELINEAR:
+		nPnY = (rr.top + rr.bottom) / 2 - MulDiv(nPercentage, rr.Height() / 2, 100);
+		nZeroLevel = (rr.top + rr.bottom) / 2;
+		break;
+	case RFTYPERECTIFIED:
+	case RFTYPELOG:
+		nPnY = rr.bottom - MulDiv(nPercentage, rr.Height(), 100);
+		nZeroLevel = rr.bottom;
+		break;
+	}
+
+	float fBlanking_ns = (float)(pPr30->nDacBlanking * 100) - (theApp.m_Scope.m_fMainBangConstant * 1e9f);
+	int xx = (int)((fBlanking_ns - (float)pAdc->nDelay) / pAdc->fSamplePeriod);
+	nPnX = MulDiv(xx, rr.Width(), pAdc->nAcqLength);
+	if (nPnX < 0) nPnX = 0;
+
+	pDC->SelectObject(&penGrey);
+	pDC->MoveTo(0, nPnY);
+	pDC->LineTo(nPnX, nPnY);
+	pDC->LineTo(nPnX, nZeroLevel);
+
+
+	CPen penDashed(PS_DOT, 1, RGB(255, 255, 255));
+	pDC->SelectObject(&penDashed);
+
+	switch (pAdc->nRfType) {
+	case RFTYPELINEAR:
+		nPnY = (rr.top + rr.bottom) / 2 - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height() / 2.0f) / 100.0f);
+		break;
+	case RFTYPERECTIFIED:
+	case RFTYPELOG:
+		nPnY = rr.bottom - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height()) / 100.0f);
+		break;
+	}
+	pDC->MoveTo(0, nPnY);
+	pDC->LineTo(rr.Width(), nPnY);
+
+	pDC->SelectObject(pOldPen);
+
+}
 
 void CScopeDlg::DacTableChanged()
 {
-	CMainFrame*  pFrame =  (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	FRAME;
 
 	theApp.m_UtUser.Pr30CalculateDacData(&theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30);
 	if(pFrame->m_pUltrasonicsSheet) {
 		pFrame->m_pUltrasonicsSheet->UpdateDacTable();
 	}
+	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_SHEET, 0, 0);
 }
 
 
@@ -2062,23 +2214,17 @@ bool CScopeDlg::FindNearestDacPt(CPoint point, CRect rr, int *nPt)
 	cMask <<= m_nTimeSlot;
 	if(!(theApp.m_Scope.m_cDisplayDACPtsMask & cMask)) return false;
 
-	int	ii;
-	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
-	GatesData* pGates = &theApp.m_UtUser.m_TS[m_nTimeSlot].Gate;
-	DSP200Data* pDsp = &theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp;
-	bool bFlag=FALSE;
-
 	point.x -= rr.left;
 	point.y -= rr.top;
 
-	for(ii=0;ii<64;ii++) {
+	for(int ii=0;ii<64;ii++) {
 
 		if(abs(m_ptDac[ii].x-point.x)<3 && abs(m_ptDac[ii].y-point.y)<3) {
 			*nPt = ii;
 			return TRUE;
 		}
 	};
-	return bFlag;
+	return false;
 }
 
 
@@ -2093,15 +2239,15 @@ void CScopeDlg::OnScopeDeletedacpoint()
 	ScreenToClient(&rr);
 	ScreenToClient(&m_ptClient);
 
-	unsigned char cMask = 1;
-	cMask <<= m_nTimeSlot;
-	if(!(theApp.m_Scope.m_cDisplayDACPtsMask & cMask)) return;
-
 	if(FindNearestDacPt(m_ptClient, rr, &m_nWhichDacPt) == TRUE) {
 
-		for(ii=m_nWhichDacPt;ii<63;ii++) {
-			pPr30->fDacDelay[nT][ii]=pPr30->fDacDelay[nT][ii+1];
-			pPr30->fDacGain[nT][ii]=pPr30->fDacGain[nT][ii+1];
+		for (ii = m_nWhichDacPt; ii < 63; ii++) {
+			pPr30->fDacDelay[nT][ii] = pPr30->fDacDelay[nT][ii + 1];
+			pPr30->fDacGain[nT][ii] = pPr30->fDacGain[nT][ii + 1];
+		}
+		for (ii = m_nWhichDacPt; ii < 63; ii++) {
+			theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][ii] = theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][ii + 1];
+			theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][ii] = theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][ii + 1];
 		}
 		DacTableChanged();
 	}
@@ -2452,18 +2598,6 @@ void CScopeDlg::OnScopeSlot8()
 
 }
 
-void CScopeDlg::SetWindowName()
-{
-	CString Buff;
-
-	Buff.Format(L"%s", theApp.m_UtUser.m_TS[m_nTimeSlot].cName);
-
-	if(Buff != m_WindowName) {
-		m_WindowName=Buff;
-		SetWindowText(m_WindowName);
-	}
-}
-
 int CScopeDlg::MinMax(int *pnV, int nMin, int nMax)
 {
 	if(*pnV<nMin) *pnV=nMin;
@@ -2652,3 +2786,21 @@ void CScopeDlg::OnScopeProperties()
 	FRAME;
 	pFrame->SendMessage(UI_SHOW_PROPERTIES_PANE, NULL, Scope);
 }
+
+void CScopeDlg::SetWindowName()
+{
+	CString Buff;
+
+	if (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY) {
+		Buff.Format(L"%s FocalLaw #:%d", theApp.m_UtUser.m_TS[m_nTimeSlot].cName, theApp.m_LSA.m_nScopeViewLaw + 1);
+	}
+	else {
+		Buff.Format(L"%s", theApp.m_UtUser.m_TS[m_nTimeSlot].cName);
+	}
+
+	if (Buff != m_WindowName) {
+		m_WindowName = Buff;
+		SetWindowText(m_WindowName);
+	}
+}
+

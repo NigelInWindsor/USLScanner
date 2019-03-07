@@ -20,7 +20,7 @@ enum ProbeType {
 	LINEAR_CONVEX,
 };
 
-struct	ElementData {
+struct	PAElementData {
 	int nStructSize;
 
 	float fVersion;
@@ -28,25 +28,6 @@ struct	ElementData {
 	D3DXVECTOR3	vecPt;
 	D3DXVECTOR3	vecNorm;
 };
-
-struct FocalLawData {
-	int nStructSize;
-
-	float fVersion;
-
-	D3DXVECTOR3	vecPt;
-	D3DXVECTOR3	vecNorm;
-
-	int		nTXStartElement;
-	int		nTXFinishElement;
-	int		nRXStartElement;
-	int		nRXFinishElement;
-	bool	bOutput[4];					//!!!PM30 Number!!!
-	float	fCollectiveGain[4];			// !!!! ACM Number!!!!!
-	float	fGainTrim[4];				// !!!! ACM Number!!!!!
-	int		nOutputFocalLawNumber[4];	//Each Beam is linked to a different FocalLaw Number Conatined here !!!!PM30 Number!!!
-};
-
 
 
 
@@ -64,9 +45,10 @@ public:
 	bool CalculateDelays(int *nDelayArray);
 	void setFocalLawAlgorithm(int nAlgorithm);
 	int getFocalLawAlgorithm();
-	void CalculateFocalLawVertices();
 	void CalculateTxFocalLaws();
 	void CalculateRxFocalLaws();
+	D3DXVECTOR3 & getFocalLawPos(int nTxRx, int nFL);
+	D3DXVECTOR3 & getFocalLawNorm(int nTxRx, int nFL);
 	float getTxDelay(int nFL, int nElement);
 	float getRxDelay(int nFL, int nTOF, int nElement);
 	void DownloadAllToHardware();
@@ -91,6 +73,10 @@ public:
 	int setFilterType(FrequencyFilterType eFilterType);
 	void ApplyFilter();
 	void CalculateFiringOrder();
+	int setDacMode(int nMode);
+	int getDacMode();
+	void setAllDacVariables();
+	int getDACCount(int nFL);
 	void setTxLastElement(int nLast);
 	int getTxLastElement();
 	void setRxLastElement(int nLast);
@@ -170,8 +156,7 @@ public:
 	int						m_nFilterGain;
 	int						m_nFlOrder[256];
 	ProbeType				m_eProbeType;
-	struct	ElementData		m_Element[256];
-	struct	FocalLawData	m_FL[2048]; //0-special, 1-256-normal
+	struct	PAElementData	m_PAElement[256];
 	CFocalLawTxRx			m_FLTx[2048];
 	CFocalLawTxRx			m_FLRx[2048];
 	D3DXVECTOR3				m_vElement[256];
@@ -179,6 +164,20 @@ public:
 	CFIR					m_FIR;
 
 	float					m_fDelayArray_ns[256];
+
+	int						m_nDacMode;
+	int						m_nDacTriggerThreshold;
+	int 					m_nDacTriggerSlope;
+	int						m_nDacBlanking;
+	float 					m_fDacBlanking;
+	int						m_nDacCount[2048];
+	float 					m_fDacDelay[2048][64];
+	float 					m_fDacGain[2048][64];
+
+
+	void operator = (CPhasedArrayProbe* pPhasedArray);
+	CRITICAL_SECTION	m_CriticalSection;
+
 
 	CPhasedArrayProbe();
 	virtual ~CPhasedArrayProbe();

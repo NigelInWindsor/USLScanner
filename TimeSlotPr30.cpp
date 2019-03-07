@@ -26,7 +26,7 @@ CTimeSlotPr30::CTimeSlotPr30(UINT nCap,CWnd* pParent,int nWhichTS,bool bSubset)
 	//{{AFX_DATA_INIT(CTimeSlotPr30)
 	m_staticBlankingText = _T("");
 	//}}AFX_DATA_INIT
-	m_nTS = MinMax(&nWhichTS, 0, 255);
+	theApp.m_UtUser.m_Global.nTimeSlot = m_nTS = MinMax(&nWhichTS, 0, 255);
 	theApp.m_UtUser.SelectWriteTimeslot();
 	m_pEditSpinItem=NULL;
 	m_nDacIndex=0;

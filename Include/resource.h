@@ -135,7 +135,6 @@
 #define IDSERIAL                        112
 #define IDC_DPRROT2SIZE                 113
 #define IDS_DPR_NOALLOC                 113
-#define IDD_DIALOG1                     113
 #define IDC_DPRVARSTART                 114
 #define IDS_DPR_BADADDR                 114
 #define DLG_SEARCHPROGRESS              114

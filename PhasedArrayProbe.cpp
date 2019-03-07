@@ -16,8 +16,57 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+void CPhasedArrayProbe::operator=(CPhasedArrayProbe * pPA)
+{
+	EnterCriticalSection(&m_CriticalSection);
+
+	CopyMemory(m_PAElement, pPA->m_PAElement, sizeof m_PAElement);
+	CopyMemory(m_FLRx, pPA->m_FLRx, sizeof m_FLRx);
+	CopyMemory(m_FLTx, pPA->m_FLTx, sizeof m_FLTx);
+
+	m_fElementPitch = pPA->m_fElementPitch;
+	m_nNumberElements = pPA->m_nNumberElements;
+	m_nNumberFocalLaws = pPA->m_nNumberFocalLaws;
+	m_nReverseArray = pPA->m_nReverseArray;
+
+	for (int nTxRx = 0; nTxRx < 2; nTxRx++) {
+		m_nFirstElement[nTxRx] = pPA->m_nFirstElement[nTxRx];
+		m_nLastElement[nTxRx] = pPA->m_nLastElement[nTxRx];
+		m_nAperture[nTxRx] = pPA->m_nAperture[nTxRx];
+		m_fFocalLawPitch[nTxRx] = pPA->m_fFocalLawPitch[nTxRx];
+		m_nFocalLawPitch[nTxRx] = (int)(m_fFocalLawPitch[nTxRx] / m_fElementPitch);
+	}
+	m_fAnalogueGain = pPA->m_fAnalogueGain;
+	m_fDigitalGain = pPA->m_fDigitalGain;
+	m_fPulseWidth = pPA->m_fPulseWidth;
+	CopyMemory(m_fFilterFreq, pPA->m_fFilterFreq, sizeof m_fFilterFreq);
+	m_fRipple = pPA->m_fRipple;
+	m_nFilterGain = pPA->m_nFilterGain;
+
+	m_nFocalLawAlgorithm = pPA->m_nFocalLawAlgorithm;
+	m_fTxFocalLength = pPA->m_fTxFocalLength;
+	m_fWedgeAngle = pPA->m_fWedgeAngle;
+	m_nWedgeVelocity = pPA->m_nWedgeVelocity;
+	m_fWedgeHeightElementOne = pPA->m_fWedgeHeightElementOne;
+	CopyMemory(m_fRxFocalLength, pPA->m_fRxFocalLength, sizeof m_fRxFocalLength);
+	CopyMemory(m_fBeamAngle, pPA->m_fBeamAngle, sizeof m_fBeamAngle);
+
+	m_nDacMode = pPA->m_nDacMode;
+	m_nDacTriggerThreshold = pPA->m_nDacTriggerThreshold;
+	m_nDacTriggerSlope = pPA->m_nDacTriggerSlope;
+	m_nDacBlanking = pPA->m_nDacBlanking;
+	m_fDacBlanking = pPA->m_fDacBlanking;
+	CopyMemory(m_nDacCount, pPA->m_nDacCount, sizeof m_nDacCount);
+	CopyMemory(m_fDacDelay, pPA->m_fDacDelay, sizeof m_fDacDelay);
+	CopyMemory(m_fDacGain, pPA->m_fDacGain, sizeof m_fDacGain);
+
+	LeaveCriticalSection(&m_CriticalSection);
+}
+
 CPhasedArrayProbe::CPhasedArrayProbe()
 {
+	InitializeCriticalSection(&m_CriticalSection);
+
 	Zero();
 }
 
@@ -29,8 +78,7 @@ CPhasedArrayProbe::~CPhasedArrayProbe()
 void CPhasedArrayProbe::Zero()
 {
 
-	ZeroMemory(m_Element, sizeof m_Element);
-	ZeroMemory(m_FL,sizeof m_FL);
+	ZeroMemory(m_PAElement, sizeof m_PAElement);
 
 	m_fElementPitch = 0.5;
 	m_nNumberElements = 32;
@@ -40,7 +88,7 @@ void CPhasedArrayProbe::Zero()
 	m_nLastElement[TX_FL] = 31;
 	m_nAperture[TX_FL] = 1;
 	m_fFocalLawPitch[TX_FL] = 0.5;
-	m_nFocalLawPitch[TX_FL] = (int)(m_fFocalLawPitch[2] / m_fElementPitch);
+	m_nFocalLawPitch[TX_FL] = (int)(m_fFocalLawPitch[TX_FL] / m_fElementPitch);
 	m_fAnalogueGain = 20.0f;
 	m_fDigitalGain = 0.0f;
 	m_fPulseWidth = 100e-9f;
@@ -58,6 +106,15 @@ void CPhasedArrayProbe::Zero()
 	m_fWedgeHeightElementOne = 5.0f;
 	ZeroMemory(m_fRxFocalLength, sizeof m_fRxFocalLength);
 	ZeroMemory(m_fBeamAngle, sizeof m_fBeamAngle);
+
+	m_nDacMode = 0;
+	m_nDacTriggerThreshold = 50;
+	m_nDacTriggerSlope = 0;
+	m_nDacBlanking = 0;
+	m_fDacBlanking = 0.0f;
+	ZeroMemory(m_nDacCount, sizeof m_nDacCount);
+	ZeroMemory(m_fDacDelay, sizeof m_fDacDelay);
+	ZeroMemory(m_fDacGain, sizeof m_fDacGain);
 
 	setRxEqualTx();
 }
@@ -139,21 +196,30 @@ ULONGLONG CPhasedArrayProbe::Save(CUSLFile *pFile)
 	pFile->Write(&m_fRipple, sizeof m_fRipple);
 	pFile->Write(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Write(&m_eFilterType, sizeof m_eFilterType);
+	pFile->Write(&m_nDacMode, sizeof m_nDacMode);
+	pFile->Write(&m_nDacTriggerThreshold, sizeof m_nDacTriggerThreshold);
+	pFile->Write(&m_nDacTriggerSlope, sizeof m_nDacTriggerSlope);
+	pFile->Write(&m_nDacBlanking, sizeof m_nDacBlanking);
+	pFile->Write(&m_fDacBlanking, sizeof m_fDacBlanking);
+	pFile->Write(m_nDacCount, sizeof m_nDacCount);
+	pFile->Write(m_fDacDelay, sizeof m_fDacDelay);
+	pFile->Write(m_fDacGain, sizeof m_fDacGain);
+
 
 
 	n64ElementOffset=pFile->GetPosition();
 	for(ii=0;ii<256;ii++) {
-		m_Element[ii].nStructSize = sizeof ElementData;
-		m_Element[ii].fVersion = theApp.m_fVersion;
-		pFile->WriteStruct(&m_Element[ii],sizeof ElementData);
+		m_PAElement[ii].nStructSize = sizeof PAElementData;
+		m_PAElement[ii].fVersion = theApp.m_fVersion;
+		pFile->WriteStruct(&m_PAElement[ii],sizeof PAElementData);
 	};
 
-	n64FocalLawOffset=pFile->GetPosition();
-	for(ii=0;ii<257;ii++) {
-		m_FL[ii].nStructSize = sizeof FocalLawData;
-		m_FL[ii].fVersion = theApp.m_fVersion;
-		pFile->WriteStruct(&m_FL[ii],sizeof FocalLawData);
-	};
+	n64FocalLawOffset = 0;
+//	for(ii=0;ii<257;ii++) {
+//		m_PAFL[ii].nStructSize = sizeof PAFocalLawData;
+//		m_PAFL[ii].fVersion = theApp.m_fVersion;
+//		pFile->WriteStruct(&m_PAFL[ii],sizeof PAFocalLawData);
+//	};
 
 	UINT64 n64Eof=pFile->GetPosition();
 
@@ -204,18 +270,26 @@ void CPhasedArrayProbe::Retrieve(CUSLFile *pFile)
 	pFile->Read(&m_fRipple, sizeof m_fRipple);
 	pFile->Read(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Read(&m_eFilterType, sizeof m_eFilterType);
-
-
+	pFile->Read(&m_nDacMode, sizeof m_nDacMode);
+	pFile->Read(&m_nDacTriggerThreshold, sizeof m_nDacTriggerThreshold);
+	pFile->Read(&m_nDacTriggerSlope, sizeof m_nDacTriggerSlope);
+	pFile->Read(&m_nDacBlanking, sizeof m_nDacBlanking);
+	pFile->Read(&m_fDacBlanking, sizeof m_fDacBlanking);
+	pFile->Read(m_nDacCount, sizeof m_nDacCount);
+	pFile->Read(m_fDacDelay, sizeof m_fDacDelay);
+	pFile->Read(m_fDacGain, sizeof m_fDacGain);
+	
 	pFile->Seek(n64ElementOffset,CFile::begin);
 	for(ii=0;ii<256;ii++) {
-		pFile->ReadStruct(&m_Element[ii], sizeof m_Element[0]);
+		pFile->ReadStruct(&m_PAElement[ii], sizeof m_PAElement[0]);
 	};
 
-	pFile->Seek(n64FocalLawOffset,CFile::begin);
-	for(ii=0;ii<257;ii++) {
-		pFile->ReadStruct(&m_FL[ii], sizeof m_FL[0]);
-	};
-
+	if (n64FocalLawOffset > 0 && n64FocalLawOffset < pFile->GetLength()) {
+//		pFile->Seek(n64FocalLawOffset, CFile::begin);
+//		for (ii = 0; ii < 257; ii++) {
+//			pFile->ReadStruct(&m_PAFL[ii], sizeof m_PAFL[0]);
+//		};
+	}
 	CalculateFiringOrder();
 }
 
@@ -392,19 +466,19 @@ void CPhasedArrayProbe::AutoFillCoordinates(char cAxis)
 	for(ii=0;ii<256;ii++) {
 		switch(cAxis) {
 		case 'X':vPos.x = (float)ii * m_fElementPitch;
-			m_Element[ii].vecPt = vPos;
+			m_PAElement[ii].vecPt = vPos;
 			break;
 		case 'Y':vPos.y = (float)ii * m_fElementPitch;
-			m_Element[ii].vecPt = vPos;
+			m_PAElement[ii].vecPt = vPos;
 			break;
 		case 'Z':vPos.z = (float)ii * m_fElementPitch;
-			m_Element[ii].vecPt = vPos;
+			m_PAElement[ii].vecPt = vPos;
 			break;
-		case 'i': m_Element[ii].vecNorm = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		case 'i': m_PAElement[ii].vecNorm = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
 			break;
-		case 'j': m_Element[ii].vecNorm = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		case 'j': m_PAElement[ii].vecNorm = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
 			break;
-		case 'k': m_Element[ii].vecNorm = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+		case 'k': m_PAElement[ii].vecNorm = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 			break;
 		}
 	}
@@ -628,24 +702,7 @@ void CPhasedArrayProbe::CalculateElementCoordinates()
 	for (int ii = 0; ii < m_nNumberElements; ii++) {
 //		float fH = -fProbeHalfLength + ((m_fElementPitch / 2.0f) + (float)ii * m_fElementPitch);
 		float fH = (float)ii * m_fElementPitch;
-		m_Element[ii].vecPt = m_vElement[ii] = D3DXVECTOR3(0.0f, 0.0f, fH);
-	}
-}
-
-void CPhasedArrayProbe::CalculateFocalLawVertices()
-{
-	int nEl0, nEl1;
-	int	nFL;
-
-	for (nFL = 0; nFL <= m_nNumberFocalLaws; nFL++) {
-		nEl0 = m_nFirstElement[TX_FL] + nFL * m_nFocalLawPitch[TX_FL];
-		nEl1 = nEl0 + m_nAperture[TX_FL] - 1;
-
-		m_FL[nFL].nRXStartElement = m_FL[nFL].nTXStartElement = nEl0;
-		m_FL[nFL].nRXFinishElement = m_FL[nFL].nTXFinishElement = nEl1;
-
-		m_FL[nFL].vecPt = (m_Element[nEl0].vecPt + m_Element[nEl1].vecPt) / 2.0f;
-		m_FL[nFL].vecNorm = m_Element[(nEl0 + nEl1) / 2].vecNorm;
+		m_PAElement[ii].vecPt = m_vElement[ii] = D3DXVECTOR3(0.0f, 0.0f, fH);
 	}
 }
 
@@ -663,6 +720,8 @@ void CPhasedArrayProbe::CalculateTxFocalLaws()
 		m_FLTx[nFL].setFocalLength(m_fTxFocalLength,0);
 		m_FLTx[nFL].setBeamAngle(m_fBeamAngle[TX_FL][0]);
 		m_FLTx[nFL].CalculateTxFocalLaw(this);
+		m_FLTx[nFL].m_vectO = (m_PAElement[nEl0].vecPt + m_PAElement[nEl1].vecPt) / 2.0f;
+		m_FLTx[nFL].m_vectN = m_PAElement[(nEl0 + nEl1) / 2].vecNorm;;
 	}
 
 }
@@ -681,8 +740,26 @@ void CPhasedArrayProbe::CalculateRxFocalLaws()
 			m_FLRx[nFL].setFocalLength(m_fRxFocalLength[nTOF],nTOF);
 		m_FLRx[nFL].setBeamAngle(m_fBeamAngle[RX_FL][0]);
 		m_FLRx[nFL].CalculateRxFocalLaw(this);
+		m_FLRx[nFL].m_vectO = (m_PAElement[nEl0].vecPt + m_PAElement[nEl1].vecPt) / 2.0f;
+		m_FLRx[nFL].m_vectN = m_PAElement[(nEl0 + nEl1) / 2].vecNorm;;
 	}
 
+}
+
+D3DXVECTOR3 &CPhasedArrayProbe::getFocalLawPos(int nTxRx, int nFL)
+{
+	if (nTxRx = RX_FL) {
+		return m_FLRx[nFL].m_vectO;
+	}
+	return m_FLTx[nFL].m_vectO;
+}
+
+D3DXVECTOR3 &CPhasedArrayProbe::getFocalLawNorm(int nTxRx, int nFL)
+{
+	if (nTxRx = RX_FL) {
+		return m_FLRx[nFL].m_vectN;
+	}
+	return m_FLTx[nFL].m_vectN;
 }
 
 float CPhasedArrayProbe::getTxDelay(int nFL, int nElement)
@@ -995,4 +1072,27 @@ void CPhasedArrayProbe::CalculateFiringOrder()
 		}
 	}
 
+}
+
+int CPhasedArrayProbe::setDacMode(int nMode)
+{
+	return m_nDacMode = MinMax(&nMode, 0, 2);
+}
+
+int CPhasedArrayProbe::getDacMode()
+{
+	return m_nDacMode;
+}
+
+void CPhasedArrayProbe::setAllDacVariables()
+{
+	if (theApp.m_AOSPhasedArray.isConnected()) {
+		theApp.m_AOSPhasedArray.setAllDacVariables(this);
+	}
+
+}
+
+int CPhasedArrayProbe::getDACCount(int nFL)
+{
+	return m_nDacCount[nFL];
 }

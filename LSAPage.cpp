@@ -636,7 +636,7 @@ finish_label:
 	theApp.m_UtUser.Pr30LinFloatGain(m_pPr30);
 
 	UpdateAllControls();
-	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_DLG);
+	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_SHEET);
 }
 
 
@@ -783,7 +783,7 @@ void CLSAPage::OnButtonZeroGains()
 		}
 	}
 	UpdateAllControls();
-	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_DLG);
+	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_SHEET);
 }
 
 

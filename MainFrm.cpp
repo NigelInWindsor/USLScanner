@@ -296,11 +296,11 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_MESSAGE(UI_UPDATE_ROBOT_SHEET, UpdateRobotSheet)
 	ON_MESSAGE(UI_UPDATE_PALETTE_SHEET, UpdatePaletteSheet)
 	ON_MESSAGE(UI_UPDATE_PMAC_SHEET, UpdatePmacSheet)
-	ON_MESSAGE(UI_UPDATE_PHASED_ARRAY_DLG, UpdatePhasedArrayDlg)
+	ON_MESSAGE(UI_UPDATE_PHASED_ARRAY_SHEET, UpdatePhasedArraySheet)
 	ON_MESSAGE(UI_UPDATE_MOTION_TOOLS, RefreshMotionTools)
 	ON_MESSAGE(UI_UPDATE_ULTRASONICS_SHEET, RefreshUltrasonicsSheet)
 	ON_MESSAGE(UI_CLOSE_ALL_IMAGES, CloseAllImages)
-	ON_MESSAGE(UI_UPDATE_LSA_UT_PAGE, UpdateUltrasonicsLSAPage)
+	ON_MESSAGE(UI_FOCAL_LAW_CHANGED, OnUpdateFocalLawChanged)
 	ON_MESSAGE(UI_UPDATE_GATES_UT_PAGE, UpdateGatesPage)
 	ON_MESSAGE(UI_UPDATE_DIALOG_BAR, InitializeDialogBar)
 	ON_MESSAGE(UI_INVALIDATE_SCAN_START_TIME, InvalidateScanTime)
@@ -483,7 +483,6 @@ CMainFrame::CMainFrame()
 	m_pRobotSheet = NULL;
 	m_pFaroCoordinateDlg = NULL;
 	m_pDataPropertiesDlg = NULL;
-	m_pPhasedArrayProbeDlg = NULL;
 	m_pPolyCoordDlg = NULL;
 	m_pInclusionsSheet = NULL;
 	m_pQuaternionsPage = NULL;
@@ -1217,7 +1216,6 @@ HRESULT CMainFrame::LanguageChanged(WPARAM,LPARAM)
 	m_pRobotSheet = NULL;
 	m_pFaroCoordinateDlg = NULL;
 	m_pDataPropertiesDlg = NULL;
-	m_pPhasedArrayProbeDlg = NULL;
 	m_pPolyCoordDlg = NULL;
 	m_pInclusionsSheet = NULL;
 	m_pQuaternionsPage = NULL;
@@ -1987,8 +1985,16 @@ void CMainFrame::OnChangeEditProbeLength()
 void CMainFrame::OnUltrasonicsTileoscilloscopesvertically()
 {
 	CRect rrDlg[8];
-	int	nTS,nTotal;
+	int	nTS,nTotal, nHeight , nTop;
 	CRect rr;
+	CRect rrScreen,rrStatus,rrClient;
+	bool bScopesInActiveWindow = false;
+
+	GetClientRect(rrClient);
+	ClientToScreen(rrClient);
+	GetWindowRect(rrScreen);
+	m_wndStatusBar.GetWindowRect(rrStatus);
+	rrClient.bottom = rrStatus.top;
 
 	rr.SetRectEmpty();
 	rr.top=2000;
@@ -2004,17 +2010,25 @@ void CMainFrame::OnUltrasonicsTileoscilloscopesvertically()
 			if(rrDlg[nTS].top < rr.top) rr.top = rrDlg[nTS].top;
 			if(rrDlg[nTS].right > rr.right) rr.right = rrDlg[nTS].right;
 			if(rrDlg[nTS].bottom > rr.bottom) rr.bottom = rrDlg[nTS].bottom;
+			if (bScopesInActiveWindow == false) {
+				if (rrScreen.PtInRect(rrDlg[nTS].TopLeft()) || rrScreen.PtInRect(rrDlg[nTS].BottomRight())) bScopesInActiveWindow = true;
+			}
 		}
 	}
 	int nHPixel = GetSystemMetrics(78);	
-	int nVPixel = GetSystemMetrics(17);	//Not 79
-	int nTop = 0;
-	int nY;
-	nVPixel -= nTop;
+	int nVPixel = GetSystemMetrics(17);	//Not 79, 17
+	if (bScopesInActiveWindow == false) {
+		nHeight = nVPixel;
+		nTop = 0;
+	} else {
+		nHeight = rrClient.Height();
+		nTop = rrClient.top;
+	}
+
 	for(nTS=0;nTS<8;nTS++) {
 		if(m_pScopeDlg[nTS]) {
-			nY = nTop+MulDiv(nTS,nVPixel,nTotal);
-			m_pScopeDlg[nTS]->SetWindowPos(&wndTop,rr.left,nY,rr.Width(),nVPixel/nTotal,NULL);
+			int nY = nTop+MulDiv(nTS,nHeight,nTotal);
+			m_pScopeDlg[nTS]->SetWindowPos(&wndTop,rr.left,nY,rr.Width(), nHeight /nTotal,NULL);
 		}
 	}
 
@@ -2887,14 +2901,6 @@ HRESULT CMainFrame::Invalidate3DViewPage(WPARAM wp, LPARAM lp)
 	return NULL;
 }
 
-HRESULT CMainFrame::UpdateUltrasonicsLSAPage(WPARAM,LPARAM)
-{
-
-	if(m_pUltrasonicsSheet) {
-		m_pUltrasonicsSheet->UpdateLSAPage();
-	}
-	return NULL;
-}
 
 HRESULT CMainFrame::UpdateGatesPage(WPARAM, LPARAM)
 {
@@ -6029,7 +6035,7 @@ void CMainFrame::OnButtonPaEqualWaterPath()
 		if(theApp.m_UtUser.m_TS[nFl].Gate.nTimeStatus[nGStart]>0) {
 			fWp[0]=theApp.m_UtUser.GetGateWaterPath(nFl);
 			bInterfaceFound[0] = true;
-			vecP[0] = theApp.m_PhasedArray[PORTSIDE].m_FL[nFl].vecPt;
+			vecP[0] = theApp.m_PhasedArray[PORTSIDE].getFocalLawPos(RX_FL, nFl);
 		}
 	}
 	for(nFl;(nFl<theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws());nFl++) {
@@ -6037,7 +6043,7 @@ void CMainFrame::OnButtonPaEqualWaterPath()
 		if(theApp.m_UtUser.m_TS[nFl].Gate.nTimeStatus[nGStart]>0) {
 			fWp[1]=theApp.m_UtUser.GetGateWaterPath(nFl);
 			bInterfaceFound[1] = true;
-			vecP[1] = theApp.m_PhasedArray[PORTSIDE].m_FL[nFl].vecPt;
+			vecP[1] = theApp.m_PhasedArray[PORTSIDE].getFocalLawPos(RX_FL, nFl);
 		}
 	}
 
@@ -6193,13 +6199,14 @@ void CMainFrame::InitializeProfileSheetPtrs()
 
 }
 
-HRESULT CMainFrame::UpdatePhasedArrayDlg(WPARAM,LPARAM)
+HRESULT CMainFrame::UpdatePhasedArraySheet(WPARAM wp,LPARAM lp)
 {
-	if(m_pPhasedArrayProbeDlg!=NULL) {
-		m_pPhasedArrayProbeDlg->UpdateAllControls();
+	if(m_pPhasedArraySheet!=NULL) {
+		m_pPhasedArraySheet->UpdateActivePage();
 	};
 	return NULL;
 }
+
 LRESULT CMainFrame::RemoteHandler(WPARAM Wp, LPARAM Lp)
 {
 	if(m_pMotionToolsSheet!=NULL) m_pMotionToolsSheet->SendMessage(REMOTE_HANDLER,Wp);
@@ -7913,5 +7920,23 @@ HRESULT CMainFrame::InvalidateViewSheets(WPARAM wParam, LPARAM lParam)
 			m_pViewSheet[nn]->InvalidateChild();
 		}
 	};
+	return NULL;
+}
+
+HRESULT CMainFrame::OnUpdateFocalLawChanged(WPARAM wp, LPARAM lp)
+{
+	int nMask = (int)wp;
+
+	if (nMask & _UPDATE_ULTRASONICS_SHEET) {
+		if (m_pUltrasonicsSheet) {
+			m_pUltrasonicsSheet->UpdateLSAPage();
+		}
+	}
+
+	if (nMask & _UPDATE_ULTRASONICS_SHEET) {
+		if (m_pPhasedArraySheet) {
+			m_pPhasedArraySheet->UpdateAllPages();
+		}
+	}
 	return NULL;
 }

@@ -12,6 +12,8 @@ class CAOSPhasedArray
 public:
 	WCHAR	m_wFileIdentifier[60] = L"USLScanner Phased Array";
 
+	CStringArray m_Messages;
+
 	CAOSPhasedArray();
 	~CAOSPhasedArray();
 
@@ -109,6 +111,7 @@ public:
 	int getFrameRate();
 	int getPRFRate();
 	unsigned int getDataRate();
+	bool setAllDacVariables(PVOID pParent);
 	bool Enable(bool bStart);
 	bool DriverRegistration();
 	bool setAnalogueGain(float fGain);

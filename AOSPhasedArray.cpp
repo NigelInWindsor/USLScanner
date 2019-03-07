@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "AOSPhasedArray.h"
 #include "USLScanner.h"
+#include "CPing.h"
+
 
 structCorrectionOEMPA g_Correction;//useful for corrected view.
 
@@ -97,12 +99,9 @@ bool CAOSPhasedArray::Connect(int nIPAddress)
 	DWORD dwProcessId;
 	CString Buff;
 	sockaddr_in Server;
+	CString strAddrs;
 
 	if (m_bConnected == false) {
-
-		Buff = AfxGetAppName();
-		CHWDeviceOEMPA::RegisterMultiProcess(Buff);
-		DriverRegistration();
 
 		if (nIPAddress == 0) {
 			ZeroMemory(&Server, sizeof Server);
@@ -116,6 +115,20 @@ bool CAOSPhasedArray::Connect(int nIPAddress)
 		}
 		swprintf(pValue, 40, L"%d.%d.%d.%d", Server.sin_addr.S_un.S_un_b.s_b4, Server.sin_addr.S_un.S_un_b.s_b3, Server.sin_addr.S_un.S_un_b.s_b2, Server.sin_addr.S_un.S_un_b.s_b1);
 		unsigned short usValue = 5001;
+
+		CPing Ping;
+		strAddrs.Format(L"%s", pValue);
+		if (Ping.Ping(strAddrs, usValue, &m_Messages) != 0) {
+			Buff.Format(L"Failed to Ping AOS Box %s", strAddrs);
+			m_Messages.Add(Buff);
+			return false;
+		}
+
+
+		Buff = AfxGetAppName();
+		CHWDeviceOEMPA::RegisterMultiProcess(Buff);
+		DriverRegistration();
+
 
 		if (CHWDeviceOEMPA::IsMultiProcessConnected(pValue, dwProcessId)) {
 			CHWDeviceOEMPA::DisconnectMultiProcess(pValue, dwProcessId);
@@ -191,10 +204,11 @@ void CAOSPhasedArray::ProcessConnection()
 
 void CAOSPhasedArray::getStatus()
 {
-	bool bStatus;
-	WORD wTemperature, wFWId;
+//	WORD wTemperature, wFWId;
 	CString string, strFile, strType;
-	int iSensorCountMax, iMasterDeviceId, iDeviceCount, iBoardCount, iSensorCount, iBoardCount2;
+	int iBoardCount, iSensorCountMax;
+	WORD wFWId;
+//	int iSensorCountMax, iMasterDeviceId, iDeviceCount, , iSensorCount, iBoardCount2;
 
 	if (!m_pHWDeviceOEMPA->GetSWDeviceOEMPA()->GetTemperatureCount(iBoardCount, iSensorCountMax))
 		return;
@@ -320,6 +334,55 @@ int CAOSPhasedArray::getPRFRate()
 unsigned int CAOSPhasedArray::getDataRate()
 {
 	return m_nDataRate;
+}
+
+bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
+{
+	bool bRet = true;
+	bool bEnableDac = false;
+	if (isConnected() == false)	return false;
+	double dTime[64];
+	float fGain[64], fSlope[64];
+	ZeroMemory(dTime, sizeof dTime);
+	ZeroMemory(fGain, sizeof fGain);
+	ZeroMemory(fSlope, sizeof fSlope);
+	int nDacCount = 0;
+	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
+
+	switch (pProbe->getDacMode()) {
+	case 0: bEnableDac = false;
+		break;
+	case 1: bEnableDac = true;
+		nDacCount = pProbe->getDACCount(0);
+		break;
+	case 2: bEnableDac = true;
+		nDacCount = pProbe->getDACCount(0);
+		break;
+	}
+	nDacCount = 3;
+	for (int ii = 0; ii < nDacCount; ii++) {
+		dTime[ii] = (double)(pProbe->m_fDacDelay[0][ii]*1e-4f);
+		fGain[ii] = pProbe->m_fDacGain[0][ii];
+		float fDiffns = (pProbe->m_fDacDelay[0][ii + 1] - pProbe->m_fDacDelay[0][ii]) * 1.0e6f;
+		fSlope[ii] = (pProbe->m_fDacGain[0][ii+1] - pProbe->m_fDacGain[0][ii]) / fDiffns;
+	}
+
+	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
+		{
+
+		for (int nCycle = 0; nCycle < m_nCycleCount && bRet == true; nCycle++) {
+			if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, bEnableDac)) bRet = false;
+//			if (!m_pHWDeviceOEMPA->SetDACGain(false, nCycle, nDacCount, dTime, fGain)) bRet = false;
+			if (!m_pHWDeviceOEMPA->SetDACSlope( nCycle, nDacCount, dTime, fSlope)) bRet = false;
+		}
+		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {
+			bRet = false;
+			AfxMessageBox(L"Failed to unlock");
+			m_Messages.Add(L"Failed to Unlock: setAllDacVariables");
+		}
+	}
+
+	return bRet;
 }
 
 bool CAOSPhasedArray::setAnalogueGain(float fGain)
@@ -489,11 +552,11 @@ UINT WINAPI CAOSPhasedArray::ProcessAcquisitionAscan_0x00010103(void * pAcquisit
 
 			pDest = (unsigned char*)theApp.m_Scope.m_RFTrace[nSlot];
 			if (theApp.m_UtUser.m_TS[0].Adc.nRfType == RFTYPELINEAR) {
-				for (int ii = 0; ii < pAscanHeader->dataCount; ii++, pDest++)
+				for (unsigned int ii = 0; ii < pAscanHeader->dataCount; ii++, pDest++)
 					*pDest = ucArray[ii];
 			}
 			else {
-				for (int ii = 0; ii < pAscanHeader->dataCount; ii++, pDest++)
+				for (unsigned int ii = 0; ii < pAscanHeader->dataCount; ii++, pDest++)
 					*pDest = ucArray[ii] >>= 1;
 			}
 			theApp.m_LSA.StoreAScan(nSlot, ucArray, pAscanHeader->dataCount);
@@ -740,7 +803,6 @@ bool CAOSPhasedArray::Retrieve(CUSLFile* pFile)
 
 bool CAOSPhasedArray::SetFilter()
 {
-	enumAcquisitionState eAcqState;
 	CHWDeviceOEMPA *pSlave = (CHWDeviceOEMPA*)m_pHWDeviceOEMPA->GetMatched256DeviceOEMPA();
 
 	return true;
@@ -980,11 +1042,10 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 	WORD wID = 65535;
 	DWORD adwHWAperture[4] = { 0 };
 	DWORD adwHWRead[4] = { 0 };
-	bool bEnable;
-	enumGateModeTof tof;
-	enumRectification eRect;
-	int iAcqElem;
-	float fStart;
+//	bool bEnable;
+//	enumGateModeTof tof;
+//	enumRectification eRect;
+//	int iAcqElem;
 	enumAcquisitionFlush eAcquisitionFlush = eAutomatic;
 	float fArray[128];
 	bool bDDFEnable;
@@ -1027,7 +1088,12 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 
 				m_pHWDeviceOEMPA->SetAllElementEnable(false, adwHWAperture);
 				for (int ii = 0; ii < pProbe->m_FLTx[nFL].m_nApertureCount; ii++) {
-					m_pHWDeviceOEMPA->SetElementEnable(ii + pProbe->m_FLTx[nFL].getFirstElement(), true, adwHWAperture);
+					if (pProbe->getReverseArray() == false) {
+						m_pHWDeviceOEMPA->SetElementEnable(ii + pProbe->m_FLTx[nFL].getFirstElement(), true, adwHWAperture);
+					}
+					else {
+						m_pHWDeviceOEMPA->SetElementEnable((pProbe->getNumberElements()-1) - (ii + pProbe->m_FLTx[nFL].getFirstElement()), true, adwHWAperture);
+					}
 				}
 				CopyMemory(pProbe->m_FLTx[nFL].m_dwAperture, adwHWAperture, sizeof adwHWAperture);
 				CopyMemory(pProbe->m_FLRx[nFL].m_dwAperture, adwHWAperture, sizeof adwHWAperture);
@@ -1039,7 +1105,7 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 
 				lPointCount = MinMax(&m_nAScanLength, 512, 8192);
 				pProbe->m_FLRx[nFL].m_dAscanRange = (double)theApp.m_UtUser.m_TS[ nFL ].Adc.nWidth * 1e-9;
-				lPointFactor = ((float)theApp.m_UtUser.m_TS[nFL].Adc.nWidth / 4) / lPointCount;
+				lPointFactor = (long)((float)theApp.m_UtUser.m_TS[nFL].Adc.nWidth / 4) / lPointCount;
 				lPointFactor = 0;
 				if (!m_pHWDeviceOEMPA->SetAscanRangeWithCount(nCycle, pProbe->m_FLRx[nFL].m_dAscanRange, eComp, lPointCount, lPointFactor))	bRet = false;
 
@@ -1048,8 +1114,8 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 
 				if (!m_pHWDeviceOEMPA->SetTimeSlot(nCycle, dTimeSlotTime))																		bRet = false;
 				if (!setRectify(pProbe, nCycle))																								bRet = false;
-				if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, m_bDACEnable))																			bRet = false;
-				if (!m_pHWDeviceOEMPA->SetDACSlope(nCycle, m_nDACCount, &m_dDACTime, &m_fDACSlope))												bRet = false;
+//				if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, m_bDACEnable))																			bRet = false;
+//				if (!m_pHWDeviceOEMPA->SetDACSlope(nCycle, m_nDACCount, &m_dDACTime, &m_fDACSlope))												bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanMaximum(nCycle, true))																		bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanMinimum(nCycle, false))																		bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanSaturation(nCycle, false))																	bRet = false;

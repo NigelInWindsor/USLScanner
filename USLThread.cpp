@@ -38,6 +38,8 @@ void CUSLThread::Start()
 {
 	if (m_bThreadEnabled == false) {
 		m_hEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+		m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
+		InitializeCriticalSection(&m_CriticalSection);
 		m_bThreadEnabled = true;
 		m_pThread = AfxBeginThread(CyclicThread, this, m_nPriority, 0, NULL);
 	}
@@ -51,7 +53,7 @@ void CUSLThread::Suspend()
 		m_bThreadEnabled = false;
 		ResetEvent(m_hEvent);
 		nRet = WaitForSingleObject(m_hEvent, 200);
-		TRACE1("USLThread suspending %s\n",m_Name);
+		TRACE1("USLThread suspending %s\n", m_Name);
 		nRet = WaitForSingleObject(CyclicThread, INFINITE);
 		TRACE1("USLThread succeeded %s\n", m_Name);
 		CloseHandle(m_hEvent);
@@ -80,10 +82,13 @@ UINT CyclicThread(LPVOID pParam)
 		if ((nRet = WaitForSingleObject(pParent->m_hEvent, nRefreshTime)) == WAIT_TIMEOUT) {
 			pParent->m_nDeadTime_us = theApp.getElapsedTime_us(StartCount);
 
+			EnterCriticalSection(&pParent->m_CriticalSection);
+
 			QueryPerformanceCounter(&StartCount);
 			if (pParent->m_pfnCallback) 
 				if(pParent->m_pfnCallback(pParent->m_pParam) == SUSPEND_MYSELF) pParent->m_bThreadEnabled = false;	//if -1 returned, it kills itself
 			pParent->m_nProcessTime_us = theApp.getElapsedTime_us(StartCount);
+			LeaveCriticalSection(&pParent->m_CriticalSection);
 		}
 	}
 	SetEvent(pParent->m_hEvent);

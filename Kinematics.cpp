@@ -918,7 +918,7 @@ void CKinematics::SurfaceFromHead(CCoord *CpHead, CCoord *CpSurface, int nSide, 
 		}
 		if(nSide == 1) fToolLength *= -1.0f;
 
-		vecP = m_vLimb1[nSide] + theApp.m_PhasedArray[nSide].m_FL[nFl].vecPt;
+		vecP = m_vLimb1[nSide] + theApp.m_PhasedArray[nSide].getFocalLawPos(RX_FL, nFl);
 		vecP.z += fToolLength;
 
 		D3DXMatrixTranslation(&matBase,CpHead->Side[nSide].fX,CpHead->Side[nSide].fY,CpHead->Side[nSide].fZ);
@@ -1187,7 +1187,7 @@ void CKinematics::HeadFromSurface(CCoord *CpSurface, CCoord *CpHead, int nSide, 
 		D3DXMatrixRotationY(&matGimbal,fYtAngle);
 		D3DXMatrixRotationX(&matSwivel,-fXtAngle);
 
-		vecP = (m_vLimb1[nSide] + theApp.m_PhasedArray[nSide].m_FL[nFl].vecPt) * -1;
+		vecP = (m_vLimb1[nSide] + theApp.m_PhasedArray[nSide].getFocalLawPos(RX_FL, nFl)) * -1;
 		vecP.z -= fToolLength;
 		D3DXVec3TransformCoord(&vecGimbalJoint,&vecP,&matGimbal);
 		D3DXVec3TransformCoord(&vecGimbalJoint,&vecGimbalJoint,&matSwivel);

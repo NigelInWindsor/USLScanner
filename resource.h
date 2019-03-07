@@ -593,6 +593,7 @@
 #define IDD_DISCS_SHAFTS_PAGE           720
 #define IDR_TOOLBAR5                    725
 #define IDR_RB_UT_COPY_MENU             727
+#define IDD_PHASEDARRAY_FOCAL_LAWS_DLG  729
 #define IDC_STATIC_VERSION              1000
 #define IDC_STATIC_VIEW                 1000
 #define IDC_ATTENUATION                 1000
@@ -3749,6 +3750,7 @@
 #define IDC_SPIN_ASCAN_LENGTH           4056
 #define IDC_SPIN_ITEM                   4056
 #define IDC_SPIN_SQUELCH_MAX            4056
+#define IDC_SPIN_FOCAL_LAW              4056
 #define IDC_SPIN_Y_0                    4057
 #define IDC_EDIT_DATA_RATE              4057
 #define IDC_SPIN_Z_0                    4058
@@ -3813,6 +3815,10 @@
 #define IDC_BUTTON2                     4111
 #define IDC_BUTTON_PING                 4111
 #define IDC_BUTTON_HW_RESET             4111
+#define IDC_DATETIMEPICKER_EVAL         4114
+#define IDC_EDIT_FOCAL_LAW              4115
+#define IDC_CHECK_TX_EQUALS_RX          4116
+#define IDC_CHECK_REVERSE_ELEMENTS      4117
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6076,9 +6082,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        728
+#define _APS_NEXT_RESOURCE_VALUE        731
 #define _APS_NEXT_COMMAND_VALUE         34151
-#define _APS_NEXT_CONTROL_VALUE         4112
+#define _APS_NEXT_CONTROL_VALUE         4118
 #define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif

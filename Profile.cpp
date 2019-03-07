@@ -10122,8 +10122,8 @@ bool CProfile::GenerateSingleLineBScan(int nLineNumber)
 			for (int nn = 0; nn < nNumberCoords; nn++) {
 				float fFast = (((float)nn * (Cp1.fPos[m_nFastAxis] - Cp0.fPos[m_nFastAxis])) / (float)(nNumberCoords - 1)) + Cp0.fPos[m_nFastAxis];
 				m_TaughtLine[nLineNumber].CalculateCoord(fFast, Cp);
-				Cp.Side0.pt += theApp.m_PhasedArray[PORTSIDE].m_FL[nLine].vecPt;
-				Cp.Side1.pt += theApp.m_PhasedArray[STARBOARD].m_FL[nLine].vecPt;
+				Cp.Side0.pt += theApp.m_PhasedArray[PORTSIDE].getFocalLawPos(RX_FL, nLine);
+				Cp.Side1.pt += theApp.m_PhasedArray[STARBOARD].getFocalLawPos(RX_FL, nLine);
 				Line.Add(Cp);
 			}
 		}

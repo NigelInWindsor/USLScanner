@@ -988,6 +988,47 @@ ULONG &CSI10x64::getISRCount()
 	return ulISRCount;
 }
 
+ULONG &CSI10x64::getIRQSource()
+{
+	static ULONG ulIRQSource;
+
+	OVERLAPPED      os;         // OVERLAPPED structure for the operation
+	DWORD           bytesReturned = 0;
+	DWORD           ioctlCode;
+	DWORD           LastErrorStatus = 0;
+	int				nStatus = 0;
+	BOOL			bStatus = true;
+	int				nLength = sizeof(ulIRQSource);
+
+	os.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+	ioctlCode = SI10_IOCTL_GET_IRQ_SOURCE;
+	ulIRQSource = -1;
+
+	if (!DeviceIoControl(m_hDevice, ioctlCode,
+		NULL, 0,
+		(LPVOID)&ulIRQSource, nLength,
+		&bytesReturned, &os))
+	{
+		LastErrorStatus = GetLastError();
+		if (LastErrorStatus == ERROR_IO_PENDING)
+		{
+			// Wait here (forever) for the Overlapped I/O to complete
+			if (!GetOverlappedResult(m_hDevice, &os, &bytesReturned, TRUE))
+			{
+				nStatus = LastErrorStatus = GetLastError();
+			}
+		}
+		else
+		{
+			nStatus = LastErrorStatus;
+		}
+	}
+	CloseHandle(os.hEvent);
+
+	return ulIRQSource;
+}
+
 BOOL CSI10x64::RegisterInterruptCallback()
 {
 	OVERLAPPED      os;         // OVERLAPPED structure for the operation
@@ -1050,11 +1091,13 @@ void CSI10x64::DeRegisterInterruptCallback()
 UINT CSI10x64PendForInterrupt(LPVOID pParam)
 {
 	CSI10x64* pParent = (CSI10x64 *)pParam;
+	int nIrqMask;
 
 	pParent->m_bIntCallbackThreadFinished = FALSE;
 	while (pParent->m_bIntCallbackThreadEnabled == TRUE) {
 		if (WaitForSingleObject(pParent->m_hEvent, 100) == WAIT_OBJECT_0) {
 			pParent->m_nEventsCount++;
+			nIrqMask = pParent->getIRQSource();
 
 			ResetEvent(pParent->m_hEvent);
 		}

@@ -15,24 +15,22 @@ class CEvaluationDlg : public CDialog
 {
 // Construction
 public:
-	void	GetCodeForADate();
-	int		OldCheckReceivingCode();
 	CString *GetExpiryDate();
-	void	SetSelfDestructDate(CString Name, int nMonths=0);
-	int		GetHowManyDaysLeft();
-	void	CreateSendingCode(CString *Code);
+	bool IsCodeRequired();
+	void	SetSelfDestructDate(CString GUID, time_t newdate = 0);
 	int		CheckReceivingCode();
-	BYTE	GetVersionNumber();
-	BYTE	ReverseBits(BYTE input);
-	bool	FindSelfDestructDate(CString Name, time_t * pSelfDestructDate);
+	bool	FindSelfDestructDate(CString GUID, time_t * pSelfDestructDate);
 	void	SetMachineName(CString Name);
-	bool	CheckifEvalCode();
 
+	ULONGLONG	m_ullNeedsCode;
 	time_t	m_nSelfDestructDate;
 	int		m_nHowManyDaysLeft;
 	char	m_MachineID[100];
 	int		m_nErrorCode;
 	BYTE	m_SendByte[12];
+	bool	m_bCtrlButton = false;
+	bool	m_bShiftButton = false;
+
 
 
 
@@ -74,6 +72,10 @@ protected:
 	afx_msg void OnChangeEditRecWord6();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	CDateTimeCtrl m_datetimepickerEval;
+	afx_msg void OnDtnDatetimechangeDatetimepickerEval(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 //{{AFX_INSERT_LOCATION}}

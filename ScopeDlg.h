@@ -92,6 +92,8 @@ public:
 	void DrawTimsGates(CDC* pDC,CRect rr);
 	void DrawGates(CDC* pDC,CRect rr);
 	void DrawDacPts(CDC *pDC,CRect rr);
+	void DrawDacPtsPR(CDC * pDC, CRect rr);
+	void DrawDacPtsPhasedArray(CDC * pDC, CRect rr);
 	struct GatesData* pGate;
 	int m_nGate;
 	int	m_nEnd;

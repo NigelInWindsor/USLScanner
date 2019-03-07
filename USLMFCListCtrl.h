@@ -1,5 +1,6 @@
 #pragma once
 #include "USLMFCHeaderCtrl.h"
+
 typedef struct CellInfo
 {
 	COLORREF m_rgbBack;
@@ -9,6 +10,7 @@ typedef struct CellInfo
 	int m_nRow;
 //	CellInfo(int nRow = 0, int nColumn = 0, COLORREF rgbText = 0x00000000, COLORREF rgbBack = 0xFFFFFFFF, DWORD_PTR dwUserData = NULL);
 }CellInfo;
+
 typedef struct ColumnInfo
 {
 	int m_nColumn;

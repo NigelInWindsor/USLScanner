@@ -50,7 +50,6 @@
 #include "RobotSheet.h"
 #include "FaroCoordinateDlg.h"
 #include "DataPropertiesDlg.h"
-#include "PhasedArrayProbeDlg.h"
 #include "ViewBladeThickneessDlg.h"
 #include "InclusionsSheet.h"
 #include "QuaternionPage.h"
@@ -166,6 +165,7 @@ public:
 	void InitializePumpsDialogBar();
 	afx_msg HRESULT UpdatePumpsDialogBar(WPARAM, LPARAM);
 	void OpenOnLastExit();
+	afx_msg HRESULT UpdatePhasedArraySheet(WPARAM wp, LPARAM lp);
 	LRESULT RemoteHandler(WPARAM Wp, LPARAM Lp);
 	LRESULT RemoteHandlerProfile(WPARAM Wp, LPARAM Lp);
 	LRESULT RemoteHandlerUltrasonics(WPARAM Wp, LPARAM Lp);
@@ -238,7 +238,6 @@ public:
 	CAssignAxesDlg* m_pAssignAxesDlg;
 	CFaroCoordinateDlg*	m_pFaroCoordinateDlg;
 	CDataPropertiesDlg* m_pDataPropertiesDlg;
-	CPhasedArrayProbeDlg* m_pPhasedArrayProbeDlg;
 	CPolyCoordDlg* m_pPolyCoordDlg;
 	CInclusionsSheet* m_pInclusionsSheet;
 	CQuaternionPage* m_pQuaternionsPage;
@@ -264,7 +263,6 @@ public:  // control bar embedded members
 	void CheckHT(bool bEStop = false);
 	void RefreshAxesSheet();
 	void InitializeProfileSheetPtrs();
-	afx_msg HRESULT UpdatePhasedArrayDlg(WPARAM, LPARAM);
 	void StartBladeScan(int nScanType, int nScanSide, int nAction);
 	afx_msg HRESULT UpdatePmacSheet(WPARAM, LPARAM);
 	void RedrawUltrasonicsSheet();
@@ -597,6 +595,7 @@ public:
 	afx_msg void OnUpdateDockablesAxis(CCmdUI *pCmdUI);
 	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	afx_msg HRESULT InvalidateViewSheets(WPARAM wParam, LPARAM lParam);
+	afx_msg HRESULT OnUpdateFocalLawChanged(WPARAM wp, LPARAM lp);
 };
 
 /////////////////////////////////////////////////////////////////////////////
