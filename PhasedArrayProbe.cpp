@@ -52,10 +52,6 @@ void CPhasedArrayProbe::operator=(CPhasedArrayProbe * pPA)
 	CopyMemory(m_fBeamAngle, pPA->m_fBeamAngle, sizeof m_fBeamAngle);
 
 	m_nDacMode = pPA->m_nDacMode;
-	m_nDacTriggerThreshold = pPA->m_nDacTriggerThreshold;
-	m_nDacTriggerSlope = pPA->m_nDacTriggerSlope;
-	m_nDacBlanking = pPA->m_nDacBlanking;
-	m_fDacBlanking = pPA->m_fDacBlanking;
 	CopyMemory(m_nDacCount, pPA->m_nDacCount, sizeof m_nDacCount);
 	CopyMemory(m_fDacDelay, pPA->m_fDacDelay, sizeof m_fDacDelay);
 	CopyMemory(m_fDacGain, pPA->m_fDacGain, sizeof m_fDacGain);
@@ -108,10 +104,6 @@ void CPhasedArrayProbe::Zero()
 	ZeroMemory(m_fBeamAngle, sizeof m_fBeamAngle);
 
 	m_nDacMode = 0;
-	m_nDacTriggerThreshold = 50;
-	m_nDacTriggerSlope = 0;
-	m_nDacBlanking = 0;
-	m_fDacBlanking = 0.0f;
 	ZeroMemory(m_nDacCount, sizeof m_nDacCount);
 	ZeroMemory(m_fDacDelay, sizeof m_fDacDelay);
 	ZeroMemory(m_fDacGain, sizeof m_fDacGain);
@@ -197,10 +189,6 @@ ULONGLONG CPhasedArrayProbe::Save(CUSLFile *pFile)
 	pFile->Write(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Write(&m_eFilterType, sizeof m_eFilterType);
 	pFile->Write(&m_nDacMode, sizeof m_nDacMode);
-	pFile->Write(&m_nDacTriggerThreshold, sizeof m_nDacTriggerThreshold);
-	pFile->Write(&m_nDacTriggerSlope, sizeof m_nDacTriggerSlope);
-	pFile->Write(&m_nDacBlanking, sizeof m_nDacBlanking);
-	pFile->Write(&m_fDacBlanking, sizeof m_fDacBlanking);
 	pFile->Write(m_nDacCount, sizeof m_nDacCount);
 	pFile->Write(m_fDacDelay, sizeof m_fDacDelay);
 	pFile->Write(m_fDacGain, sizeof m_fDacGain);
@@ -271,10 +259,6 @@ void CPhasedArrayProbe::Retrieve(CUSLFile *pFile)
 	pFile->Read(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Read(&m_eFilterType, sizeof m_eFilterType);
 	pFile->Read(&m_nDacMode, sizeof m_nDacMode);
-	pFile->Read(&m_nDacTriggerThreshold, sizeof m_nDacTriggerThreshold);
-	pFile->Read(&m_nDacTriggerSlope, sizeof m_nDacTriggerSlope);
-	pFile->Read(&m_nDacBlanking, sizeof m_nDacBlanking);
-	pFile->Read(&m_fDacBlanking, sizeof m_fDacBlanking);
 	pFile->Read(m_nDacCount, sizeof m_nDacCount);
 	pFile->Read(m_fDacDelay, sizeof m_fDacDelay);
 	pFile->Read(m_fDacGain, sizeof m_fDacGain);
@@ -666,6 +650,14 @@ D3DXVECTOR3 &CPhasedArrayProbe::getElementPos(int nIndex)
 	return m_vElement[nIndex];
 }
 
+CString &CPhasedArrayProbe::getstrElementPos(int nIndex)
+{
+	static CString Buff;
+
+	Buff.Format(L"%d  X:%.01f  Y:%.01f  Z:%.01f", nIndex + 1, m_vElement[nIndex].x, m_vElement[nIndex].y, m_vElement[nIndex].z);
+	return Buff;
+}
+
 float CPhasedArrayProbe::setTxBeamAngle(float fAngle, int StartFinish)
 {
 
@@ -760,6 +752,22 @@ D3DXVECTOR3 &CPhasedArrayProbe::getFocalLawNorm(int nTxRx, int nFL)
 		return m_FLRx[nFL].m_vectN;
 	}
 	return m_FLTx[nFL].m_vectN;
+}
+
+CString &CPhasedArrayProbe::getstrFocalLawPos(int nTxRx, int nIndex)
+{
+	static CString Buff;
+
+	if (nTxRx == 0) {
+		Buff.Format(L"%d  X:%.01f  Y:%.01f  Z:%.01f  i:%.03f  j:%.03f  k:%.03f", nIndex + 1, m_FLTx[nIndex].m_vectO.x, m_FLTx[nIndex].m_vectO.y, m_FLTx[nIndex].m_vectO.z,
+			m_FLTx[nIndex].m_vectN.x, m_FLTx[nIndex].m_vectN.y, m_FLTx[nIndex].m_vectN.z);
+	}
+	else {
+		Buff.Format(L"%d X:%.01f  Y:%.01f  Z:%.01f  i:%.03f  j:%.03f  k:%.03f", nIndex + 1, m_FLRx[nIndex].m_vectO.x, m_FLRx[nIndex].m_vectO.y, m_FLRx[nIndex].m_vectO.z,
+			m_FLRx[nIndex].m_vectN.x, m_FLRx[nIndex].m_vectN.y, m_FLRx[nIndex].m_vectN.z);
+	}
+
+	return Buff;
 }
 
 float CPhasedArrayProbe::getTxDelay(int nFL, int nElement)
@@ -1092,7 +1100,39 @@ void CPhasedArrayProbe::setAllDacVariables()
 
 }
 
+void CPhasedArrayProbe::setDacInterfaceGate(bool bEnable)
+{
+	if (theApp.m_AOSPhasedArray.isConnected()) {
+		theApp.m_AOSPhasedArray.setInterfaceGate(this, bEnable);
+	}
+}
+
 int CPhasedArrayProbe::getDACCount(int nFL)
 {
 	return m_nDacCount[nFL];
+}
+
+/*
+nFL == -1 clear all focal laws
+*/
+void CPhasedArrayProbe::ZeroDacGains(int nFL)
+{
+	if (nFL < 0) {
+		ZeroMemory(m_fDacGain, sizeof m_fDacGain);
+	}
+	else {
+		ZeroMemory(m_fDacGain[nFL], sizeof m_fDacGain[0]);
+	}
+}
+/*
+nFL == -1 clear all focal laws
+*/
+void CPhasedArrayProbe::ZeroDacTimes(int nFL)
+{
+	if (nFL < 0) {
+		ZeroMemory(m_fDacDelay, sizeof m_fDacDelay);
+	}
+	else {
+		ZeroMemory(m_fDacDelay[nFL], sizeof m_fDacDelay[0]);
+	}
 }

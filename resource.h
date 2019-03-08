@@ -3819,6 +3819,7 @@
 #define IDC_EDIT_FOCAL_LAW              4115
 #define IDC_CHECK_TX_EQUALS_RX          4116
 #define IDC_CHECK_REVERSE_ELEMENTS      4117
+#define IDC_LIST1                       4118
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6082,9 +6083,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        731
+#define _APS_NEXT_RESOURCE_VALUE        732
 #define _APS_NEXT_COMMAND_VALUE         34151
-#define _APS_NEXT_CONTROL_VALUE         4118
+#define _APS_NEXT_CONTROL_VALUE         4119
 #define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif

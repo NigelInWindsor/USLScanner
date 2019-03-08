@@ -49,6 +49,7 @@ public:
 	void CalculateRxFocalLaws();
 	D3DXVECTOR3 & getFocalLawPos(int nTxRx, int nFL);
 	D3DXVECTOR3 & getFocalLawNorm(int nTxRx, int nFL);
+	CString & getstrFocalLawPos(int nTxRx, int nIndex);
 	float getTxDelay(int nFL, int nElement);
 	float getRxDelay(int nFL, int nTOF, int nElement);
 	void DownloadAllToHardware();
@@ -76,7 +77,10 @@ public:
 	int setDacMode(int nMode);
 	int getDacMode();
 	void setAllDacVariables();
+	void setDacInterfaceGate(bool bEnable);
 	int getDACCount(int nFL);
+	void ZeroDacGains(int nFL);
+	void ZeroDacTimes(int nFL);
 	void setTxLastElement(int nLast);
 	int getTxLastElement();
 	void setRxLastElement(int nLast);
@@ -122,6 +126,7 @@ public:
 	D3DXVECTOR3 &			getFocalLawCenterPos(int nTXRx, int nFL);
 	D3DXVECTOR3 &			getFocalLawElementPos(int nTXRx, int nFL, int nEl);
 	D3DXVECTOR3 &			getElementPos(int nIndex);
+	CString &				getstrElementPos(int nIndex);
 	float					setTxBeamAngle(float fAngle, int StartFinish);
 	float					setRxBeamAngle(float fAngle,int StartFinish);
 	float					getTxBeamAngle(int StartFinish);
@@ -166,10 +171,6 @@ public:
 	float					m_fDelayArray_ns[256];
 
 	int						m_nDacMode;
-	int						m_nDacTriggerThreshold;
-	int 					m_nDacTriggerSlope;
-	int						m_nDacBlanking;
-	float 					m_fDacBlanking;
 	int						m_nDacCount[2048];
 	float 					m_fDacDelay[2048][64];
 	float 					m_fDacGain[2048][64];

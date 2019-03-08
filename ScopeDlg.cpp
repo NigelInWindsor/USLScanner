@@ -1587,6 +1587,12 @@ void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 
 			theApp.m_UtUser.Dsp200CalculateHardware(nTimeSlot,m_nGate);
 
+			if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+				if (theApp.m_PhasedArray[PORTSIDE].getDacMode() == 2) {
+					theApp.m_PhasedArray[PORTSIDE].setDacInterfaceGate(true);
+				}
+			}
+
 			if(pFrame->m_pUltrasonicsSheet) {
 				if(pFrame->m_pUltrasonicsSheet->m_pGatesPage) {
 					pFrame->m_pUltrasonicsSheet->m_pGatesPage->SetGateTimeSlot(m_nGate,nTimeSlot);
@@ -1967,8 +1973,14 @@ bool CScopeDlg::FindDACStartPt(int *nStart)
 	int nDacBlanking = 0;
 
 	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
-		nDacBlanking = theApp.m_PhasedArray[PORTSIDE].m_nDacBlanking;
-		nDacTriggerThreshold = theApp.m_PhasedArray[PORTSIDE].m_nDacTriggerThreshold = 50;
+		if (theApp.m_PhasedArray[PORTSIDE].m_nDacMode < 2) {
+			*nStart = 0;
+			return true;
+		}
+		else {
+			*nStart = theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nTimeSample[0];
+			return theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nTimeStatus[0];
+		}
 	}
 	else {
 		nDacBlanking = theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30.nDacBlanking;
@@ -2014,13 +2026,29 @@ void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
 	int	ii,nPnX,nPnY;
 	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
 	float fGain,fDelay;
+	CPen penWhite(PS_SOLID, 1, RGB(255, 255, 255));
+	CPen penGrey(PS_SOLID, 1, RGB(128, 128, 128));
+	CPen *pOldPen = pDC->SelectObject(&penWhite);
+	CPen penDashed(PS_DOT, 1, RGB(255, 255, 255));
+
+	//Draw DAC ref amplitude
+	pDC->SelectObject(&penDashed);
+	switch (pAdc->nRfType) {
+	case RFTYPELINEAR:
+		nPnY = (rr.top + rr.bottom) / 2 - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height() / 2.0f) / 100.0f);
+		break;
+	case RFTYPERECTIFIED:
+	case RFTYPELOG:
+		nPnY = rr.bottom - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height()) / 100.0f);
+		break;
+	}
+	pDC->MoveTo(0, nPnY);
+	pDC->LineTo(rr.Width(), nPnY);
+	pDC->SelectObject(pOldPen);
 
 
 	if(FindDACStartPt(&nStart)==FALSE) return;
 
-	CPen penWhite(PS_SOLID,1,RGB(255,255,255));
-	CPen penGrey(PS_SOLID,1,RGB(128,128,128));
-	CPen *pOldPen = pDC->SelectObject(&penWhite);
 	//Put the crosses up
 	for(ii=0;ii<64;ii++) {
 		if(pPA->m_fDacDelay[0][ii]!=0.0) {
@@ -2054,48 +2082,7 @@ void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
 			pDC->LineTo(nPnX+4,nPnY-4);
 		}
 	}
-	//draw dac threshold and curve
-	int nPercentage = MulDiv(pPA->m_nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold,127);
-	int nZeroLevel;
-	switch(pAdc->nRfType) {
-	case RFTYPELINEAR:
-		nPnY = (rr.top+rr.bottom)/2 - MulDiv(nPercentage, rr.Height()/2,100);
-		nZeroLevel = (rr.top + rr.bottom) / 2;
-		break;
-	case RFTYPERECTIFIED:
-	case RFTYPELOG:
-		nPnY = rr.bottom - MulDiv(nPercentage, rr.Height(),100);
-		nZeroLevel = rr.bottom;
-		break;
-	}
 
-	float fBlanking_ns = (float)(pPA->m_nDacBlanking * 100) - (theApp.m_Scope.m_fMainBangConstant * 1e9f);
-	int xx = (int)((fBlanking_ns - (float)pAdc->nDelay) / pAdc->fSamplePeriod);
-	nPnX = MulDiv(xx, rr.Width(), pAdc->nAcqLength);
-	if(nPnX<0) nPnX = 0;
-
-	pDC->SelectObject(&penGrey);
-	pDC->MoveTo(0,nPnY);
-	pDC->LineTo(nPnX,nPnY);
-	pDC->LineTo(nPnX,nZeroLevel);
-
-
-	CPen penDashed(PS_DOT,1,RGB(255,255,255));
-	pDC->SelectObject(&penDashed);
-
-	switch(pAdc->nRfType) {
-	case RFTYPELINEAR:
-		nPnY = (rr.top+rr.bottom)/2 - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height()/2.0f)/100.0f);
-		break;
-	case RFTYPERECTIFIED:
-	case RFTYPELOG:
-		nPnY = rr.bottom - (int)((theApp.m_LastSettings.fDACRefAmplitude*(float)rr.Height())/100.0f);
-		break;
-	}
-	pDC->MoveTo(0,nPnY);
-	pDC->LineTo(rr.Width(),nPnY);
-
-	pDC->SelectObject(pOldPen);
 
 }
 
@@ -2205,6 +2192,8 @@ void CScopeDlg::DacTableChanged()
 		pFrame->m_pUltrasonicsSheet->UpdateDacTable();
 	}
 	pFrame->SendMessage(UI_UPDATE_PHASED_ARRAY_SHEET, 0, 0);
+	theApp.m_PhasedArray[PORTSIDE].setAllDacVariables();
+
 }
 
 

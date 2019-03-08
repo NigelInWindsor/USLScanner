@@ -18,6 +18,8 @@ CPhasedArraySheet::CPhasedArraySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT 
 	m_pPhasedArrayFocalLawsPage = NULL;
 	m_pPhasedArrayProbePage = NULL;
 	m_pAOSPhasedArrayUTPage = NULL;
+	m_pGatesPage = NULL;
+
 
 	m_pPhasedArrayFocalLawsPage = new CPhasedArrayFocalLawsDlg();
 	AddPage(m_pPhasedArrayFocalLawsPage);
@@ -28,6 +30,9 @@ CPhasedArraySheet::CPhasedArraySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT 
 	m_pAOSPhasedArrayUTPage = new CAOSPhasedArrayUTPage();
 	AddPage(m_pAOSPhasedArrayUTPage);
 
+	m_pGatesPage = new CGatesPage();
+	AddPage(m_pGatesPage);
+
 }
 
 
@@ -37,6 +42,7 @@ CPhasedArraySheet::~CPhasedArraySheet()
 	SAFE_DELETE(m_pPhasedArrayFocalLawsPage);
 	SAFE_DELETE(m_pPhasedArrayProbePage);
 	SAFE_DELETE(m_pAOSPhasedArrayUTPage);
+	SAFE_DELETE(m_pGatesPage);
 }
 
 

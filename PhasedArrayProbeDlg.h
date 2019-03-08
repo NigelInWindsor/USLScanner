@@ -29,7 +29,6 @@ public:
 	int	m_nIndex;
 	int m_nSide;
 	void FillList();
-	void CreateColumns();
 	BOOL OnToolTipNotify(UINT id, NMHDR *pNMHDR, LRESULT *pResult);
 	CToolBar   m_wndToolBar;
 	CReBar     m_wndRebar;
@@ -169,6 +168,7 @@ public:
 	afx_msg void OnCbnSelchangeComboFiringOrder();
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
+	CListBox m_listCoords;
 };
 
 //{{AFX_INSERT_LOCATION}}

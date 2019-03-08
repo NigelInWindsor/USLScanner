@@ -39,11 +39,9 @@ void CPhasedArrayProbeDlg::DoDataExchange(CDataExchange* pDX)
 	//{{AFX_DATA_MAP(CPhasedArrayProbeDlg)
 
 
-	DDX_Control(pDX, IDC_LIST_ELEMENTS, m_listElements);
 	DDX_Control(pDX, IDC_COMBO_NUMBER_ELEMENTS, m_comboElementCount);
 	DDX_Control(pDX, IDC_EDIT_ELEMENT_PITCH, m_editElementPitch);
 	DDX_Control(pDX, IDC_SPIN_ELEMENT_PITCH, m_spinElementPitch);
-
 
 
 	//}}AFX_DATA_MAP
@@ -56,6 +54,7 @@ void CPhasedArrayProbeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_HEIGHT_ELEMENT_1, m_spinWedgeHeightElementOne);
 	DDX_Control(pDX, IDC_COMBO_PROBE_TYPE, m_comboProbeType);
 	DDX_Control(pDX, IDC_COMBO_FIRING_ORDER, m_comboFiringOrder);
+	DDX_Control(pDX, IDC_LIST_COORDS, m_listCoords);
 }
 
 
@@ -143,12 +142,6 @@ BOOL CPhasedArrayProbeDlg::OnInitDialog()
 
 	m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
 
-	m_StaticTable.Initialize(this, m_listElements, TRUE, FALSE, TRUE, TRUE);
-	m_StaticPosView.Initialize(this, m_staticView, TRUE, TRUE, TRUE, TRUE);
-
-	m_StaticTable.SetNewPos();
-	m_StaticPosView.SetNewPos();
-
 	m_comboElementCount.AddString(L"8");
 	m_comboElementCount.AddString(L"16");
 	m_comboElementCount.AddString(L"24");
@@ -173,8 +166,6 @@ BOOL CPhasedArrayProbeDlg::OnInitDialog()
 	m_comboFiringOrder.AddString(L"Sixth");
 	m_comboFiringOrder.AddString(L"Seventh");
 
-	CreateColumns();
-	
 	UpdateAllControls();
 
 	m_hBr = CreateSolidBrush(GetSysColor(COLOR_MENU)); // <= create on initDialog
@@ -199,9 +190,6 @@ void CPhasedArrayProbeDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CResizablePage::OnSize(nType, cx, cy);
 	
-	m_StaticTable.SetNewPos();	
-	m_StaticPosView.SetNewPos();
-
 	if (GetSafeHwnd()) {
 		Invalidate(FALSE);
 	}
@@ -258,54 +246,33 @@ void CPhasedArrayProbeDlg::UpdateAllControls()
 	Buff.Format(L"%.01f mm", theApp.m_PhasedArray[PORTSIDE].getWedgeHeightElementOne());
 	m_editWedgeHeightElementOne.SetWindowTextW(Buff);
 
+	FillList();
+
 	SetToolBarCheckedState();
 
 	setWindowTitle();
 }
 
-
-void CPhasedArrayProbeDlg::CreateColumns()
-{
-	int ColumnWidth[10] = { 24,40,40,40,48,48,48,50};
-	CString ColumnName[10] = {L"#",L"X",L"Y",L"Z",L"i",L"j",L"k",L"gain"};
-	int	ii;
-
-	int nColumnCount = m_listElements.GetHeaderCtrl()->GetItemCount();
-	for (ii=0;ii < nColumnCount;ii++) {
-		m_listElements.DeleteColumn(0);
-	}
-
-	if(theApp.m_LastSettings.nPhasedArrayMask & PA_DISPLAY_ELEMENTS) {
-		nColumnCount = 7;
-	} else {
-		nColumnCount = 8;
-	}
-	for (ii=0;ii<nColumnCount;ii++) {
-		m_listElements.InsertColumn(ii,ColumnName[ii], LVCFMT_CENTER,ColumnWidth[ii]);
-	}
-	m_listElements.SetExtendedStyle( LVS_EX_FULLROWSELECT   );
-
-}
-
 void CPhasedArrayProbeDlg::FillList()
 {
-	int	ii;
 	CString Buff;
 
-	m_listElements.DeleteAllItems();
-
-	if(theApp.m_LastSettings.nPhasedArrayMask & PA_DISPLAY_ELEMENTS) {
-		for (ii=0;ii<theApp.m_PhasedArray[m_nSide].getNumberElements();ii++) {
-			Buff.Format(_T("%d"),ii+1);
-			m_listElements.InsertItem(ii, Buff.GetBuffer(255), ii);
-		};
-	} else {
-		for (ii=0;ii<theApp.m_PhasedArray[m_nSide].getNumberFocalLaws();ii++) {
-			Buff.Format(_T("%d"),ii+1);
-			m_listElements.InsertItem(ii, Buff.GetBuffer(255), ii);
-		};
+	m_listCoords.ResetContent();
+	if (theApp.m_LastSettings.nPhasedArrayMask & PA_DISPLAY_ELEMENTS) {
+		for (int ii = 0; ii < theApp.m_PhasedArray[PORTSIDE].getNumberElements(); ii++) {
+			Buff = theApp.m_PhasedArray[PORTSIDE].getstrElementPos(ii);
+			m_listCoords.AddString(Buff);
+		}
+	}
+	else {
+		for (int ii = 0; ii < theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws(); ii++) {
+			Buff = theApp.m_PhasedArray[PORTSIDE].getstrFocalLawPos(TX_FL,ii);
+			m_listCoords.AddString(Buff);
+		}
 	}
 }
+
+
 
 void CPhasedArrayProbeDlg::OnGetdispinfoListElements(NMHDR* pNMHDR, LRESULT* pResult) 
 {
@@ -647,7 +614,6 @@ void CPhasedArrayProbeDlg::OnButtonElements()
 	theApp.m_LastSettings.nPhasedArrayMask |= PA_DISPLAY_ELEMENTS;
 	
 	SetToolBarCheckedState();
-	CreateColumns();
 	FillList();
 }
 
@@ -657,7 +623,6 @@ void CPhasedArrayProbeDlg::OnButtonFocalLaws()
 	theApp.m_LastSettings.nPhasedArrayMask |= PA_DISPLAY_FOCAL_LAWS;
 
 	SetToolBarCheckedState();
-	CreateColumns();
 	FillList();
 }
 

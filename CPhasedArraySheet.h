@@ -3,15 +3,18 @@
 #include "PhasedArrayProbeDlg.h"
 #include "AOSPhasedArrayUTPage.h"
 #include "CPhasedArrayFocalLawsDlg.h"
+#include "GatesPage.h"
 
 class CPhasedArraySheet : public CResizableSheet
 {
 	DECLARE_DYNAMIC(CPhasedArraySheet)
 
 public:
-	CPhasedArrayFocalLawsDlg* m_pPhasedArrayFocalLawsPage;
-	CAOSPhasedArrayUTPage * m_pAOSPhasedArrayUTPage;
-	CPhasedArrayProbeDlg* m_pPhasedArrayProbePage;
+	CPhasedArrayFocalLawsDlg*	m_pPhasedArrayFocalLawsPage;
+	CAOSPhasedArrayUTPage *		m_pAOSPhasedArrayUTPage;
+	CPhasedArrayProbeDlg*		m_pPhasedArrayProbePage;
+	CGatesPage*					m_pGatesPage;
+
 	CWnd**	m_pDlg;
 
 	void UpdateAllPages();

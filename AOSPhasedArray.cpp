@@ -342,10 +342,9 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 	bool bEnableDac = false;
 	if (isConnected() == false)	return false;
 	double dTime[64];
-	float fGain[64], fSlope[64];
+	float fGain[64];
 	ZeroMemory(dTime, sizeof dTime);
 	ZeroMemory(fGain, sizeof fGain);
-	ZeroMemory(fSlope, sizeof fSlope);
 	int nDacCount = 0;
 	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
 
@@ -359,12 +358,11 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 		nDacCount = pProbe->getDACCount(0);
 		break;
 	}
-	nDacCount = 3;
-	for (int ii = 0; ii < nDacCount; ii++) {
-		dTime[ii] = (double)(pProbe->m_fDacDelay[0][ii]*1e-4f);
-		fGain[ii] = pProbe->m_fDacGain[0][ii];
-		float fDiffns = (pProbe->m_fDacDelay[0][ii + 1] - pProbe->m_fDacDelay[0][ii]) * 1.0e6f;
-		fSlope[ii] = (pProbe->m_fDacGain[0][ii+1] - pProbe->m_fDacGain[0][ii]) / fDiffns;
+
+	for (nDacCount = 0; nDacCount < 64; nDacCount++) {
+		if (nDacCount != 0 && pProbe->m_fDacDelay[0][nDacCount] == 0.0f) break;
+		dTime[nDacCount] = (double)(pProbe->m_fDacDelay[0][nDacCount] * 1e-6f);
+		fGain[nDacCount] = pProbe->m_fDacGain[0][nDacCount];
 	}
 
 	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
@@ -372,13 +370,57 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 
 		for (int nCycle = 0; nCycle < m_nCycleCount && bRet == true; nCycle++) {
 			if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, bEnableDac)) bRet = false;
-//			if (!m_pHWDeviceOEMPA->SetDACGain(false, nCycle, nDacCount, dTime, fGain)) bRet = false;
-			if (!m_pHWDeviceOEMPA->SetDACSlope( nCycle, nDacCount, dTime, fSlope)) bRet = false;
+			if (!m_pHWDeviceOEMPA->SetDACGain(true, nCycle, nDacCount, dTime, fGain)) bRet = false;
 		}
+
+
 		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {
 			bRet = false;
 			AfxMessageBox(L"Failed to unlock");
 			m_Messages.Add(L"Failed to Unlock: setAllDacVariables");
+		}
+	}
+
+	if (pProbe->getDacMode() == 2) {
+		setInterfaceGate(pParent, true);
+	}
+	else {
+		setInterfaceGate(pParent, false);
+	}
+
+	return bRet;
+}
+
+bool CAOSPhasedArray::setInterfaceGate(PVOID pParent, bool bEnable)
+{
+	bool bRet = true;
+	if (isConnected() == false)	return false;
+	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
+
+	int nGate = 0;
+	double dThresholdPercent = (double)theApp.m_UtUser.m_TS[0].Gate.nThreshold[0];
+	enumGateModeAmp eGateModeAmp = eAmpMaximum;
+	enumGateModeTof eGateModeTof = eTofThresholdCross;
+	enumRectification eGateRectification = eSigned;
+	double dGateStart = (double)theApp.m_UtUser.m_TS[0].Gate.nNsDelay[0] * 1.0e-9;
+	double dGateStop = (double)(theApp.m_UtUser.m_TS[0].Gate.nNsWidth[0] + theApp.m_UtUser.m_TS[0].Gate.nNsDelay[0]) * 1.0e-9;
+	int iTrackingCycleIndex = 0;
+	int iTrackingGateIndex = 0;
+
+	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
+	{
+		for (int nCycle = 0; nCycle < m_nCycleCount && bRet == true; nCycle++) {
+			if (!m_pHWDeviceOEMPA->SetGateModeThreshold(nCycle, nGate, bEnable, dThresholdPercent, eGateModeAmp, eGateModeTof, eGateRectification)) bRet = false;
+			if (!m_pHWDeviceOEMPA->SetGateStart(nCycle, nGate, dGateStart)) bRet = false;
+			if (!m_pHWDeviceOEMPA->SetGateStop(nCycle, nGate, dGateStop)) bRet = false;
+			iTrackingCycleIndex = nCycle;
+			if (!m_pHWDeviceOEMPA->SetTrackingDac(nCycle, bEnable, iTrackingCycleIndex, iTrackingGateIndex)) bRet = false;
+		}
+
+		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {
+			bRet = false;
+			AfxMessageBox(L"Failed to unlock");
+			m_Messages.Add(L"Failed to Unlock: setInterfaceGate");
 		}
 	}
 

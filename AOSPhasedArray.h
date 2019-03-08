@@ -112,6 +112,7 @@ public:
 	int getPRFRate();
 	unsigned int getDataRate();
 	bool setAllDacVariables(PVOID pParent);
+	bool setInterfaceGate(PVOID pParent, bool bEnable);
 	bool Enable(bool bStart);
 	bool DriverRegistration();
 	bool setAnalogueGain(float fGain);

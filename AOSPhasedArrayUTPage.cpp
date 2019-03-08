@@ -82,6 +82,13 @@ ON_WM_CLOSE()
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_FILTER_GAIN, &CAOSPhasedArrayUTPage::OnDeltaposSpinFilterGain)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnLvnGetdispinfoListDacList)
 	ON_CBN_SELCHANGE(IDC_COMBO_DAC_MODE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboDacMode)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnNMDblclkListDacList)
+	ON_NOTIFY(NM_CLICK, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnNMClickListDacList)
+	ON_MESSAGE(UI_ITEMCHANGED, DacTableChanged)
+	ON_NOTIFY(NM_RCLICK, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnNMRClickListDacList)
+	ON_COMMAND(ID_DAC_CLEARALLGAINS, OnRbdacmenuClearallgains)
+	ON_COMMAND(ID_DAC_CLEAREVERYTHING, OnRbdacmenuCleareverything)
+	ON_COMMAND(ID_DAC_DELETEPT, OnRbdacmenuDeletept)
 END_MESSAGE_MAP()
 
 void CAOSPhasedArrayUTPage::OnClose()
@@ -777,4 +784,101 @@ void CAOSPhasedArrayUTPage::OnCbnSelchangeComboDacMode()
 {
 	theApp.m_PhasedArray[PORTSIDE].setDacMode(m_comboDacMode.GetCurSel());
 	m_nUpdateHardware |= U_DAC;
+}
+
+
+void CAOSPhasedArrayUTPage::OnNMDblclkListDacList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	int nColumn = pNMItemActivate->iSubItem;
+	int nRow = pNMItemActivate->iItem;
+
+	SAFE_DELETE(m_pListItemEdit);
+	m_pListItemEdit = new CListItemEdit(this, (CWnd**)&m_pListItemEdit, &m_listDAC, pNMItemActivate);
+
+	switch (nColumn) {
+	case 1:
+		m_pListItemEdit->Create(CListItemEdit::IDD, this, &theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][nRow], 0.0f, 100000.0f, 0.01f, L"%.02f");
+		break;
+	case 2:
+		m_pListItemEdit->Create(CListItemEdit::IDD, this, &theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][nRow], -60.0f, 60.0f, 0.1f, L"%.01f");
+		break;
+	}
+	*pResult = 0;
+}
+
+
+void CAOSPhasedArrayUTPage::OnNMClickListDacList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	SAFE_DELETE(m_pListItemEdit);
+
+	*pResult = 0;
+}
+
+HRESULT CAOSPhasedArrayUTPage::DacTableChanged(WPARAM wp, LPARAM lp)
+{
+
+	if (wp == WM_ITEMFINISHED) {
+		m_nUpdateHardware |= U_DAC;
+	}
+
+	if (wp == WM_ITEMCHANGED) {
+		m_nUpdateHardware |= U_DAC;
+	}
+
+	return NULL;
+}
+
+
+
+void CAOSPhasedArrayUTPage::OnNMRClickListDacList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+
+	m_nDacIndex = pNMItemActivate->iItem;
+
+	CMenu* menu = (CMenu *) new CMenu;
+	CPoint	Point;
+
+	GetCursorPos(&Point);
+
+	if (menu->LoadMenu(IDR_RB_DAC_MENU)) {
+		CMenu* pPopup = menu->GetSubMenu(0);
+		ASSERT(pPopup != NULL);
+
+		pPopup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, Point.x, Point.y, this);
+
+	};
+	delete menu;
+	*pResult = 0;
+}
+
+void CAOSPhasedArrayUTPage::OnRbdacmenuClearallgains()
+{
+	theApp.m_PhasedArray[PORTSIDE].ZeroDacGains(-1);
+	m_nUpdateHardware |= U_DAC;
+	Invalidate(FALSE);
+}
+
+void CAOSPhasedArrayUTPage::OnRbdacmenuCleareverything()
+{
+
+	theApp.m_PhasedArray[PORTSIDE].ZeroDacGains(-1);
+	theApp.m_PhasedArray[PORTSIDE].ZeroDacTimes(-1);
+	m_nUpdateHardware |= U_DAC;
+
+	Invalidate(FALSE);
+}
+
+
+void CAOSPhasedArrayUTPage::OnRbdacmenuDeletept()
+{
+	for (int ii = m_nDacIndex; ii < 63; ii++) {
+		theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][ii] = theApp.m_PhasedArray[PORTSIDE].m_fDacDelay[0][ii + 1];
+		theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][ii] = theApp.m_PhasedArray[PORTSIDE].m_fDacGain[0][ii + 1];
+	}
+	m_nUpdateHardware |= U_DAC;
+
+	Invalidate(FALSE);
 }

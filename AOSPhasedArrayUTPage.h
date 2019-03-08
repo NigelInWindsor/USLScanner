@@ -2,6 +2,7 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "EditSpinCtrl.h"
+#include "ListItemEdit.h"
 
 class CAOSPhasedArrayUTPage : public CPropertyPage
 {
@@ -16,6 +17,8 @@ public:
 	HBRUSH	m_hBr;
 	HANDLE	m_hSemaphore;
 	int		m_nDacIndex;
+	CListItemEdit* m_pListItemEdit = NULL;
+
 	
 
 public:
@@ -92,4 +95,11 @@ public:
 	afx_msg void OnLvnGetdispinfoListDacList(NMHDR *pNMHDR, LRESULT *pResult);
 	CComboBox m_comboDacMode;
 	afx_msg void OnCbnSelchangeComboDacMode();
+	afx_msg void OnNMDblclkListDacList(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMClickListDacList(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg HRESULT DacTableChanged(WPARAM wp, LPARAM lp);
+	afx_msg void OnNMRClickListDacList(NMHDR *pNMHDR, LRESULT *pResult);
+	void OnRbdacmenuClearallgains();
+	void OnRbdacmenuCleareverything();
+	void OnRbdacmenuDeletept();
 };
