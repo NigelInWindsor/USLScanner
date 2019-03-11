@@ -74,6 +74,8 @@ public:
 	int setFilterType(FrequencyFilterType eFilterType);
 	void ApplyFilter();
 	void CalculateFiringOrder();
+	bool setDacEnable(bool bEnable);
+	bool getDacEnable();
 	int setDacMode(int nMode);
 	int getDacMode();
 	void setAllDacVariables();
@@ -81,6 +83,8 @@ public:
 	int getDACCount(int nFL);
 	void ZeroDacGains(int nFL);
 	void ZeroDacTimes(int nFL);
+	void setVectorEOE1(D3DXVECTOR3 vect);
+	D3DXVECTOR3 &getVectorEOE1();
 	void setTxLastElement(int nLast);
 	int getTxLastElement();
 	void setRxLastElement(int nLast);
@@ -167,9 +171,11 @@ public:
 	D3DXVECTOR3				m_vElement[256];
 	float					m_fBeamAngle[2][2];		//TX/RX, Start/Finish
 	CFIR					m_FIR;
+	D3DXVECTOR3				m_vEl0El1;
 
 	float					m_fDelayArray_ns[256];
 
+	bool					m_bDacEnable;
 	int						m_nDacMode;
 	int						m_nDacCount[2048];
 	float 					m_fDacDelay[2048][64];

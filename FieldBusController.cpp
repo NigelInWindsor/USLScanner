@@ -151,6 +151,11 @@ CString CFieldBusController::getRxArrayAt(int nIndex)
 	return L"";
 }
 
+int CFieldBusController::GetRxFlagAt(int nIndex)
+{
+	return m_ArrayFlag[nIndex];
+}
+
 void CFieldBusController::AddRxStr(CString *pBuff)
 {
 	CString Buff;

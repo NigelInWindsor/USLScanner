@@ -22,13 +22,11 @@ CPhasedArrayProbeDlg::CPhasedArrayProbeDlg()
 {
 	//{{AFX_DATA_INIT(CPhasedArrayProbeDlg)
 	//}}AFX_DATA_INIT
-
 	
 	m_nSide = PORTSIDE;
 	m_nIndex = 0;
 	m_pEditSpinItem = NULL;
 	m_nColumn = 0;
-
 }
 
 
@@ -38,11 +36,9 @@ void CPhasedArrayProbeDlg::DoDataExchange(CDataExchange* pDX)
 	CResizablePage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CPhasedArrayProbeDlg)
 
-
 	DDX_Control(pDX, IDC_COMBO_NUMBER_ELEMENTS, m_comboElementCount);
 	DDX_Control(pDX, IDC_EDIT_ELEMENT_PITCH, m_editElementPitch);
 	DDX_Control(pDX, IDC_SPIN_ELEMENT_PITCH, m_spinElementPitch);
-
 
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_VIEW, m_staticView);
@@ -53,8 +49,8 @@ void CPhasedArrayProbeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_WEDGE_HEIGHT_ELEMENT_1, m_editWedgeHeightElementOne);
 	DDX_Control(pDX, IDC_SPIN_HEIGHT_ELEMENT_1, m_spinWedgeHeightElementOne);
 	DDX_Control(pDX, IDC_COMBO_PROBE_TYPE, m_comboProbeType);
-	DDX_Control(pDX, IDC_COMBO_FIRING_ORDER, m_comboFiringOrder);
 	DDX_Control(pDX, IDC_LIST_COORDS, m_listCoords);
+	DDX_Control(pDX, IDC_EDIT1, m_editVecE0E1);
 }
 
 
@@ -93,16 +89,15 @@ BEGIN_MESSAGE_MAP(CPhasedArrayProbeDlg, CResizablePage)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_PROBE_ANGLE, &CPhasedArrayProbeDlg::OnDeltaposSpinWedgeAngle)
 	ON_COMMAND(ID_BUTTON_RX_EQUALS_TX, OnButtonRxEqualTx)
 	ON_COMMAND(ID_BUTTON_DOWNLOAD_TO_HARDWARE, OnButtonDownloadToHardWare)
-
 	
 	ON_EN_CHANGE(IDC_EDIT_WEDGE_VELOCITY, &CPhasedArrayProbeDlg::OnEnChangeEditWedgeVelocity)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_WEDGE_VELOCITY, &CPhasedArrayProbeDlg::OnDeltaposSpinWedgeVelocity)
 	ON_EN_CHANGE(IDC_EDIT_WEDGE_HEIGHT_ELEMENT_1, &CPhasedArrayProbeDlg::OnEnChangeEditWedgeHeightElement1)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_HEIGHT_ELEMENT_1, &CPhasedArrayProbeDlg::OnDeltaposSpinHeightElement1)
 	ON_CBN_SELCHANGE(IDC_COMBO_PROBE_TYPE, &CPhasedArrayProbeDlg::OnCbnSelchangeComboProbeType)
-	ON_CBN_SELCHANGE(IDC_COMBO_FIRING_ORDER, &CPhasedArrayProbeDlg::OnCbnSelchangeComboFiringOrder)
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
+	ON_EN_CHANGE(IDC_EDIT1, &CPhasedArrayProbeDlg::OnEnChangeEdit1)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -158,14 +153,6 @@ BOOL CPhasedArrayProbeDlg::OnInitDialog()
 	Buff.Format(IDS_Linear_concave);	m_comboProbeType.AddString(Buff);
 	Buff.Format(IDS_Linear_convex);		m_comboProbeType.AddString(Buff);
 
-	m_comboFiringOrder.AddString(L"Sequential");
-	m_comboFiringOrder.AddString(L"Half");
-	m_comboFiringOrder.AddString(L"Third");
-	m_comboFiringOrder.AddString(L"Quarter");
-	m_comboFiringOrder.AddString(L"Fith");
-	m_comboFiringOrder.AddString(L"Sixth");
-	m_comboFiringOrder.AddString(L"Seventh");
-
 	UpdateAllControls();
 
 	m_hBr = CreateSolidBrush(GetSysColor(COLOR_MENU)); // <= create on initDialog
@@ -210,10 +197,9 @@ void CPhasedArrayProbeDlg::UpdateAllControls()
 {
 	if(GetSafeHwnd() == NULL) return;
 	CString Buff;
+	D3DXVECTOR3 vect;
 
 	m_comboProbeType.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getProbeType());
-	m_comboFiringOrder.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getFiringOrder());
-	//FillList();
 
 	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getWedgeAngle(), DEGREES);
 	m_editWedgeAngle.SetWindowTextW(Buff);
@@ -221,7 +207,6 @@ void CPhasedArrayProbeDlg::UpdateAllControls()
 
 	Buff.Format(L"%.02f mm",theApp.m_PhasedArray[m_nSide].getElementPitch());
 	m_editElementPitch.SetWindowText(Buff);
-
 
 	switch(theApp.m_PhasedArray[PORTSIDE].getNumberElements()) {
 	case 8: m_comboElementCount.SetCurSel(0);
@@ -240,11 +225,14 @@ void CPhasedArrayProbeDlg::UpdateAllControls()
 		break;
 	}
 
-
 	Buff.Format(L"%d m/s", theApp.m_PhasedArray[PORTSIDE].getWedgeVelocity());
 	m_editWedgeVelocity.SetWindowTextW(Buff);
 	Buff.Format(L"%.01f mm", theApp.m_PhasedArray[PORTSIDE].getWedgeHeightElementOne());
 	m_editWedgeHeightElementOne.SetWindowTextW(Buff);
+
+	vect = theApp.m_PhasedArray[0].getVectorEOE1();
+	Buff.Format(L"i:%.03f j:%.03f k:%.03f", vect.x, vect.y, vect.z);
+	m_editVecE0E1.SetWindowTextW(Buff);
 
 	FillList();
 
@@ -989,6 +977,7 @@ BOOL CPhasedArrayProbeDlg::OnSetActive()
 {
 	theApp.m_LastSettings.nLastPhasedArrayTab = ((CPropertySheet*)GetParent())->GetActiveIndex();
 
+	UpdateAllControls();
 	theApp.StartThread(L"Phased Array Probe Dlg", &PhasedArrayProbeDlgThread, this, 200, THREAD_PRIORITY_NORMAL);
 
 	return CResizablePage::OnSetActive();
@@ -1083,11 +1072,6 @@ void CPhasedArrayProbeDlg::OnCbnSelchangeComboProbeType()
 	Invalidate(false);
 }
 
-
-void CPhasedArrayProbeDlg::OnCbnSelchangeComboFiringOrder()
-{
-	theApp.m_PhasedArray[PORTSIDE].setFiringOrder(m_comboFiringOrder.GetCurSel());
-}
 
 
 void CPhasedArrayProbeDlg::OnClose()
@@ -1292,4 +1276,16 @@ void CPhasedArrayProbeDlg::RenderConcaveProbe(CDC* pDC, CRect* rr)
 	delete ptOuter;
 	delete pByte;
 	pDC->SelectObject(pOldPen);
+}
+
+
+void CPhasedArrayProbeDlg::OnEnChangeEdit1()
+{
+	CString Buff;
+	D3DXVECTOR3 vec;
+
+	m_editVecE0E1.GetWindowTextW(Buff);
+	ExtractVector(Buff, NULL, &vec, NULL);
+
+	theApp.m_PhasedArray[0].setVectorEOE1(vec);
 }

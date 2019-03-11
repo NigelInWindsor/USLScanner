@@ -102,4 +102,6 @@ public:
 	void OnRbdacmenuClearallgains();
 	void OnRbdacmenuCleareverything();
 	void OnRbdacmenuDeletept();
+	CComboBox m_comboDacEnable;
+	afx_msg void OnCbnSelchangeComboEnable();
 };

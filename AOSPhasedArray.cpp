@@ -339,7 +339,6 @@ unsigned int CAOSPhasedArray::getDataRate()
 bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 {
 	bool bRet = true;
-	bool bEnableDac = false;
 	if (isConnected() == false)	return false;
 	double dTime[64];
 	float fGain[64];
@@ -349,12 +348,10 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
 
 	switch (pProbe->getDacMode()) {
-	case 0: bEnableDac = false;
-		break;
-	case 1: bEnableDac = true;
+	case 0: 
 		nDacCount = pProbe->getDACCount(0);
 		break;
-	case 2: bEnableDac = true;
+	case 1:
 		nDacCount = pProbe->getDACCount(0);
 		break;
 	}
@@ -369,7 +366,7 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 		{
 
 		for (int nCycle = 0; nCycle < m_nCycleCount && bRet == true; nCycle++) {
-			if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, bEnableDac)) bRet = false;
+			if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, pProbe->m_bDacEnable)) bRet = false;
 			if (!m_pHWDeviceOEMPA->SetDACGain(true, nCycle, nDacCount, dTime, fGain)) bRet = false;
 		}
 
@@ -381,7 +378,7 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 		}
 	}
 
-	if (pProbe->getDacMode() == 2) {
+	if (pProbe->getDacMode() == 1) {
 		setInterfaceGate(pParent, true);
 	}
 	else {
@@ -1284,3 +1281,20 @@ void CAOSPhasedArray::EditFile(wchar_t *pFile, bool bCloseWaiting)
 }
 
 
+int	CAOSPhasedArray::getMessageSize()
+{
+	return (int)m_Messages.GetSize();
+}
+
+CString CAOSPhasedArray::getMessageAt(int nIndex)
+{
+	if (nIndex < m_Messages.GetSize()) {
+		return m_Messages.GetAt(nIndex);
+	}
+	return L"";
+}
+
+void CAOSPhasedArray::AddMessage(bool bError, CString strMessage)
+{
+	m_Messages.Add(strMessage);
+}

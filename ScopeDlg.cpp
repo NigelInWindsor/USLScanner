@@ -1588,7 +1588,7 @@ void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 			theApp.m_UtUser.Dsp200CalculateHardware(nTimeSlot,m_nGate);
 
 			if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
-				if (theApp.m_PhasedArray[PORTSIDE].getDacMode() == 2) {
+				if (theApp.m_PhasedArray[PORTSIDE].getDacMode() == 1) {
 					theApp.m_PhasedArray[PORTSIDE].setDacInterfaceGate(true);
 				}
 			}
@@ -1973,7 +1973,7 @@ bool CScopeDlg::FindDACStartPt(int *nStart)
 	int nDacBlanking = 0;
 
 	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
-		if (theApp.m_PhasedArray[PORTSIDE].m_nDacMode < 2) {
+		if (theApp.m_PhasedArray[PORTSIDE].m_nDacMode == 0) {
 			*nStart = 0;
 			return true;
 		}
@@ -2051,7 +2051,7 @@ void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
 
 	//Put the crosses up
 	for(ii=0;ii<64;ii++) {
-		if(pPA->m_fDacDelay[0][ii]!=0.0) {
+		if(pPA->m_fDacDelay[0][ii]!=0.0 || ii==0) {
 			fDelay = pPA->m_fDacDelay[0][ii];
 			switch(theApp.m_LastSettings.nDacDelayUnits) {
 			case 0:	fDelay = pPA->m_fDacDelay[0][ii] * 1000;		//ns

@@ -203,6 +203,7 @@ public:
 	CString m_LastSendStr;
 	int	getRxArraySize();
 	CString getRxArrayAt(int nIndex);
+	int GetRxFlagAt(int nIndex);
 	void AddRxStr(CString * pBuff);
 
 

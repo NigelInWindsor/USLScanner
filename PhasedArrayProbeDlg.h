@@ -163,12 +163,13 @@ public:
 	afx_msg void OnEnChangeEditWedgeHeightElement1();
 	afx_msg void OnDeltaposSpinHeightElement1(NMHDR *pNMHDR, LRESULT *pResult);
 	CComboBox m_comboProbeType;
-	CComboBox m_comboFiringOrder;
 	afx_msg void OnCbnSelchangeComboProbeType();
 	afx_msg void OnCbnSelchangeComboFiringOrder();
 	afx_msg void OnClose();
 	afx_msg void OnDestroy();
 	CListBox m_listCoords;
+	CEdit m_editVecE0E1;
+	afx_msg void OnEnChangeEdit1();
 };
 
 //{{AFX_INSERT_LOCATION}}

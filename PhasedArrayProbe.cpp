@@ -51,10 +51,13 @@ void CPhasedArrayProbe::operator=(CPhasedArrayProbe * pPA)
 	CopyMemory(m_fRxFocalLength, pPA->m_fRxFocalLength, sizeof m_fRxFocalLength);
 	CopyMemory(m_fBeamAngle, pPA->m_fBeamAngle, sizeof m_fBeamAngle);
 
+	m_bDacEnable = pPA->m_bDacEnable;
 	m_nDacMode = pPA->m_nDacMode;
 	CopyMemory(m_nDacCount, pPA->m_nDacCount, sizeof m_nDacCount);
 	CopyMemory(m_fDacDelay, pPA->m_fDacDelay, sizeof m_fDacDelay);
 	CopyMemory(m_fDacGain, pPA->m_fDacGain, sizeof m_fDacGain);
+
+	m_vEl0El1 = pPA->m_vEl0El1;
 
 	LeaveCriticalSection(&m_CriticalSection);
 }
@@ -103,6 +106,7 @@ void CPhasedArrayProbe::Zero()
 	ZeroMemory(m_fRxFocalLength, sizeof m_fRxFocalLength);
 	ZeroMemory(m_fBeamAngle, sizeof m_fBeamAngle);
 
+	m_bDacEnable = false;
 	m_nDacMode = 0;
 	ZeroMemory(m_nDacCount, sizeof m_nDacCount);
 	ZeroMemory(m_fDacDelay, sizeof m_fDacDelay);
@@ -188,10 +192,12 @@ ULONGLONG CPhasedArrayProbe::Save(CUSLFile *pFile)
 	pFile->Write(&m_fRipple, sizeof m_fRipple);
 	pFile->Write(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Write(&m_eFilterType, sizeof m_eFilterType);
+	pFile->Write(&m_bDacEnable, sizeof m_bDacEnable);
 	pFile->Write(&m_nDacMode, sizeof m_nDacMode);
 	pFile->Write(m_nDacCount, sizeof m_nDacCount);
 	pFile->Write(m_fDacDelay, sizeof m_fDacDelay);
 	pFile->Write(m_fDacGain, sizeof m_fDacGain);
+	pFile->Write(&m_vEl0El1, sizeof m_vEl0El1);
 
 
 
@@ -258,11 +264,13 @@ void CPhasedArrayProbe::Retrieve(CUSLFile *pFile)
 	pFile->Read(&m_fRipple, sizeof m_fRipple);
 	pFile->Read(&m_fStopGain, sizeof m_fStopGain);
 	pFile->Read(&m_eFilterType, sizeof m_eFilterType);
+	pFile->Read(&m_bDacEnable, sizeof m_bDacEnable);
 	pFile->Read(&m_nDacMode, sizeof m_nDacMode);
 	pFile->Read(m_nDacCount, sizeof m_nDacCount);
 	pFile->Read(m_fDacDelay, sizeof m_fDacDelay);
 	pFile->Read(m_fDacGain, sizeof m_fDacGain);
-	
+	pFile->Read(&m_vEl0El1, sizeof m_vEl0El1);
+
 	pFile->Seek(n64ElementOffset,CFile::begin);
 	for(ii=0;ii<256;ii++) {
 		pFile->ReadStruct(&m_PAElement[ii], sizeof m_PAElement[0]);
@@ -692,9 +700,8 @@ void CPhasedArrayProbe::CalculateElementCoordinates()
 	float fProbeHalfLength = (float)(m_nNumberElements / 2) * m_fElementPitch;
 
 	for (int ii = 0; ii < m_nNumberElements; ii++) {
-//		float fH = -fProbeHalfLength + ((m_fElementPitch / 2.0f) + (float)ii * m_fElementPitch);
 		float fH = (float)ii * m_fElementPitch;
-		m_PAElement[ii].vecPt = m_vElement[ii] = D3DXVECTOR3(0.0f, 0.0f, fH);
+		m_PAElement[ii].vecPt = m_vElement[ii] = m_vEl0El1 * fH;
 	}
 }
 
@@ -1082,9 +1089,20 @@ void CPhasedArrayProbe::CalculateFiringOrder()
 
 }
 
+
+bool CPhasedArrayProbe::setDacEnable(bool bEnable)
+{
+	return m_bDacEnable = bEnable;
+}
+
+bool CPhasedArrayProbe::getDacEnable()
+{
+	return m_bDacEnable;
+}
+
 int CPhasedArrayProbe::setDacMode(int nMode)
 {
-	return m_nDacMode = MinMax(&nMode, 0, 2);
+	return m_nDacMode = MinMax(&nMode, 0, 1);
 }
 
 int CPhasedArrayProbe::getDacMode()
@@ -1135,4 +1153,14 @@ void CPhasedArrayProbe::ZeroDacTimes(int nFL)
 	else {
 		ZeroMemory(m_fDacDelay[nFL], sizeof m_fDacDelay[0]);
 	}
+}
+
+void CPhasedArrayProbe::setVectorEOE1(D3DXVECTOR3 vect)
+{
+	m_vEl0El1 = vect;
+}
+
+D3DXVECTOR3 & CPhasedArrayProbe::getVectorEOE1()
+{
+	return m_vEl0El1;
 }

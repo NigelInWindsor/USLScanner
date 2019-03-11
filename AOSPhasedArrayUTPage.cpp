@@ -50,6 +50,7 @@ void CAOSPhasedArrayUTPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_FILTER_GAIN, m_editspinFilterGain);
 	DDX_Control(pDX, IDC_LIST_DAC_LIST, m_listDAC);
 	DDX_Control(pDX, IDC_COMBO_DAC_MODE, m_comboDacMode);
+	DDX_Control(pDX, IDC_COMBO_ENABLE, m_comboDacEnable);
 }
 
 
@@ -89,6 +90,7 @@ ON_WM_CLOSE()
 	ON_COMMAND(ID_DAC_CLEARALLGAINS, OnRbdacmenuClearallgains)
 	ON_COMMAND(ID_DAC_CLEAREVERYTHING, OnRbdacmenuCleareverything)
 	ON_COMMAND(ID_DAC_DELETEPT, OnRbdacmenuDeletept)
+	ON_CBN_SELCHANGE(IDC_COMBO_ENABLE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboEnable)
 END_MESSAGE_MAP()
 
 void CAOSPhasedArrayUTPage::OnClose()
@@ -127,7 +129,9 @@ BOOL CAOSPhasedArrayUTPage::OnInitDialog()
 	Buff.LoadStringW(IDS_Frequency);	m_comboDisplayMode.AddString(Buff);
 	Buff.LoadStringW(IDS_ImpulseResponce);	m_comboDisplayMode.AddString(Buff);
 
-	Buff.LoadStringW(IDS_Off);			m_comboDacMode.AddString(Buff);
+	Buff.LoadStringW(IDS_Off);			m_comboDacEnable.AddString(Buff);
+	Buff.LoadStringW(IDS_On);			m_comboDacEnable.AddString(Buff);
+
 	Buff.LoadStringW(IDS_Main_Bang);	m_comboDacMode.AddString(Buff);
 	Buff.LoadStringW(IDS_Interface);	m_comboDacMode.AddString(Buff);
 
@@ -170,9 +174,11 @@ void CAOSPhasedArrayUTPage::UpdateAllControls()
 	CString Buff;
 	bool bFlag = true;
 
+
 	m_comboDisplayMode.SetCurSel(theApp.m_LastSettings.nPAFilterDisplayMode &= 1);
 	m_comboRectify.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getRectification());
 	m_comboFilterType.SetCurSel(theApp.m_PhasedArray[PORTSIDE].m_eFilterType);
+	m_comboDacEnable.SetCurSel( (int)theApp.m_PhasedArray[PORTSIDE].getDacEnable());
 	m_comboDacMode.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getDacMode());
 
 	theApp.m_PhasedArray[PORTSIDE].getFilterType() < BANDPASS ? bFlag = true : bFlag = false;
@@ -787,6 +793,13 @@ void CAOSPhasedArrayUTPage::OnCbnSelchangeComboDacMode()
 }
 
 
+void CAOSPhasedArrayUTPage::OnCbnSelchangeComboEnable()
+{
+	theApp.m_PhasedArray[PORTSIDE].setDacEnable((bool)m_comboDacEnable.GetCurSel());
+	m_nUpdateHardware |= U_DAC;
+}
+
+
 void CAOSPhasedArrayUTPage::OnNMDblclkListDacList(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
@@ -882,3 +895,5 @@ void CAOSPhasedArrayUTPage::OnRbdacmenuDeletept()
 
 	Invalidate(FALSE);
 }
+
+

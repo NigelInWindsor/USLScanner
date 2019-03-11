@@ -4,6 +4,8 @@
 #define AFX_AOSPHASEDARRAYPAGE_H__439F55FC_DE9A_456D_BF04_0080ECA7ACC4__INCLUDED_
 
 #include "EditSpinCtrl.h"
+#include "USLMFCListCtrl.h"
+
 
 #if _MSC_VER > 1000
 #pragma once
@@ -70,6 +72,10 @@ public:
 	afx_msg void OnDeltaposSpinAscanLength(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnEnChangeEditAscanLength();
 	afx_msg void OnBnClickedButtonDefault();
+	void CreateColumns();
+	void FillList();
+	afx_msg void OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *pResult);
+	CUSLMFCListCtrl m_listMessages;
 };
 
 //{{AFX_INSERT_LOCATION}}

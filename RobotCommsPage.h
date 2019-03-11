@@ -9,6 +9,7 @@
 
 #include "DoubleScrollBar.h"
 #include "EditSpinItem.h"
+#include "USLMFCListCtrl.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CRobotCommsPage dialog
@@ -20,14 +21,8 @@ class CRobotCommsPage : public CPropertyPage
 // Construction
 public:
 	HBRUSH m_hBr;
-	HRESULT CRobotCommsPage::ItemFinished(WPARAM wParam, LPARAM lParam);
-	HRESULT CRobotCommsPage::ItemChanged(WPARAM wParam, LPARAM lParam);
 	void CreateColumns();
 	void FillList();
-	void RenderWatch(CPaintDC *pDC, CRect rect, LOGFONT *plf = NULL, int nDevice = 0);
-	void RenderView();
-	void SendDCValues();
-	void DownLoadScanLine(int nLine);
 	CStringArray m_TxArray;
 	int	m_nEcatDCClockDiff;
 	int	m_nSysServoCount;
@@ -50,10 +45,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CRobotCommsPage)
 	enum { IDD = IDD_ROBOT_COMMS_PAGE };
-	CListCtrl	m_listWatch;
 	CStatic	m_staticWatch;
-	CDoubleScrollBar	m_scrollV;
-	CStatic	m_staticView;
 	CEdit	m_editEthercatStatus;
 	CButton	m_checkEchoData;
 	CSpinButtonCtrl	m_spinDCPlus;
@@ -104,27 +96,18 @@ protected:
 	afx_msg void OnRadioRobot0();
 	afx_msg void OnRadioRobot1();
 	afx_msg void OnRadioRobotBoth();
-	afx_msg void OnButtonProg3();
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	afx_msg void OnChangeEditDcMinus();
-	afx_msg void OnChangeEditDcPlus();
-	afx_msg void OnChangeEditDcBand();
-	afx_msg void OnButtonTest();
-	afx_msg void OnButtonJogTosafe();
-	afx_msg void OnButtonPmacReset();
 	afx_msg void OnButtonClear();
-	afx_msg void OnCheckEchoData();
-	afx_msg void OnPaint();
-	afx_msg void OnClickListWatch(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDblclkListWatch(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnGetdispinfoListWatch(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnWatchDelete();
-	afx_msg void OnRclickListWatch(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnCommsClearall();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	CUSLMFCListCtrl m_listMessages;
+	afx_msg void OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMRClickListMessages(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnCommsCopy();
+	afx_msg void OnEditCopy();
+	afx_msg void OnEditPaste();
 };
 
 //{{AFX_INSERT_LOCATION}}

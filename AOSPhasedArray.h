@@ -129,5 +129,11 @@ public:
 	bool Retrieve(CUSLFile* pFile);
 	bool SetFilter();
 	bool setPRF(PVOID pParent);
+
+	int getMessageSize();
+	CString getMessageAt(int nIndex);
+
+	void AddMessage(bool bError, CString strMessage);
+
 };
 

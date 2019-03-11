@@ -3742,6 +3742,7 @@
 #define IDC_COMBO_SET                   4053
 #define IDC_COMBO_AVERAGES              4053
 #define IDC_COMBO_DANGER_PLANE_DIR      4053
+#define IDC_COMBO_ENABLE                4053
 #define IDC_CHECK_SAVE                  4054
 #define IDC_STATIC_SAVE                 4055
 #define IDC_SPIN1                       4056
@@ -3819,7 +3820,7 @@
 #define IDC_EDIT_FOCAL_LAW              4115
 #define IDC_CHECK_TX_EQUALS_RX          4116
 #define IDC_CHECK_REVERSE_ELEMENTS      4117
-#define IDC_LIST1                       4118
+#define IDC_LIST_MESSAGES               4119
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -4980,6 +4981,7 @@
 #define ID_VIEW_EDIT_TOOLBAR            34148
 #define ID_UT_ALLTRUE                   34149
 #define ID_UT_ALLFALSE                  34150
+#define ID_COMMS_COPY                   34151
 #define IDS_SIMPLE_RASTER               61001
 #define IDS_MS_Sans_Serif               61001
 #define IDS_RAPID_RAPID                 61002
@@ -6083,9 +6085,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        732
-#define _APS_NEXT_COMMAND_VALUE         34151
-#define _APS_NEXT_CONTROL_VALUE         4119
+#define _APS_NEXT_RESOURCE_VALUE        734
+#define _APS_NEXT_COMMAND_VALUE         34152
+#define _APS_NEXT_CONTROL_VALUE         4121
 #define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif
