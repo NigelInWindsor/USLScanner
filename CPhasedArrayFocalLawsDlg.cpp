@@ -7,18 +7,10 @@ void CPhasedArrayFocalLawsDlg::DoDataExchange(CDataExchange* pDX)
 	CResizablePage::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_COMBO_TX_PITCH, m_comboTXFocalLawPitch);
-	DDX_Control(pDX, IDC_SPIN_LAST_TX_ELEMENT, m_spinTxLastElement);
-	DDX_Control(pDX, IDC_EDIT_LAST_TX_ELEMENT, m_editTxLastElement);
-	DDX_Control(pDX, IDC_SPIN_FIRST_TX_ELEMENT, m_spinTxFirstElement);
-	DDX_Control(pDX, IDC_EDIT_FIRST_TX_ELEMENT, m_editTxFirstElement);
 	DDX_Control(pDX, IDC_SPIN_TX_APERTURE, m_spinTxAperture);
 	DDX_Control(pDX, IDC_EDIT_TX_APERTURE, m_editTxAperture);
 
 	DDX_Control(pDX, IDC_COMBO_RX_PITCH, m_comboRXFocalLawPitch);
-	DDX_Control(pDX, IDC_SPIN_LAST_RX_ELEMENT, m_spinRxLastElement);
-	DDX_Control(pDX, IDC_EDIT_LAST_RX_ELEMENT, m_editRxLastElement);
-	DDX_Control(pDX, IDC_SPIN_FIRST_RX_ELEMENT, m_spinRxFirstElement);
-	DDX_Control(pDX, IDC_EDIT_FIRST_RX_ELEMENT, m_editRxFirstElement);
 	DDX_Control(pDX, IDC_SPIN_RX_APERTURE, m_spinRxAperture);
 	DDX_Control(pDX, IDC_EDIT_RX_APERTURE, m_editRxAperture);
 
@@ -45,6 +37,10 @@ void CPhasedArrayFocalLawsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_FOCAL_LAW, m_spinFocalLaw);
 	DDX_Control(pDX, IDC_CHECK_TX_EQUALS_RX, m_checkRxEqualsTx);
 	DDX_Control(pDX, IDC_CHECK_REVERSE_ELEMENTS, m_checkReverseElements);
+	DDX_Control(pDX, IDC_COMBO_FIRST_ELEMENT_TX, m_comboFirstElementTx);
+	DDX_Control(pDX, IDC_COMBO_LAST_ELEMENT_TX, m_comboLastElementTx);
+	DDX_Control(pDX, IDC_COMBO_FIRST_ELEMENT_RX, m_comboFirstElementRx);
+	DDX_Control(pDX, IDC_COMBO_LAST_ELEMENT_RX, m_comboLastElementRx);
 }
 
 CPhasedArrayFocalLawsDlg::CPhasedArrayFocalLawsDlg()
@@ -66,10 +62,6 @@ BEGIN_MESSAGE_MAP(CPhasedArrayFocalLawsDlg, CResizablePage)
 	ON_EN_CHANGE(IDC_EDIT_RX_APERTURE, &CPhasedArrayFocalLawsDlg::OnEnChangeEditRxAperture)
 	ON_CBN_SELCHANGE(IDC_COMBO_TX_PITCH, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboTxPitch)
 	ON_CBN_SELCHANGE(IDC_COMBO_RX_PITCH, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboRxPitch)
-	ON_EN_CHANGE(IDC_EDIT_FIRST_TX_ELEMENT, &CPhasedArrayFocalLawsDlg::OnEnChangeEditFirstTxElement)
-	ON_EN_CHANGE(IDC_EDIT_LAST_TX_ELEMENT, &CPhasedArrayFocalLawsDlg::OnEnChangeEditLastTxElement)
-	ON_EN_CHANGE(IDC_EDIT_FIRST_RX_ELEMENT, &CPhasedArrayFocalLawsDlg::OnEnChangeEditFirstRxElement)
-	ON_EN_CHANGE(IDC_EDIT_LAST_RX_ELEMENT, &CPhasedArrayFocalLawsDlg::OnEnChangeEditLastRxElement)
 	ON_CBN_SELCHANGE(IDC_COMBO_FIRING_ORDER, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFiringOrder)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_TX_BEAM_ANGLE, &CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxBeamAngle)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_TX_FOCAL_LENGTH, &CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxFocalLength)
@@ -87,6 +79,11 @@ BEGIN_MESSAGE_MAP(CPhasedArrayFocalLawsDlg, CResizablePage)
 	ON_EN_CHANGE(IDC_EDIT_FOCAL_LAW, &CPhasedArrayFocalLawsDlg::OnEnChangeEditFocalLaw)
 	ON_BN_CLICKED(IDC_CHECK_TX_EQUALS_RX, &CPhasedArrayFocalLawsDlg::OnBnClickedCheckTxEqualsRx)
 	ON_BN_CLICKED(IDC_CHECK_REVERSE_ELEMENTS, &CPhasedArrayFocalLawsDlg::OnBnClickedCheckReverseElements)
+	ON_CBN_SELCHANGE(IDC_COMBO_FIRST_ELEMENT_TX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementTx)
+	ON_CBN_SELCHANGE(IDC_COMBO_LAST_ELEMENT_TX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementTx)
+	ON_CBN_SELCHANGE(IDC_COMBO_FIRST_ELEMENT_RX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementRx)
+	ON_CBN_SELCHANGE(IDC_COMBO_LAST_ELEMENT_RX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementRx)
+	ON_EN_CHANGE(IDC_EDIT_TX_FOCAL_LENGTH, &CPhasedArrayFocalLawsDlg::OnEnChangeEditTxFocalLength)
 END_MESSAGE_MAP()
 
 
@@ -148,8 +145,8 @@ BOOL CPhasedArrayFocalLawsDlg::OnSetActive()
 		m_comboTXFocalLawPitch.AddString(Buff);
 		m_comboRXFocalLawPitch.AddString(Buff);
 	}
-	m_comboTXFocalLawPitch.SetCurSel(theApp.m_PhasedArray[m_nSide].getIntTxFocalLawPitch() - 1);
-	m_comboRXFocalLawPitch.SetCurSel(theApp.m_PhasedArray[m_nSide].getIntRxFocalLawPitch() - 1);
+
+	UpdateAllControls();
 
 	return CResizablePage::OnSetActive();
 }
@@ -168,37 +165,33 @@ void CPhasedArrayFocalLawsDlg::UpdateAllControls()
 	CString Buff;
 	bool bReadOnly;
 
+	if (theApp.m_PhasedArray[PORTSIDE].getNumberElements() - m_comboFirstElementTx.GetCount()) {
+		m_comboFirstElementTx.ResetContent();
+		m_comboFirstElementRx.ResetContent();
+		m_comboLastElementTx.ResetContent();
+		m_comboLastElementRx.ResetContent();
+		for (int ii = 0; ii < theApp.m_PhasedArray[PORTSIDE].getNumberElements(); ii++) {
+			Buff.Format(L"%d", ii + 1);
+			m_comboFirstElementTx.AddString(Buff);
+			m_comboFirstElementRx.AddString(Buff);
+			m_comboLastElementTx.AddString(Buff);
+			m_comboLastElementRx.AddString(Buff);
+		}
+	}
+	m_comboFirstElementTx.SetCurSel(theApp.m_PhasedArray[m_nSide].getTxFirstElement());
+	m_comboFirstElementRx.SetCurSel(theApp.m_PhasedArray[m_nSide].getRxFirstElement());
+	m_comboLastElementTx.SetCurSel(theApp.m_PhasedArray[m_nSide].getTxLastElement());
+	m_comboLastElementRx.SetCurSel(theApp.m_PhasedArray[m_nSide].getRxLastElement());
+
 	Buff.Format(_T("%d"), theApp.m_LSA.m_nScopeViewLaw + 1);
 	m_editFocalLaw.SetWindowText(Buff);
 	m_spinFocalLaw.SetPos(theApp.m_LSA.m_nScopeViewLaw );
 
-	m_spinTxFirstElement.SetRange(0, theApp.m_PhasedArray[PORTSIDE].getNumberElements() - 1);
-	m_spinTxLastElement.SetRange(0, theApp.m_PhasedArray[PORTSIDE].getNumberElements() - 1);
-	m_spinRxFirstElement.SetRange(0, theApp.m_PhasedArray[PORTSIDE].getNumberElements() - 1);
-	m_spinRxLastElement.SetRange(0, theApp.m_PhasedArray[PORTSIDE].getNumberElements() - 1);
-
-
 	m_comboFiringOrder.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getFiringOrder());
-
-	Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getTxFirstElement() + 1);
-	m_editTxFirstElement.SetWindowText(Buff);
-	m_spinTxFirstElement.SetPos(theApp.m_PhasedArray[m_nSide].getTxFirstElement());
-
-	Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getTxLastElement() + 1);
-	m_editTxLastElement.SetWindowText(Buff);
-	m_spinTxLastElement.SetPos(theApp.m_PhasedArray[m_nSide].getTxLastElement());
 
 	Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getTxAperture());
 	m_editTxAperture.SetWindowText(Buff);
 	m_spinTxAperture.SetPos(theApp.m_PhasedArray[m_nSide].getTxAperture());
-
-	Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxFirstElement() + 1);
-	m_editRxFirstElement.SetWindowText(Buff);
-	m_spinRxFirstElement.SetPos(theApp.m_PhasedArray[m_nSide].getRxFirstElement());
-
-	Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxLastElement() + 1);
-	m_editRxLastElement.SetWindowText(Buff);
-	m_spinRxLastElement.SetPos(theApp.m_PhasedArray[m_nSide].getRxLastElement());
 
 	Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getRxAperture());
 	m_editRxAperture.SetWindowText(Buff);
@@ -242,8 +235,8 @@ void CPhasedArrayFocalLawsDlg::UpdateAllControls()
 	m_comboRXFocalLawPitch.EnableWindow(bReadOnly ^ 1);
 	m_editRxBeamAngle.SetReadOnly(bReadOnly);
 	m_editRxAperture.SetReadOnly(bReadOnly);
-	m_editRxFirstElement.SetReadOnly(bReadOnly);
-	m_editRxLastElement.SetReadOnly(bReadOnly);
+	m_comboFirstElementRx.EnableWindow(bReadOnly ^ 1);
+	m_comboLastElementRx.EnableWindow(bReadOnly ^ 1);
 
 }
 
@@ -287,46 +280,6 @@ void CPhasedArrayFocalLawsDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 			UpdateAllControls();
 		};
 		break;
-	case IDC_SPIN_FIRST_TX_ELEMENT:
-		nTemp = pSpin->GetPos() & 0xffff;
-		if (nTemp - theApp.m_PhasedArray[m_nSide].getTxFirstElement()) {
-			theApp.m_PhasedArray[m_nSide].setTxFirstElement(nTemp);
-			Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getTxFirstElement() + 1);
-			m_editTxFirstElement.SetWindowText(Buff);
-			ApplyFocalLaws();
-			UpdateAllControls();
-		}
-		break;
-	case IDC_SPIN_LAST_TX_ELEMENT:
-		nTemp = pSpin->GetPos() & 0xffff;
-		if (nTemp - theApp.m_PhasedArray[m_nSide].getTxLastElement()) {
-			theApp.m_PhasedArray[m_nSide].setTxLastElement(nTemp);
-			Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getTxLastElement() + 1);
-			m_editTxLastElement.SetWindowText(Buff);
-			ApplyFocalLaws();
-			UpdateAllControls();
-		};
-		break;
-	case IDC_SPIN_FIRST_RX_ELEMENT:
-		nTemp = pSpin->GetPos() & 0xffff;
-		if (nTemp - theApp.m_PhasedArray[m_nSide].getRxFirstElement()) {
-			theApp.m_PhasedArray[m_nSide].setRxFirstElement(nTemp);
-			Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxFirstElement() + 1);
-			m_editRxFirstElement.SetWindowText(Buff);
-			ApplyFocalLaws();
-			UpdateAllControls();
-		}
-		break;
-	case IDC_SPIN_LAST_RX_ELEMENT:
-		nTemp = pSpin->GetPos() & 0xffff;
-		if (nTemp - theApp.m_PhasedArray[m_nSide].getRxLastElement()) {
-			theApp.m_PhasedArray[m_nSide].setRxLastElement(nTemp);
-			Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getRxLastElement() + 1);
-			m_editRxLastElement.SetWindowText(Buff);
-			ApplyFocalLaws();
-			UpdateAllControls();
-		};
-		break;
 	};
 
 	CResizablePage::OnVScroll(nSBCode, nPos, pScrollBar);
@@ -345,7 +298,7 @@ void CPhasedArrayFocalLawsDlg::ApplyFocalLaws()
 	theApp.m_PhasedArray[PORTSIDE].CalculateTxFocalLaws();
 	theApp.m_PhasedArray[PORTSIDE].CalculateRxFocalLaws();
 
-	theApp.m_PhasedArray[PORTSIDE].DownloadAllToHardware();
+	theApp.m_PhasedArray[PORTSIDE].DownloadAllToHardware(0);
 }
 
 
@@ -397,84 +350,6 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboRxPitch()
 }
 
 
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditLastTxElement()
-{
-	CString Buff;
-
-	m_editTxLastElement.GetWindowText(Buff);
-	int nTemp = _ttoi(Buff) - 1;
-
-	if (nTemp - theApp.m_PhasedArray[m_nSide].getTxLastElement()) {
-		theApp.m_PhasedArray[m_nSide].setTxLastElement(nTemp);
-		m_spinTxLastElement.SetPos(theApp.m_PhasedArray[m_nSide].getTxLastElement());
-		ApplyFocalLaws();
-		if (theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX) {
-			Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxLastElement() + 1);
-			m_editRxLastElement.SetWindowText(Buff);
-		}
-	}
-
-}
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditFirstTxElement()
-{
-	CString Buff;
-
-	m_editTxFirstElement.GetWindowText(Buff);
-	int nTemp = _ttoi(Buff) - 1;
-
-	if (nTemp - theApp.m_PhasedArray[m_nSide].getTxFirstElement()) {
-		theApp.m_PhasedArray[m_nSide].setTxFirstElement(nTemp);
-		m_spinTxFirstElement.SetPos(theApp.m_PhasedArray[m_nSide].getTxFirstElement());
-		Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getTxFirstElement() + 1);
-		m_editTxFirstElement.SetWindowText(Buff);
-		ApplyFocalLaws();
-		if (theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX) {
-			Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxFirstElement() + 1);
-			m_editRxFirstElement.SetWindowText(Buff);
-		}
-	}
-
-}
-
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditFirstRxElement()
-{
-	CString Buff;
-
-	m_editRxFirstElement.GetWindowText(Buff);
-	int nTemp = _ttoi(Buff) - 1;
-
-	if (nTemp - theApp.m_PhasedArray[m_nSide].getRxFirstElement()) {
-		theApp.m_PhasedArray[m_nSide].setRxFirstElement(nTemp);
-		m_spinRxFirstElement.SetPos(theApp.m_PhasedArray[m_nSide].getRxFirstElement());
-		Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxFirstElement() + 1);
-		m_editRxFirstElement.SetWindowText(Buff);
-		ApplyFocalLaws();
-	}
-}
-
-
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditLastRxElement()
-{
-	CString Buff;
-
-	m_editRxLastElement.GetWindowText(Buff);
-	int nTemp = _ttoi(Buff) - 1;
-
-	if (nTemp - theApp.m_PhasedArray[m_nSide].getRxLastElement()) {
-		theApp.m_PhasedArray[m_nSide].setRxLastElement(nTemp);
-		m_spinRxLastElement.SetPos(theApp.m_PhasedArray[m_nSide].getRxLastElement());
-		Buff.Format(L"%d", theApp.m_PhasedArray[m_nSide].getRxLastElement() + 1);
-		m_editRxLastElement.SetWindowText(Buff);
-		ApplyFocalLaws();
-	}
-
-}
-
-
-
 
 
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFiringOrder()
@@ -485,17 +360,146 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFiringOrder()
 
 
 
+
+void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
+	CString Buff;
+	float fAngle = theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0);
+
+	fAngle += ((float)pNMUpDown->iDelta * 0.5f);
+	theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fAngle, 0);
+	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0), DEGREES);
+	m_editRxBeamAngle.SetWindowText(Buff);
+	ApplyFocalLaws();
+
+	*pResult = 0;
+}
+
+void CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
+	CString Buff;
+	float fAngle = theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0);
+
+	fAngle += ((float)pNMUpDown->iDelta * 0.5f);
+	theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fAngle, 0);
+	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0), DEGREES);
+	m_editTxBeamAngle.SetWindowText(Buff);
+	ApplyFocalLaws();
+	UpdateAllControls();
+
+
+	*pResult = 0;
+}
+
+
+
+void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxBeamAngle()
+{
+	CString Buff;
+	float fTemp;
+
+	m_editTxBeamAngle.GetWindowTextW(Buff);
+	_WTOF(Buff, fTemp);
+	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0)) {
+		theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fTemp, 0);
+		m_spinTxBeamAngle.SetPos((int)(fTemp * 10));
+		ApplyFocalLaws();
+	}
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxBeamAngle()
+{
+	CString Buff;
+	float fTemp;
+
+	m_editRxBeamAngle.GetWindowTextW(Buff);
+	_WTOF(Buff, fTemp);
+	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0)) {
+		theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fTemp, 0);
+		m_spinRxBeamAngle.SetPos((int)(fTemp * 10));
+		ApplyFocalLaws();
+	}
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnEnChangeEditFocalLaw()
+{
+	CString Buff;
+	int nTemp = theApp.m_LSA.m_nScopeViewLaw;
+
+	m_editFocalLaw.GetWindowText(Buff);
+	nTemp = _ttoi(Buff) - 1;
+
+	if (nTemp - theApp.m_LSA.m_nScopeViewLaw) {
+		theApp.m_LSA.m_nScopeViewLaw = MinMax(&nTemp, 0, theApp.m_LSA.nFocalLawsL - 1);
+
+		m_spinFocalLaw.SetPos(theApp.m_LSA.m_nScopeViewLaw);
+	}
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnBnClickedCheckTxEqualsRx()
+{
+	theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX ? theApp.m_LastSettings.nPhasedArrayMask &= ~PA_RX_EQUAL_TX : theApp.m_LastSettings.nPhasedArrayMask |= PA_RX_EQUAL_TX;
+	ApplyFocalLaws();
+	UpdateAllControls();
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnBnClickedCheckReverseElements()
+{
+	m_checkReverseElements.GetCheck() == false ? theApp.m_PhasedArray[PORTSIDE].setReverseArray(false) : theApp.m_PhasedArray[PORTSIDE].setReverseArray(true);
+	ApplyFocalLaws();
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementTx()
+{
+	theApp.m_PhasedArray[m_nSide].setTxFirstElement(m_comboFirstElementTx.GetCurSel());
+	ApplyFocalLaws();
+	UpdateAllControls();
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementTx()
+{
+	theApp.m_PhasedArray[m_nSide].setTxLastElement(m_comboLastElementTx.GetCurSel());
+	ApplyFocalLaws();
+	UpdateAllControls();
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementRx()
+{
+	theApp.m_PhasedArray[m_nSide].setRxFirstElement(m_comboFirstElementRx.GetCurSel());
+	ApplyFocalLaws();
+	UpdateAllControls();
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementRx()
+{
+	theApp.m_PhasedArray[m_nSide].setRxLastElement(m_comboLastElementRx.GetCurSel());
+	ApplyFocalLaws();
+	UpdateAllControls();
+}
+
+
 void CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxFocalLength(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	CString Buff;
 	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
 	float fDistance = theApp.m_PhasedArray[PORTSIDE].getTxFocalLength();
 
-	fDistance += ((float)pNMUpDown->iDelta * 0.1f);
+	fDistance += ((float)pNMUpDown->iDelta * 2.0f);
 	theApp.m_PhasedArray[PORTSIDE].setTxFocalLength(fDistance);
 	Buff.Format(L"%.01f mm", theApp.m_PhasedArray[PORTSIDE].getTxFocalLength());
 	m_editTxFocalLength.SetWindowText(Buff);
 	ApplyFocalLaws();
+	UpdateAllControls();
 
 	*pResult = 0;
 }
@@ -637,96 +641,16 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxFocalLength3()
 
 }
 
-void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-	CString Buff;
-	float fAngle = theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0);
-
-	fAngle += ((float)pNMUpDown->iDelta * 0.5f);
-	theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fAngle, 0);
-	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0), DEGREES);
-	m_editRxBeamAngle.SetWindowText(Buff);
-	ApplyFocalLaws();
-
-	*pResult = 0;
-}
-
-void CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-	CString Buff;
-	float fAngle = theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0);
-
-	fAngle += ((float)pNMUpDown->iDelta * 0.5f);
-	theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fAngle, 0);
-	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0), DEGREES);
-	m_editTxBeamAngle.SetWindowText(Buff);
-	ApplyFocalLaws();
-	UpdateAllControls();
-
-
-	*pResult = 0;
-}
-
-
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxBeamAngle()
+void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxFocalLength()
 {
 	CString Buff;
-	float fTemp;
+	float fLength;
 
-	m_editTxBeamAngle.GetWindowTextW(Buff);
-	_WTOF(Buff, fTemp);
-	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0)) {
-		theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fTemp, 0);
-		m_spinTxBeamAngle.SetPos((int)(fTemp * 10));
+	m_editTxFocalLength.GetWindowTextW(Buff);
+	_WTOF(Buff, fLength);
+	if (fLength > 1000.0f) fLength = 0.0f;
+	if (fLength - theApp.m_PhasedArray[PORTSIDE].getTxFocalLength()) {
+		theApp.m_PhasedArray[PORTSIDE].setTxFocalLength(fLength);
 		ApplyFocalLaws();
 	}
-}
-
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxBeamAngle()
-{
-	CString Buff;
-	float fTemp;
-
-	m_editRxBeamAngle.GetWindowTextW(Buff);
-	_WTOF(Buff, fTemp);
-	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0)) {
-		theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fTemp, 0);
-		m_spinRxBeamAngle.SetPos((int)(fTemp * 10));
-		ApplyFocalLaws();
-	}
-}
-
-
-void CPhasedArrayFocalLawsDlg::OnEnChangeEditFocalLaw()
-{
-	CString Buff;
-	int nTemp = theApp.m_LSA.m_nScopeViewLaw;
-
-	m_editFocalLaw.GetWindowText(Buff);
-	nTemp = _ttoi(Buff) - 1;
-
-	if (nTemp - theApp.m_LSA.m_nScopeViewLaw) {
-		theApp.m_LSA.m_nScopeViewLaw = MinMax(&nTemp, 0, theApp.m_LSA.nFocalLawsL - 1);
-
-		m_spinFocalLaw.SetPos(theApp.m_LSA.m_nScopeViewLaw);
-	}
-}
-
-
-void CPhasedArrayFocalLawsDlg::OnBnClickedCheckTxEqualsRx()
-{
-	theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX ? theApp.m_LastSettings.nPhasedArrayMask &= ~PA_RX_EQUAL_TX : theApp.m_LastSettings.nPhasedArrayMask |= PA_RX_EQUAL_TX;
-	ApplyFocalLaws();
-	UpdateAllControls();
-}
-
-
-void CPhasedArrayFocalLawsDlg::OnBnClickedCheckReverseElements()
-{
-	m_checkReverseElements.GetCheck() == false ? theApp.m_PhasedArray[PORTSIDE].setReverseArray(false) : theApp.m_PhasedArray[PORTSIDE].setReverseArray(true);
-	ApplyFocalLaws();
 }

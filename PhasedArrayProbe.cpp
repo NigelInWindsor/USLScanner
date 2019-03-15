@@ -288,6 +288,12 @@ void CPhasedArrayProbe::Retrieve(CUSLFile *pFile)
 void CPhasedArrayProbe::setNumberElements(int nNumberElements)
 {
 	m_nNumberElements = MinMax(&nNumberElements,1,256);
+
+	MinMax(&m_nFirstElement[TX_FL], 0, nNumberElements - 1);
+	MinMax(&m_nFirstElement[RX_FL], 0, nNumberElements - 1);
+	MinMax(&m_nLastElement[TX_FL], 0, nNumberElements - 1);
+	MinMax(&m_nLastElement[RX_FL], 0, nNumberElements - 1);
+
 	setNumberFocalLaws(getNumberFocalLaws());
 }
 
@@ -306,6 +312,9 @@ void CPhasedArrayProbe::setRxEqualTx()
 	m_nFocalLawPitch[RX_FL] = m_nFocalLawPitch[TX_FL];
 	m_fBeamAngle[RX_FL][0] = m_fBeamAngle[TX_FL][0];
 	m_fBeamAngle[RX_FL][1] = m_fBeamAngle[TX_FL][1];
+	ZeroMemory(m_fRxFocalLength, sizeof m_fRxFocalLength);
+	m_fRxFocalLength[0] = m_fTxFocalLength;
+	
 
 }
 
@@ -789,11 +798,10 @@ float CPhasedArrayProbe::getRxDelay(int nFL, int nTOF, int nElement)
 	return m_FLRx[nFL].getRxDelay(nTOF, nElement);
 }
 
-void CPhasedArrayProbe::DownloadAllToHardware()
+void CPhasedArrayProbe::DownloadAllToHardware(int nMask)
 {
 	if (theApp.m_AOSPhasedArray.isConnected()) {
-		theApp.m_AOSPhasedArray.setAllHardwareVariables(this);
-
+		theApp.m_AOSPhasedArray.setAllHardwareVariables(this, nMask);
 	}
 }
 

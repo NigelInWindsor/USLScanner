@@ -210,7 +210,7 @@ void CLSABScanDlg::DrawBScan()
 	CDC  dcMem;
 	int ii, nFL,yy,nDeltaY;
 	int nTS,nX,nY0,nY1,nSrc,nPnY;
-	int nAscanLength = theApp.m_LSA.m_nAscanLength;
+	int nAscanLength = theApp.m_UtUser.m_TS[0].Adc.nAcqLength;
 	int	nHighY0 = 0,nHighY1 = 1;
 	CSize size;
 	CString Buff;

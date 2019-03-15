@@ -60,7 +60,6 @@ public:
 	CEdit			m_editTxElementPitch;
 	CSpinButtonCtrl	m_spinTxAperture;
 	CEdit			m_editTxAperture;
-	CComboBox		m_comboTXFocalLawPitch;
 
 	CSpinButtonCtrl	m_spinRxLastElement;
 	CEdit			m_editRxLastElement;

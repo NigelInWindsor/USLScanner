@@ -88,8 +88,7 @@ BEGIN_MESSAGE_MAP(CPhasedArrayProbeDlg, CResizablePage)
 	ON_EN_CHANGE(IDC_EDIT_PROBE_ANGLE, &CPhasedArrayProbeDlg::OnEnChangeEditWedgeAngle)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_PROBE_ANGLE, &CPhasedArrayProbeDlg::OnDeltaposSpinWedgeAngle)
 	ON_COMMAND(ID_BUTTON_RX_EQUALS_TX, OnButtonRxEqualTx)
-	ON_COMMAND(ID_BUTTON_DOWNLOAD_TO_HARDWARE, OnButtonDownloadToHardWare)
-	
+
 	ON_EN_CHANGE(IDC_EDIT_WEDGE_VELOCITY, &CPhasedArrayProbeDlg::OnEnChangeEditWedgeVelocity)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_WEDGE_VELOCITY, &CPhasedArrayProbeDlg::OnDeltaposSpinWedgeVelocity)
 	ON_EN_CHANGE(IDC_EDIT_WEDGE_HEIGHT_ELEMENT_1, &CPhasedArrayProbeDlg::OnEnChangeEditWedgeHeightElement1)
@@ -188,7 +187,6 @@ void CPhasedArrayProbeDlg::InvalidateHardware(bool bFlag)
 	if(theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX) 	theApp.m_PhasedArray[PORTSIDE].setRxEqualTx();
 	theApp.m_PhasedArray[PORTSIDE].CalculateTxFocalLaws();
 	theApp.m_PhasedArray[PORTSIDE].CalculateRxFocalLaws();
-
 
 	Invalidate(false);
 }
@@ -738,13 +736,13 @@ void CPhasedArrayProbeDlg::OnDeltaposSpinElementPitch(NMHDR* pNMHDR, LRESULT* pR
 	fTemp -= ((float)pNMUpDown->iDelta * 0.01f);
 	if(fTemp - fElementPitch) {
 		theApp.m_PhasedArray[m_nSide].setElementPitch(fTemp);
-		theApp.m_PhasedArray[m_nSide].setTxFocalLawPitch(m_comboTXFocalLawPitch.GetCurSel() + 1);
-		ApplyFocalLaws();
-		UpdateAllControls();
 
-		Invalidate(false);
 		InvalidateHardware(false);
+		m_nUpdateHardware |= U_TX_FL;
 		m_nUpdateHardware |= U_RX_FL;
+
+		UpdateAllControls();
+		Invalidate(false);
 	}
 	
 	*pResult = 0;
@@ -963,12 +961,6 @@ void CPhasedArrayProbeDlg::OnButtonRxEqualTx()
 	theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX ? theApp.m_LastSettings.nPhasedArrayMask &= ~PA_RX_EQUAL_TX : theApp.m_LastSettings.nPhasedArrayMask |= PA_RX_EQUAL_TX;
 	InvalidateHardware(false);
 	UpdateAllControls();
-}
-
-void CPhasedArrayProbeDlg::OnButtonDownloadToHardWare()
-{
-	theApp.m_PhasedArray[PORTSIDE].DownloadAllToHardware();
-	Invalidate(false);
 }
 
 

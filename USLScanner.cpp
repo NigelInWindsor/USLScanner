@@ -547,7 +547,10 @@ BOOL CUSLScannerApp::InitInstance()
 			m_AOSPhasedArray.Initialize();
 		}
 	}
-
+	Buff = L"Initializing Phased array units"; m_pBootUpDlg->UpdatePrompt(Buff);
+	theApp.m_PhasedArray[PORTSIDE].CalculateTxFocalLaws();
+	theApp.m_PhasedArray[PORTSIDE].CalculateRxFocalLaws();
+	theApp.m_PhasedArray[PORTSIDE].DownloadAllToHardware(0xFFFFFF);
 	
 	m_pBootUpDlg->SendMessage(WM_CLOSE);
 	delete m_pBootUpDlg;

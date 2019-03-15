@@ -16,11 +16,7 @@ public:
 	void UpdateAllControls();
 
 	enum { IDD = IDD_PHASEDARRAY_FOCAL_LAWS_DLG	};
-	CSpinButtonCtrl	m_spinTxLastElement;
-	CEdit			m_editTxLastElement;
 	CSpinButtonCtrl	m_spinTxElementPitch;
-	CEdit			m_editTxFirstElement;
-	CSpinButtonCtrl	m_spinTxFirstElement;
 	CEdit			m_editTxElementPitch;
 	CSpinButtonCtrl	m_spinTxAperture;
 	CEdit			m_editTxAperture;
@@ -30,11 +26,7 @@ public:
 	CEdit			m_editTxFocalLength;
 	CEdit			m_editTxBeamAngle;
 
-	CSpinButtonCtrl	m_spinRxLastElement;
-	CEdit			m_editRxLastElement;
 	CSpinButtonCtrl	m_spinRxElementPitch;
-	CEdit			m_editRxFirstElement;
-	CSpinButtonCtrl	m_spinRxFirstElement;
 	CEdit			m_editRxElementPitch;
 	CSpinButtonCtrl	m_spinRxAperture;
 	CEdit			m_editRxAperture;
@@ -57,10 +49,6 @@ public:
 	afx_msg void OnEnChangeEditRxAperture();
 	afx_msg void OnCbnSelchangeComboTxPitch();
 	afx_msg void OnCbnSelchangeComboRxPitch();
-	afx_msg void OnEnChangeEditFirstTxElement();
-	afx_msg void OnEnChangeEditLastTxElement();
-	afx_msg void OnEnChangeEditFirstRxElement();
-	afx_msg void OnEnChangeEditLastRxElement();
 	virtual void DoDataExchange(CDataExchange* pDX);
 	afx_msg void OnCbnSelchangeComboFiringOrder();
 	afx_msg void OnDeltaposSpinTxBeamAngle(NMHDR *pNMHDR, LRESULT *pResult);
@@ -82,5 +70,14 @@ public:
 	CButton m_checkRxEqualsTx;
 	afx_msg void OnBnClickedCheckTxEqualsRx();
 	afx_msg void OnBnClickedCheckReverseElements();
+	CComboBox m_comboFirstElementTx;
+	CComboBox m_comboLastElementTx;
+	CComboBox m_comboFirstElementRx;
+	CComboBox m_comboLastElementRx;
+	afx_msg void OnCbnSelchangeComboFirstElementTx();
+	afx_msg void OnCbnSelchangeComboLastElementTx();
+	afx_msg void OnCbnSelchangeComboFirstElementRx();
+	afx_msg void OnCbnSelchangeComboLastElementRx();
+	afx_msg void OnEnChangeEditTxFocalLength();
 };
 

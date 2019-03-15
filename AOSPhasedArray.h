@@ -95,7 +95,6 @@ public:
 	bool HWEnablePulser256(bool bEnable);
 	bool HWEnablePulser(bool bEnable);
 	bool Initialize();
-	bool setAllHardwareVariables(PVOID  pParent);
 	void getMaxNumberElements(CString *pBuff);
 	void getMaxApertureSize(CString *pBuff);
 	void getMaxCycleCount(CString *pBuff);
@@ -123,6 +122,7 @@ public:
 	bool setWidthDelay(PVOID pParent);
 	bool setRectify(PVOID pParent, int nFL = -1);
 	bool setFilter(PVOID pParent, int nFL = -1);
+	bool setAllHardwareVariables(PVOID pParent, int nWhichMask);
 	bool HWToFile();
 	void EditFile(wchar_t * pFile, bool bCloseWaiting);
 	ULONGLONG Save(CUSLFile* pFile);

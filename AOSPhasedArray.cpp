@@ -73,7 +73,6 @@ CAOSPhasedArray::CAOSPhasedArray()
 	g_bInitGain = true;
 	memset(m_abyMultiChannelDecimation, 0, sizeof(m_abyMultiChannelDecimation));
 	memset(m_afMultiChannelStart, 0, sizeof(m_afMultiChannelStart));
-
 }
 
 
@@ -85,12 +84,10 @@ CAOSPhasedArray::~CAOSPhasedArray()
 
 void CAOSPhasedArray::ResetCounters()
 {
-	
 	EnterCriticalSection(&m_CriticSectionCounters);
 	m_dwDigitalInputsAscan = 0;
 	m_dwDigitalInputsCscan = 0;
 	LeaveCriticalSection(&m_CriticSectionCounters);
-	
 }
 
 bool CAOSPhasedArray::Connect(int nIPAddress)
@@ -347,15 +344,6 @@ bool CAOSPhasedArray::setAllDacVariables(PVOID pParent)
 	int nDacCount = 0;
 	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
 
-	switch (pProbe->getDacMode()) {
-	case 0: 
-		nDacCount = pProbe->getDACCount(0);
-		break;
-	case 1:
-		nDacCount = pProbe->getDACCount(0);
-		break;
-	}
-
 	for (nDacCount = 0; nDacCount < 64; nDacCount++) {
 		if (nDacCount != 0 && pProbe->m_fDacDelay[0][nDacCount] == 0.0f) break;
 		dTime[nDacCount] = (double)(pProbe->m_fDacDelay[0][nDacCount] * 1e-6f);
@@ -599,7 +587,7 @@ UINT WINAPI CAOSPhasedArray::ProcessAcquisitionAscan_0x00010103(void * pAcquisit
 					*pDest = ucArray[ii] >>= 1;
 			}
 			theApp.m_LSA.StoreAScan(nSlot, ucArray, pAscanHeader->dataCount);
-			theApp.m_UtUser.m_TS[nSlot].Adc.nAcqLength = pAscanHeader->dataCount;
+//			theApp.m_UtUser.m_TS[nSlot].Adc.nAcqLength = pAscanHeader->dataCount;
 			theApp.m_UtUser.ProcessTrace(theApp.m_Scope.m_RFTrace[nSlot], nSlot);
 		}
 		else {
@@ -925,8 +913,20 @@ bool CAOSPhasedArray::setWidthDelay(PVOID pParent)
 	double dRdDelay, dRdRange, dRdSamplingFrequency;
 	long lPointCount = MinMax(&m_nAScanLength, 512, 8192);
 	long lPointFactor;
+	CString Buff;
+
+	lPointFactor = (theApp.m_UtUser.m_TS[0].Adc.nWidth / 10) / lPointCount;
+	if (lPointFactor == 0) {
+		theApp.m_UtUser.m_TS[0].Adc.nAcqLength = theApp.m_UtUser.m_TS[0].Adc.nWidth / 10;
+	}
+	else {
+		theApp.m_UtUser.m_TS[0].Adc.nAcqLength = theApp.m_AOSPhasedArray.m_nAScanLength;
+	}
+	for (int nTS = 0; nTS < 256; nTS++) theApp.m_UtUser.m_TS[nTS].Adc.nAcqLength = theApp.m_UtUser.m_TS[0].Adc.nAcqLength;
+	Buff.Format(L"AcqLength: %d", theApp.m_UtUser.m_TS[0].Adc.nAcqLength); m_Messages.Add(Buff);
 
 	if (isConnected() == false)	return false;
+
 
 	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
 	{
@@ -1073,24 +1073,20 @@ bool CAOSPhasedArray::setFilter(PVOID pParent, int nFL)
 }
 
 
-bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
+bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent, int nWhichMask)
 {
+	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
+
 	bool bRet = true;
 	double dTemp;
 	double dTimeSlotTime = 1.0f / (float)theApp.m_UtUser.m_Global.nPrf;
 	WORD wID = 65535;
 	DWORD adwHWAperture[4] = { 0 };
 	DWORD adwHWRead[4] = { 0 };
-//	bool bEnable;
-//	enumGateModeTof tof;
-//	enumRectification eRect;
-//	int iAcqElem;
 	enumAcquisitionFlush eAcquisitionFlush = eAutomatic;
 	float fArray[128];
 	bool bDDFEnable;
 	int nFL;
-
-	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
 
 	enumCompressionType eComp = eCompression;
 	long lPointCount;
@@ -1104,6 +1100,19 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 	enumGateModeTof eGateModeTofWr = (enumGateModeTof)iMode;
 	enumRectification eGateRectificationWr = (enumRectification)iMode;
 	double dGateThresholdPercentWr = 0.0;
+
+	double dDacTime[64];
+	float fDacGain[64];
+	ZeroMemory(dDacTime, sizeof dDacTime);
+	ZeroMemory(fDacGain, sizeof fDacGain);
+	int nDacCount = 0;
+
+	for (nDacCount = 0; nDacCount < 64; nDacCount++) {
+		if (nDacCount != 0 && pProbe->m_fDacDelay[0][nDacCount] == 0.0f) break;
+		dDacTime[nDacCount] = (double)(pProbe->m_fDacDelay[0][nDacCount] * 1e-6f);
+		fDacGain[nDacCount] = pProbe->m_fDacGain[0][nDacCount];
+	}
+
 
 	if (isConnected() == false)	return false;
 
@@ -1153,8 +1162,6 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 
 				if (!m_pHWDeviceOEMPA->SetTimeSlot(nCycle, dTimeSlotTime))																		bRet = false;
 				if (!setRectify(pProbe, nCycle))																								bRet = false;
-//				if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, m_bDACEnable))																			bRet = false;
-//				if (!m_pHWDeviceOEMPA->SetDACSlope(nCycle, m_nDACCount, &m_dDACTime, &m_fDACSlope))												bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanMaximum(nCycle, true))																		bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanMinimum(nCycle, false))																		bRet = false;
 				if (!m_pHWDeviceOEMPA->EnableAscanSaturation(nCycle, false))																	bRet = false;
@@ -1163,9 +1170,9 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 				if (!m_pHWDeviceOEMPA->SetAscanAcqIdChannelScan(nCycle, wID))																	bRet = false;
 				if (!m_pHWDeviceOEMPA->SetAscanAcqIdChannelCycle(nCycle, wID))																	bRet = false;
 
-				for (int iGateIndex = 0; iGateIndex < g_iOEMPAGateCountMax; iGateIndex++) {
-					if (!m_pHWDeviceOEMPA->SetGateModeThreshold(nCycle, iGateIndex, bGateEnable, eGateModeAmpWr, eGateModeTofWr, eGateRectificationWr, dGateThresholdPercentWr)) bRet = false;
-				}
+//				for (int iGateIndex = 0; iGateIndex < g_iOEMPAGateCountMax; iGateIndex++) {
+//					if (!m_pHWDeviceOEMPA->SetGateModeThreshold(nCycle, iGateIndex, bGateEnable, eGateModeAmpWr, eGateModeTofWr, eGateRectificationWr, dGateThresholdPercentWr)) bRet = false;
+//				}
 
 
 				//Cyle Pulser
@@ -1188,7 +1195,31 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent)
 				ZeroMemory(fArray, sizeof fArray);
 				if (!m_pHWDeviceOEMPA->SetReceptionGains(nCycle, adwHWAperture, fArray))														bRet = false;
 				if (!m_pHWDeviceOEMPA->SetGainAnalog(nCycle, pProbe->m_fAnalogueGain))															bRet = false;
-				if (!setFilter(pProbe, nCycle))																								bRet = false;
+				if (!setFilter(pProbe, nCycle))																									bRet = false;
+
+				if (nWhichMask & _SET_PA_DAC) {
+					if (!m_pHWDeviceOEMPA->EnableDAC(nCycle, pProbe->m_bDacEnable)) bRet = false;
+					if (!m_pHWDeviceOEMPA->SetDACGain(true, nCycle, nDacCount, dDacTime, fDacGain)) bRet = false;
+
+					int nGate = 0;
+					double dThresholdPercent = (double)theApp.m_UtUser.m_TS[0].Gate.nThreshold[0];
+					enumGateModeAmp eGateModeAmp = eAmpMaximum;
+					enumGateModeTof eGateModeTof = eTofThresholdCross;
+					enumRectification eGateRectification = eSigned;
+					double dGateStart = (double)theApp.m_UtUser.m_TS[0].Gate.nNsDelay[0] * 1.0e-9;
+					double dGateStop = (double)(theApp.m_UtUser.m_TS[0].Gate.nNsWidth[0] + theApp.m_UtUser.m_TS[0].Gate.nNsDelay[0]) * 1.0e-9;
+					int iTrackingCycleIndex = 0;
+					int iTrackingGateIndex = 0;
+					bool bEnable;
+					pProbe->getDacMode() == 1 ? bEnable = true : bEnable = false;
+
+					if (!m_pHWDeviceOEMPA->SetGateModeThreshold(nCycle, nGate, bEnable, dThresholdPercent, eGateModeAmp, eGateModeTof, eGateRectification)) bRet = false;
+					if (!m_pHWDeviceOEMPA->SetGateStart(nCycle, nGate, dGateStart)) bRet = false;
+					if (!m_pHWDeviceOEMPA->SetGateStop(nCycle, nGate, dGateStop)) bRet = false;
+					iTrackingCycleIndex = nCycle;
+					if (!m_pHWDeviceOEMPA->SetTrackingDac(nCycle, bEnable, iTrackingCycleIndex, iTrackingGateIndex)) bRet = false;
+				}
+
 			}
 		}
 		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {

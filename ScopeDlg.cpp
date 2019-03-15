@@ -1418,13 +1418,23 @@ void CScopeDlg::SetRfInputType(int nType)
 }
 
 
+int CScopeDlg::EnumerateTimeSlot()
+{
+	if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
+		return theApp.m_LSA.m_nScopeViewLaw;
+	}
+	else {
+		return m_nTimeSlot;
+	}
+}
 
 bool CScopeDlg::FindNearestGate(CPoint point, CRect rr, int *nGate, int *nEnd)
 {
+	int nTS = EnumerateTimeSlot();
 	int	nStart,nFinish,gg,nMaxDx,nTemp;
-	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
-	GatesData* pGates = &theApp.m_UtUser.m_TS[m_nTimeSlot].Gate;
-	DSP200Data* pDsp = &theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp;
+	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[nTS].Adc;
+	GatesData* pGates = &theApp.m_UtUser.m_TS[nTS].Gate;
+	DSP200Data* pDsp = &theApp.m_UtUser.m_TS[nTS].Dsp;
 	bool bFlag=FALSE;
 
 	point.x-=rr.left;
@@ -1520,18 +1530,13 @@ void CScopeDlg::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
-	int nTimeSlot = m_nTimeSlot;
-
-	if((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY)) {
-		nTimeSlot = theApp.m_LSA.m_nScopeViewLaw;
-		nTimeSlot = 0;
-	}
+	int nTS = EnumerateTimeSlot();
 
 	CRect	rr;
 	int	nStart,nFinish,nInterfacePos;
-	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[nTimeSlot].Adc;
-	GatesData* pGates = &theApp.m_UtUser.m_TS[nTimeSlot].Gate;
-	DSP200Data* pDsp = &theApp.m_UtUser.m_TS[nTimeSlot].Dsp;
+	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[nTS].Adc;
+	GatesData* pGates = &theApp.m_UtUser.m_TS[nTS].Gate;
+	DSP200Data* pDsp = &theApp.m_UtUser.m_TS[nTS].Dsp;
 	float fGain;
 	static CPoint ptLast;
 
@@ -1585,7 +1590,7 @@ void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 			RefreshLockVariables();
 			CMainFrame*  pFrame =  (CMainFrame*)AfxGetApp()->m_pMainWnd;
 
-			theApp.m_UtUser.Dsp200CalculateHardware(nTimeSlot,m_nGate);
+			theApp.m_UtUser.Dsp200CalculateHardware(nTS,m_nGate);
 
 			if (((theApp.m_LSA.IsConnected()) && (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY)) || theApp.m_AOSPhasedArray.IsConnected()) {
 				if (theApp.m_PhasedArray[PORTSIDE].getDacMode() == 1) {
@@ -1595,11 +1600,11 @@ void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 
 			if(pFrame->m_pUltrasonicsSheet) {
 				if(pFrame->m_pUltrasonicsSheet->m_pGatesPage) {
-					pFrame->m_pUltrasonicsSheet->m_pGatesPage->SetGateTimeSlot(m_nGate,nTimeSlot);
+					pFrame->m_pUltrasonicsSheet->m_pGatesPage->SetGateTimeSlot(m_nGate, nTS);
 					pFrame->m_pUltrasonicsSheet->m_pGatesPage->UpdateAllControls();
 				}
 			}
-			CopyGates();
+			CopyGates(nTS);
 		};
 
 		if((m_bModifyDacPosition==TRUE) && (ptLast != point)) {
@@ -1615,12 +1620,12 @@ void CScopeDlg::OnMouseMove(UINT nFlags, CPoint point)
 			}
 			fGain = (float)(20.0 * log10(theApp.m_LastSettings.fDACRefAmplitude/fGain));
 
-			Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[nTimeSlot].Pr30;
+			Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[nTS].Pr30;
 			int	nT = pPr30->nDacTable;
 			pPr30->fDacGain[nT][m_nWhichDacPt]=fGain;
 			DacTableChanged();
 			ptLast = point;
-			CopyDAC();
+			CopyDAC(nTS);
 		}
 	}
 
@@ -1853,6 +1858,7 @@ void CScopeDlg::OnScopeDacrefamplitude()
 
 void CScopeDlg::OnScopeStoredacpoint()
 {
+	int nTS = EnumerateTimeSlot();
 	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
 	Pr30Data* pPr30 = &theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30;
 	CPhasedArrayProbe* pPA = &theApp.m_PhasedArray[PORTSIDE];
@@ -1865,7 +1871,7 @@ void CScopeDlg::OnScopeStoredacpoint()
 	ScreenToClient(&rr);
 	ScreenToClient(&m_ptClient);
 
-	if(FindDACStartPt(&nStart) == FALSE) return;
+	if(FindDACStartPt(&nStart, nTS) == FALSE) return;
 
 	float fDelay = (float)(MulDiv((m_ptClient.x-rr.left),pAdc->nAcqLength,rr.Width())-nStart) * pAdc->fSamplePeriod;
 	fDelay = fDelay / 1000.0f;
@@ -1964,9 +1970,9 @@ void CScopeDlg::OnScopeDisplaydacpoints()
 }
 
 
-bool CScopeDlg::FindDACStartPt(int *nStart)
+bool CScopeDlg::FindDACStartPt(int *nStart, int nTS)
 {
-	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
+	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[0].Adc;
 	int xx;
 	*nStart = -1;
 	int nDacTriggerThreshold = 0;
@@ -1978,13 +1984,13 @@ bool CScopeDlg::FindDACStartPt(int *nStart)
 			return true;
 		}
 		else {
-			*nStart = theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nTimeSample[0];
-			return theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nTimeStatus[0];
+			*nStart = theApp.m_UtUser.m_TS[nTS].Gate.nTimeSample[0];
+			return theApp.m_UtUser.m_TS[nTS].Gate.nTimeStatus[0];
 		}
 	}
 	else {
-		nDacBlanking = theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30.nDacBlanking;
-		nDacTriggerThreshold = theApp.m_UtUser.m_TS[m_nTimeSlot].Pr30.nDacTriggerThreshold;
+		nDacBlanking = theApp.m_UtUser.m_TS[nTS].Pr30.nDacBlanking;
+		nDacTriggerThreshold = theApp.m_UtUser.m_TS[nTS].Pr30.nDacTriggerThreshold;
 	}
 
 	if(theApp.m_LastSettings.nDacMaxThreshold == 0) theApp.m_LastSettings.nDacMaxThreshold = 100;
@@ -1997,7 +2003,7 @@ bool CScopeDlg::FindDACStartPt(int *nStart)
 	int nThreshold = MulDiv(nDacTriggerThreshold-128,theApp.m_LastSettings.nDacMaxThreshold, 100);
 
 	for( ;xx<(int)pAdc->nAcqLength;xx++) {
-		if(theApp.m_Scope.m_RFTrace[m_nTimeSlot][xx] > nThreshold) {
+		if(theApp.m_Scope.m_RFTrace[nTS][xx] > nThreshold) {
 			*nStart = xx;
 			return TRUE;
 		}
@@ -2021,10 +2027,12 @@ void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
 {
 	if (theApp.m_Scope.m_cDisplayDACPtsMask == 0) return;
 
+	int nTS = EnumerateTimeSlot();
+
 	CPhasedArrayProbe* pPA = &theApp.m_PhasedArray[PORTSIDE];
 	int	nStart;
 	int	ii,nPnX,nPnY;
-	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[m_nTimeSlot].Adc;
+	ADC200Data* pAdc = &theApp.m_UtUser.m_TS[0].Adc;
 	float fGain,fDelay;
 	CPen penWhite(PS_SOLID, 1, RGB(255, 255, 255));
 	CPen penGrey(PS_SOLID, 1, RGB(128, 128, 128));
@@ -2047,7 +2055,7 @@ void CScopeDlg::DrawDacPtsPhasedArray(CDC *pDC,CRect rr)
 	pDC->SelectObject(pOldPen);
 
 
-	if(FindDACStartPt(&nStart)==FALSE) return;
+	if(FindDACStartPt(&nStart, nTS)==FALSE) return;
 
 	//Put the crosses up
 	for(ii=0;ii<64;ii++) {
@@ -2100,7 +2108,7 @@ void CScopeDlg::DrawDacPtsPR(CDC *pDC, CRect rr)
 	float fGain, fDelay;
 
 
-	if (FindDACStartPt(&nStart) == FALSE) return;
+	if (FindDACStartPt(&nStart, m_nTimeSlot) == FALSE) return;
 
 	CPen penWhite(PS_SOLID, 1, RGB(255, 255, 255));
 	CPen penGrey(PS_SOLID, 1, RGB(128, 128, 128));
@@ -2648,32 +2656,32 @@ void CScopeDlg::CopyScopeDelayWidth()
 	}
 }
 
-void CScopeDlg::CopyGates()
+void CScopeDlg::CopyGates(int nSrcTs)
 {
 	for(int nTS=0;nTS<256;nTS++) {
 		if(theApp.m_LastSettings.n64CopyUtVariable & _UT_GATE_MODE || theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nGateMode, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nGateMode, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nGateMode);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nGateMode, theApp.m_UtUser.m_TS[nSrcTs].Gate.nGateMode, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nGateMode);
 		}
 		if(theApp.m_LastSettings.n64CopyUtVariable & _UT_GATE_DELAY || theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nNsDelay, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nNsDelay, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nNsDelay);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nSampleDelay, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nSampleDelay, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nSampleDelay);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.Delay, theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.Delay, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.Delay);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nNsDelay, theApp.m_UtUser.m_TS[nSrcTs].Gate.nNsDelay, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nNsDelay);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nSampleDelay, theApp.m_UtUser.m_TS[nSrcTs].Gate.nSampleDelay, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nSampleDelay);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.Delay, theApp.m_UtUser.m_TS[nSrcTs].Dsp.Delay, sizeof theApp.m_UtUser.m_TS[nSrcTs].Dsp.Delay);
 		}
 		if(theApp.m_LastSettings.n64CopyUtVariable & _UT_GATE_WIDTH || theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nNsWidth, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nNsWidth, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nNsWidth);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nSampleWidth, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nSampleWidth, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nSampleWidth);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.Width, theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.Width, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.Width);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nNsWidth, theApp.m_UtUser.m_TS[nSrcTs].Gate.nNsWidth, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nNsWidth);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nSampleWidth, theApp.m_UtUser.m_TS[nSrcTs].Gate.nSampleWidth, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nSampleWidth);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.Width, theApp.m_UtUser.m_TS[nSrcTs].Dsp.Width, sizeof theApp.m_UtUser.m_TS[nSrcTs].Dsp.Width);
 		}
 		if(theApp.m_LastSettings.n64CopyUtVariable & _UT_GATE_THRESHOLD || theApp.m_LastSettings.nDesiredDevice==PHASED_ARRAY) {
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nThreshold, theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nThreshold, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Gate.nThreshold);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.InterfaceThreshold, theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.InterfaceThreshold, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.InterfaceThreshold);
-			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.SignDetect, theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.SignDetect, sizeof theApp.m_UtUser.m_TS[m_nTimeSlot].Dsp.SignDetect);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Gate.nThreshold, theApp.m_UtUser.m_TS[nSrcTs].Gate.nThreshold, sizeof theApp.m_UtUser.m_TS[nSrcTs].Gate.nThreshold);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.InterfaceThreshold, theApp.m_UtUser.m_TS[nSrcTs].Dsp.InterfaceThreshold, sizeof theApp.m_UtUser.m_TS[nSrcTs].Dsp.InterfaceThreshold);
+			CopyMemory(theApp.m_UtUser.m_TS[nTS].Dsp.SignDetect, theApp.m_UtUser.m_TS[nSrcTs].Dsp.SignDetect, sizeof theApp.m_UtUser.m_TS[nSrcTs].Dsp.SignDetect);
 		}
 	}
 
 }
 
-void CScopeDlg::CopyDAC()
+void CScopeDlg::CopyDAC(int nSrcTs)
 {
 
 }

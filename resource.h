@@ -3743,8 +3743,11 @@
 #define IDC_COMBO_AVERAGES              4053
 #define IDC_COMBO_DANGER_PLANE_DIR      4053
 #define IDC_COMBO_ENABLE                4053
+#define IDC_COMBO_FIRST_ELEMENT_TX      4053
 #define IDC_CHECK_SAVE                  4054
+#define IDC_COMBO_LAST_ELEMENT_TX       4054
 #define IDC_STATIC_SAVE                 4055
+#define IDC_COMBO_FIRST_ELEMENT_RX      4055
 #define IDC_SPIN1                       4056
 #define IDC_SPIN_STARTOFFSET            4056
 #define IDC_SPIN_X_0                    4056
@@ -3754,6 +3757,8 @@
 #define IDC_SPIN_FOCAL_LAW              4056
 #define IDC_SPIN_Y_0                    4057
 #define IDC_EDIT_DATA_RATE              4057
+#define IDC_COMBO_LAST_ELEMENT_TX2      4057
+#define IDC_COMBO_LAST_ELEMENT_RX       4057
 #define IDC_SPIN_Z_0                    4058
 #define IDC_EDIT_ASCAN_LENGTH           4058
 #define IDC_SPIN_X_1                    4059

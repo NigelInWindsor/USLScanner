@@ -113,20 +113,20 @@ bool CEvaluationDlg::FindSelfDestructDate(CString GUID, time_t* pSelfDestructDat
 		if (!RegKey.QueryQWORDValue(L"68658469", ullTemp)) { //68-D 65-A 84-T 69-E
 			*pSelfDestructDate = ullTemp;
 		} else {
-			RegKey.Close();
-			return false; //If we dont find a date then we dont have a machine ID
+//			RegKey.Close();
+//			return false; //If we dont find a date then we dont have a machine ID
 		};
 
 		if (!RegKey.QueryStringValue(L"ID", str, &(nLength = sizeof str))) {
 			Buff.Format(_T("%s"), str);
 			theApp.CStringToChar(Buff, m_MachineID);
 		} else {
-			RegKey.Close(); //If we cant find a machine Id then this is an error condition
-			return false;
+//			RegKey.Close(); //If we cant find a machine Id then this is an error condition
+//			return false;
 		};
 
 		if (!RegKey.QueryQWORDValue(L"Needs code", m_ullNeedsCode)) { //68-D 65-A 84-T 69-E
-			*pSelfDestructDate = ullTemp;
+
 		}
 		else {
 			RegKey.Close();

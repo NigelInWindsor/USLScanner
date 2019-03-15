@@ -6257,13 +6257,14 @@ void CUSLut::RefreshAllVariables(int nJobNumber)
 {
 	
 	int	nTS;
-	int	nOldTimeSlot=m_Global.nTimeSlot;
 	InitializeAddrs();
 	if(m_Pm30CommDevice==NONE) return;
 
-
 	if(m_Global.Mux.nMaxTimeslots<=0)m_Global.Mux.nMaxTimeslots=1;
 	if(m_Global.Mux.nMaxTimeslots>8)m_Global.Mux.nMaxTimeslots=8;
+	MinMax(&m_Global.nTimeSlot, 0, 7);
+	int	nOldTimeSlot = m_Global.nTimeSlot;
+
 	switch(m_Global.nTriggerSource) {
 	case USL_PR20:
 	case USL_PR30:

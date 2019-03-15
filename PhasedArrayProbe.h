@@ -14,6 +14,12 @@
 #define	TX_FL		0
 #define	RX_FL		1
 
+#define	_SET_PA_DAC			0x00001
+#define	_SET_PA_GATES		0x00002
+#define	_SET_PA_GAINS		0x00004
+#define	_SET_PA_FOCALLAWS	0x00008
+
+
 enum ProbeType {
 	LINEAR_FLAT,
 	LINEAR_CONCAVE,
@@ -52,7 +58,7 @@ public:
 	CString & getstrFocalLawPos(int nTxRx, int nIndex);
 	float getTxDelay(int nFL, int nElement);
 	float getRxDelay(int nFL, int nTOF, int nElement);
-	void DownloadAllToHardware();
+	void DownloadAllToHardware(int nMask);
 	void DownloadTxFocalLawsToHardware();
 	void DownloadRxFocalLawsToHardware();
 	ULONGLONG getElementEnableMask(int nFL, int nTxRx);

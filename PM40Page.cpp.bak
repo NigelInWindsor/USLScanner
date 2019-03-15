@@ -181,9 +181,7 @@ void CPM40Page::OnTimer(UINT_PTR nIDEvent)
 	Temp.Format(L"expected Slot number wrong %d\r\n", theApp.m_PM40User.m_nExpectedSlotNumberWrong);	Buff += Temp;
 	Temp.Format(L"Number of maibox bytes %d\r\n", theApp.m_PM40User.m_nTotalMailboxBytesSent);				Buff += Temp;
 	Temp.Format(L"Number of mailbox commands %d\r\n", theApp.m_PM40User.m_nTotalCommandsSent);				Buff += Temp;
-//	Temp.Format(L"Timeslot Last: %d Total: %d\r\n", theApp.m_UtUser.m_nLastWriteTimeSlot, theApp.m_UtUser.m_nTimeSlotCount);				Buff += Temp;
-//	Temp.Format(L"Pulse volatge: %d\r\n", theApp.m_UtUser.m_nPulseVoltageCount);		Buff += Temp;
-	
+
 	
 	m_editGeneral.SetWindowTextW(Buff);
 

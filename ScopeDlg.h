@@ -23,9 +23,9 @@ class CScopeDlg : public CDialog
 // Construction
 public:
 	CString m_ThreadName;
-	void CopyDAC();
-	void CopyGates();
+	void CopyDAC(int nSrcTs);
 	void CopyScopeDelayWidth();
+	void CopyGates(int nSrcTs);
 	int		MinMax(int* pnV,int nMin,int nMax);
 	CString m_WindowName;
 	int m_nMaxSample;
@@ -57,7 +57,6 @@ public:
 	CPoint m_ptDac[64];
 	bool FindNearestDacPt(CPoint point,CRect rr, int *nPt);
 	void DacTableChanged();
-	bool FindDACStartPt(int *nStart);
 	void RefreshLockVariables();
 	void CheckLockDelayFromZHeight();
 	double m_fInitialZPosLock;
@@ -85,6 +84,7 @@ public:
 	int m_nArrayHeight;
 
 	bool bModifyGatePosition;
+	int EnumerateTimeSlot();
 	bool FindNearestGate(CPoint point,CRect rr,int *nGate,int *nEnd);
 	HRESULT RefreshScopeDisplay(WPARAM, LPARAM);
 	void SetRfInputType(int nType);
@@ -164,6 +164,7 @@ protected:
 	afx_msg void OnScopeDacrefamplitude();
 	afx_msg void OnScopeStoredacpoint();
 	afx_msg void OnScopeDisplaydacpoints();
+	bool FindDACStartPt(int * nStart, int nTS);
 	afx_msg void OnScopeDeletedacpoint();
 	afx_msg void OnScopeSaveasbmp();
 	afx_msg void OnScopeStartrecording();
