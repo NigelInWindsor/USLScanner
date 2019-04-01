@@ -540,7 +540,7 @@ BOOL CUSLScannerApp::InitInstance()
 	}
 
 	m_DataTranslationHW.Start();
-
+	
 	if (m_Tank.bConnectAOSAtStartUp[0]) {
 		m_pBootUpDlg->UpdatePrompt(L"Starting AOS Phased Array");
 		if (m_AOSPhasedArray.Connect(m_Tank.nAOSIPAddrs[0])) {
@@ -548,6 +548,7 @@ BOOL CUSLScannerApp::InitInstance()
 		}
 	}
 	Buff = L"Initializing Phased array units"; m_pBootUpDlg->UpdatePrompt(Buff);
+	theApp.m_PhasedArray[PORTSIDE].CalculateElementCoordinates();
 	theApp.m_PhasedArray[PORTSIDE].CalculateTxFocalLaws();
 	theApp.m_PhasedArray[PORTSIDE].CalculateRxFocalLaws();
 	theApp.m_PhasedArray[PORTSIDE].DownloadAllToHardware(0xFFFFFF);

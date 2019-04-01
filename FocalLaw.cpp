@@ -16,6 +16,7 @@ CFocalLawTxRx::CFocalLawTxRx()
 	m_nLastElement = 5;
 	m_nFocalTOFCount = 1;
 	m_fBeamAngle = 0.0f;
+	m_fGain = 0.0f;
 
 	ZeroMemory(m_fTxDelay, sizeof m_fTxDelay);
 	ZeroMemory(m_fPulseWidth, sizeof m_fPulseWidth);
@@ -166,4 +167,14 @@ float CFocalLawTxRx::getRxDelay(int nTOF, int nElement)
 {
 	return m_fRxDelay[nTOF][nElement];
 
+}
+
+float CFocalLawTxRx::getGain()
+{
+	return m_fGain;
+}
+
+float CFocalLawTxRx::setGain(float fGain)
+{
+	return m_fGain = fGain;
 }

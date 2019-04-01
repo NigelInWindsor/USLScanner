@@ -328,7 +328,7 @@ void CEthercat::Si10CallBack()
 			break;
 		case RAILWAY_AXLE: nLength = sizeof RailwayAxleIO;
 			break;
-		case QUICKSTEP_FLATBED:
+		case TANK_2AXIS:
 		case TANK_5AXIS: nLength = sizeof Tank5AxisIO;
 			break;
 		case TANK_6AXIS: nLength = sizeof Tank6AxisIO;
@@ -756,7 +756,7 @@ void CEthercat::InvalidateRobotJoints()
 
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		pTank5AxisIO[0] = (Tank5AxisIO*)&EthercatIO[0];
 		pTank5AxisIO[1] = (Tank5AxisIO*)&EthercatIO[1];
 
@@ -795,6 +795,12 @@ void CEthercat::InvalidateRobotJoints()
 			theApp.m_Axes[theApp.m_Tank.nXRight].nStatus = theApp.m_Axes[theApp.m_Tank.nYRight].nStatus = theApp.m_Axes[theApp.m_Tank.nZRight].nStatus = 0;
 			theApp.m_Axes[theApp.m_Tank.nXtRight].nStatus = theApp.m_Axes[theApp.m_Tank.nYtRight].nStatus = 0;
 		}
+		theApp.m_FBCtrl.m_nEStopStatus[0] = pTank5AxisIO[0]->cEStopStatus & 1;
+		theApp.m_FBCtrl.m_nEStopStatus[1] = pTank5AxisIO[0]->cEStopStatus & 1;
+		theApp.m_FBCtrl.m_nPumpStatus[0] = (pTank5AxisIO[0]->cPumpStatus >> 0) & 1;
+		theApp.m_FBCtrl.m_nPumpStatus[1] = (pTank5AxisIO[0]->cPumpStatus >> 1) & 1;
+		theApp.m_FBCtrl.m_nAirKnifeStatus[0] = (pTank5AxisIO[0]->cAirKnifeStatus >> 0) & 1;
+		theApp.m_FBCtrl.m_nAirKnifeStatus[1] = (pTank5AxisIO[0]->cAirKnifeStatus >> 1) & 1;
 
 		break;
 	case TANK_6AXIS:
@@ -962,7 +968,7 @@ bool CEthercat::ReportPumpStatus(int nAxis, int nSide)
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		if(theApp.m_FBCtrl.m_nPumpStatus[nSide] & 1) return true;
 		break;
@@ -1004,7 +1010,7 @@ int	CEthercat::GetInputPort()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 
 		return theApp.m_FBCtrl.m_nEStopStatus[0] & 1;
 		break;
@@ -1315,7 +1321,7 @@ CString &CEthercat::getLifeCount()
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 
 		strLifeCount.Format(L"Life count: %d",pHengshenIO->cLife);
@@ -1343,7 +1349,7 @@ CString &CEthercat::getCoordStatus(int nCoord)
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case FB_TWIN_TOWER:
 	case TWIN_TOWER_KINEMATIC:
 		strCoordStatus.Format(L"Coord status %d: %04x",nCoord, pHengshenIO->cCoordStatus[nCoord]);
@@ -1379,7 +1385,7 @@ CString &CEthercat::getEncoderPos(int nAxis)
 		break;
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		strEncoderPos.Format(L"Encoder pos[%d]: %d", nAxis + 1, m_32AxisIO[0].nEncoderPos[nAxis]);
 		break;
@@ -1415,7 +1421,7 @@ CString &CEthercat::getStrAxisStatus(int nAxis)
 		break;
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		strAxisStatus.Format(L"0x%02x", m_32AxisIO[0].cAxisStatus[nAxis]);
 		break;
@@ -1450,8 +1456,10 @@ int CEthercat::getAxisStatus(int nAxis)
 		return ConvertAxisStatusToPmacAxisStatus(pRailwayAxleIO->cAxisStatus[nAxis]);
 		break;
 	case TANK_5AXIS:
+	case TANK_2AXIS:
+		return ConvertAxisStatusToPmacAxisStatus(pTank5AxisIO->cAxisStatus[nAxis]);
+		break;
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
 		return ConvertAxisStatusToPmacAxisStatus(pTank6AxisIO->cAxisStatus[nAxis]);
 		break;
 	case TWIN_TOWER_KINEMATIC:
@@ -1468,6 +1476,8 @@ CString &CEthercat::getAirKnifeStatus()
 	HengshenIO *pHengshenIO = (HengshenIO*)&m_EthercatIO[0];
 	SPXRobotIO *pSPXRobotIO = (SPXRobotIO*)&m_EthercatIO[0];
 	TwinRobotIO *pTwinRobotIO = (TwinRobotIO*)&m_EthercatIO[0];
+	Tank5AxisIO* pTank5AxisIO = (Tank5AxisIO*)&m_EthercatIO[0];
+
 
 
 	switch(getDataFormat()) {
@@ -1481,6 +1491,10 @@ CString &CEthercat::getAirKnifeStatus()
 	case DUAL_ROBOT:
 		strAirKnifeStatus.Format(L"Air Knife[1:2]: %d",(pSPXRobotIO->cGeneralStatus >> 3) & 0x03);
 		break;
+	case TANK_5AXIS:
+	case TANK_2AXIS:
+		strAirKnifeStatus.Format(L"Air Knife[1:2]: %d", pTank5AxisIO->cAirKnifeStatus);
+		break;
 	}
 
 	return strAirKnifeStatus;
@@ -1491,6 +1505,7 @@ CString &CEthercat::getEStopStatus()
 	static CString strEStopStatus;
 	//HengshenIO *pHengshenIO = (HengshenIO*)&m_EthercatIO[0];
 	SPXRobotIO *pSPXRobotIO = (SPXRobotIO*)&m_EthercatIO[0];
+	Tank5AxisIO* pTank5AxisIO = (Tank5AxisIO*)&m_EthercatIO[0];
 
 	switch(getDataFormat()) {
 	default: strEStopStatus.Empty();
@@ -1498,6 +1513,10 @@ CString &CEthercat::getEStopStatus()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 		strEStopStatus.Format(L"E Stop: %d",(pSPXRobotIO->cGeneralStatus >> 0) & 0x01);
+		break;
+	case TANK_5AXIS:
+	case TANK_2AXIS:
+		strEStopStatus.Format(L"E Stop: %d", pTank5AxisIO->cEStopStatus);
 		break;
 	}
 
@@ -1511,6 +1530,7 @@ CString &CEthercat::getPumpStatus()
 	TwinRobotIO *pTwinRobotIO = (TwinRobotIO*)&m_EthercatIO[0];
 	SPXRobotIO *pSPXRobotIO = (SPXRobotIO*)&m_EthercatIO[0];
 	Tank10AxisIO *pTank10AxisIO = (Tank10AxisIO*)&m_EthercatIO[0];
+	Tank5AxisIO* pTank5AxisIO = (Tank5AxisIO*)&m_EthercatIO[0];
 
 	switch(getDataFormat()) {
 	default: strPumpStatus.Empty();
@@ -1525,6 +1545,10 @@ CString &CEthercat::getPumpStatus()
 		break;
 	case TWIN_TOWER_KINEMATIC:
 		strPumpStatus.Format(L"Pump[1:2]: %d", pTank10AxisIO->cPumpStatus & 0x03);
+		break;
+	case TANK_5AXIS:
+	case TANK_2AXIS:
+		strPumpStatus.Format(L"Pump[1:2]: %d", pTank5AxisIO->cPumpStatus);
 		break;
 	}
 
@@ -1604,7 +1628,7 @@ int CEthercat::EncoderPos(int nAxis)
 		break;
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		return m_32AxisIO[0].nEncoderPos[nAxis];
 		break;
@@ -1659,7 +1683,7 @@ int CEthercat::getMotorStatus(int nMotor)
 		break;
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		return m_32AxisIO[0].cAxisStatus[nMotor];
 		break;

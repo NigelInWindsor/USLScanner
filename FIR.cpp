@@ -795,16 +795,16 @@ void CFIR::remez(int numband, double bands[], double des[], double weight[],
          if (nNumTaps%2)
             c = 1;
          else
-            c = cos(Pi * (double)i/nNumTaps);
+            c = cos(Pi * (double)i/(double)nNumTaps);
       }
       else
       {
          if (nNumTaps%2)
-            c = sin(Pi2 * (double)i/nNumTaps);
+            c = sin(Pi2 * (double)i/ (double)nNumTaps);
          else
-            c = sin(Pi * (double)i/nNumTaps);
+            c = sin(Pi * (double)i/ (double)nNumTaps);
       }
-      taps[i] = ComputeA((double)i/nNumTaps, r, ad, x, y)*c;
+      taps[i] = ComputeA((double)i/ (double)nNumTaps, r, ad, x, y)*c;
    }
 
 /*

@@ -202,7 +202,7 @@ public:
 	unsigned char m_ArrayFlag[MAX_NUMBER_STRINGS];
 	CString m_LastSendStr;
 	int	getRxArraySize();
-	CString getRxArrayAt(int nIndex);
+	CString & getRxArrayAt(int nIndex);
 	int GetRxFlagAt(int nIndex);
 	void AddRxStr(CString * pBuff);
 
@@ -256,6 +256,8 @@ public:
 	void SetHomePos(int nAxis, int nHomePos);
 	void SetHomePos(int nAxis);
 	void SetHomePosAll();
+
+	CRITICAL_SECTION	m_CriticalSection;
 
 	CFieldBusController();
 	virtual ~CFieldBusController();

@@ -2,6 +2,11 @@
 #include "USLScanner.h"
 #include "CPhasedArrayFocalLawsDlg.h"
 
+#define U_APPLY_FOCAL_LAWS		0x0000100
+#define U_BEAM_CORRECTION_GAIN	0x0000200
+
+extern UINT FocalLawsThread(LPVOID pParam);
+
 void CPhasedArrayFocalLawsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CResizablePage::DoDataExchange(pDX);
@@ -41,6 +46,8 @@ void CPhasedArrayFocalLawsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_LAST_ELEMENT_TX, m_comboLastElementTx);
 	DDX_Control(pDX, IDC_COMBO_FIRST_ELEMENT_RX, m_comboFirstElementRx);
 	DDX_Control(pDX, IDC_COMBO_LAST_ELEMENT_RX, m_comboLastElementRx);
+	DDX_Control(pDX, IDC_EDIT_GAIN, m_editGain);
+	DDX_Control(pDX, IDC_SPIN_GAIN, m_spinGain);
 }
 
 CPhasedArrayFocalLawsDlg::CPhasedArrayFocalLawsDlg()
@@ -48,11 +55,14 @@ CPhasedArrayFocalLawsDlg::CPhasedArrayFocalLawsDlg()
 
 {
 	m_nSide = 0;
+	m_nUpdateHardware = 0;
 }
 
 
 CPhasedArrayFocalLawsDlg::~CPhasedArrayFocalLawsDlg()
 {
+	theApp.SuspendThread(this);
+
 }
 
 BEGIN_MESSAGE_MAP(CPhasedArrayFocalLawsDlg, CResizablePage)
@@ -84,6 +94,8 @@ BEGIN_MESSAGE_MAP(CPhasedArrayFocalLawsDlg, CResizablePage)
 	ON_CBN_SELCHANGE(IDC_COMBO_FIRST_ELEMENT_RX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementRx)
 	ON_CBN_SELCHANGE(IDC_COMBO_LAST_ELEMENT_RX, &CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementRx)
 	ON_EN_CHANGE(IDC_EDIT_TX_FOCAL_LENGTH, &CPhasedArrayFocalLawsDlg::OnEnChangeEditTxFocalLength)
+	ON_EN_CHANGE(IDC_EDIT_GAIN, &CPhasedArrayFocalLawsDlg::OnEnChangeEditGain)
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_GAIN, &CPhasedArrayFocalLawsDlg::OnDeltaposSpinGain)
 END_MESSAGE_MAP()
 
 
@@ -103,6 +115,8 @@ BOOL CPhasedArrayFocalLawsDlg::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
+	m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
+
 	m_spinFocalLaw.SetRange(0, 128);
 
 	m_spinTxAperture.SetRange(1, 16);
@@ -110,6 +124,8 @@ BOOL CPhasedArrayFocalLawsDlg::OnInitDialog()
 	m_spinTxBeamAngle.SetRange(0, 7200);
 	m_spinRxBeamAngle.SetRange(0, 7200);
 	m_spinTxFocalLength.SetRange(0, 1000);
+	m_spinGain.SetRange(0,100);
+
 	for (int nTOF = 0; nTOF < 4; nTOF++)
 		m_spinRxFocalLength[nTOF].SetRange(0, 1000);
 
@@ -146,6 +162,8 @@ BOOL CPhasedArrayFocalLawsDlg::OnSetActive()
 		m_comboRXFocalLawPitch.AddString(Buff);
 	}
 
+	StartThread();
+
 	UpdateAllControls();
 
 	return CResizablePage::OnSetActive();
@@ -154,9 +172,47 @@ BOOL CPhasedArrayFocalLawsDlg::OnSetActive()
 
 BOOL CPhasedArrayFocalLawsDlg::OnKillActive()
 {
-	// TODO: Add your specialized code here and/or call the base class
+	SuspendThread();
 
 	return CResizablePage::OnKillActive();
+}
+
+void CPhasedArrayFocalLawsDlg::StartThread()
+{
+	theApp.StartThread(L"Phased array focal laws Dlg", &FocalLawsThread, this, 200, THREAD_PRIORITY_NORMAL);
+}
+
+void CPhasedArrayFocalLawsDlg::SuspendThread()
+{
+	theApp.SuspendThread(this);
+}
+
+UINT FocalLawsThread(LPVOID pParam)
+{
+	CPhasedArrayFocalLawsDlg* pParent = (CPhasedArrayFocalLawsDlg*)pParam;
+
+	TRACE0("Focal laws waiting\n");
+	if (WaitForSingleObject(pParent->m_hSemaphore, 10) == WAIT_OBJECT_0) {
+
+		if (pParent->GetSafeHwnd() && pParent->IsWindowVisible() == TRUE) {
+
+			int nFL = theApp.m_LSA.m_nScopeViewLaw;
+
+			if (pParent->m_nUpdateHardware & U_APPLY_FOCAL_LAWS) {
+				pParent->ApplyFocalLaws();
+				pParent->m_nUpdateHardware &= ~U_APPLY_FOCAL_LAWS;
+			}
+
+			if (pParent->m_nUpdateHardware & U_BEAM_CORRECTION_GAIN) {
+				theApp.m_PhasedArray[PORTSIDE].setBeamCorrectionGain(nFL, true);
+				pParent->m_nUpdateHardware &= ~U_BEAM_CORRECTION_GAIN;
+			}
+		}
+		ReleaseSemaphore(pParent->m_hSemaphore, 1, NULL);
+	}
+	TRACE0("Focal laws waiting completed\n");
+
+	return THREAD_CONTINUE;
 }
 
 void CPhasedArrayFocalLawsDlg::UpdateAllControls()
@@ -186,6 +242,12 @@ void CPhasedArrayFocalLawsDlg::UpdateAllControls()
 	Buff.Format(_T("%d"), theApp.m_LSA.m_nScopeViewLaw + 1);
 	m_editFocalLaw.SetWindowText(Buff);
 	m_spinFocalLaw.SetPos(theApp.m_LSA.m_nScopeViewLaw );
+
+
+	int nFL = theApp.m_LSA.m_nScopeViewLaw;
+	Buff.Format(L"%.01f dB", theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].getGain());
+	m_editGain.SetWindowTextW(Buff);
+	m_spinGain.SetPos(50);
 
 	m_comboFiringOrder.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getFiringOrder());
 
@@ -256,8 +318,9 @@ void CPhasedArrayFocalLawsDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 			Buff.Format(_T("%d"), theApp.m_LSA.m_nScopeViewLaw + 1);
 			m_editFocalLaw.SetWindowText(Buff);
 			m_spinFocalLaw.SetPos(theApp.m_LSA.m_nScopeViewLaw);
-			theApp.m_LSA.CmdSetWriteFL(theApp.m_LSA.m_nScopeViewLaw + 1);
-
+			int nFL = theApp.m_LSA.m_nScopeViewLaw;
+			Buff.Format(L"%.01f dB", theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].getGain());
+			m_editGain.SetWindowTextW(Buff);
 		}
 		break;
 	case IDC_SPIN_TX_APERTURE:
@@ -266,7 +329,7 @@ void CPhasedArrayFocalLawsDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 			theApp.m_PhasedArray[m_nSide].setTxAperture(nTemp);
 			Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getTxAperture());
 			m_editTxAperture.SetWindowText(Buff);
-			ApplyFocalLaws();
+			m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 			UpdateAllControls();
 		};
 		break;
@@ -276,7 +339,7 @@ void CPhasedArrayFocalLawsDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pS
 			theApp.m_PhasedArray[m_nSide].setRxAperture(nTemp);
 			Buff.Format(_T("%d"), theApp.m_PhasedArray[m_nSide].getRxAperture());
 			m_editRxAperture.SetWindowText(Buff);
-			ApplyFocalLaws();
+			m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 			UpdateAllControls();
 		};
 		break;
@@ -312,7 +375,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxAperture()
 
 	if (nTemp - theApp.m_PhasedArray[PORTSIDE].getTxAperture()) {
 		m_spinTxAperture.SetPos(theApp.m_PhasedArray[PORTSIDE].getTxAperture());
-		ApplyFocalLaws();
+		m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 		if (theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX) {
 			Buff.Format(L"%d", theApp.m_PhasedArray[PORTSIDE].getRxAperture());
 			m_editRxAperture.SetWindowText(Buff);
@@ -331,7 +394,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxAperture()
 
 	if (nTemp - theApp.m_PhasedArray[PORTSIDE].getRxAperture()) {
 		m_spinRxAperture.SetPos(theApp.m_PhasedArray[PORTSIDE].getRxAperture());
-		ApplyFocalLaws();
+		m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	};
 }
 
@@ -339,14 +402,14 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxAperture()
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboTxPitch()
 {
 	theApp.m_PhasedArray[m_nSide].setTxFocalLawPitch(m_comboTXFocalLawPitch.GetCurSel() + 1);
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 }
 
 
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboRxPitch()
 {
 	theApp.m_PhasedArray[m_nSide].setRxFocalLawPitch(m_comboRXFocalLawPitch.GetCurSel() + 1);
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 }
 
 
@@ -355,6 +418,7 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboRxPitch()
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFiringOrder()
 {
 	theApp.m_PhasedArray[PORTSIDE].setFiringOrder(m_comboFiringOrder.GetCurSel());
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 }
 
 
@@ -371,7 +435,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxBeamAngle(NMHDR *pNMHDR, LRESULT 
 	theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fAngle, 0);
 	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0), DEGREES);
 	m_editRxBeamAngle.SetWindowText(Buff);
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 
 	*pResult = 0;
 }
@@ -386,7 +450,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxBeamAngle(NMHDR *pNMHDR, LRESULT 
 	theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fAngle, 0);
 	Buff.Format(L"%.01f%s", theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0), DEGREES);
 	m_editTxBeamAngle.SetWindowText(Buff);
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 
 
@@ -405,7 +469,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxBeamAngle()
 	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getTxBeamAngle(0)) {
 		theApp.m_PhasedArray[PORTSIDE].setTxBeamAngle(fTemp, 0);
 		m_spinTxBeamAngle.SetPos((int)(fTemp * 10));
-		ApplyFocalLaws();
+		m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 }
 
@@ -420,7 +484,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxBeamAngle()
 	if (fTemp - theApp.m_PhasedArray[PORTSIDE].getRxBeamAngle(0)) {
 		theApp.m_PhasedArray[PORTSIDE].setRxBeamAngle(fTemp, 0);
 		m_spinRxBeamAngle.SetPos((int)(fTemp * 10));
-		ApplyFocalLaws();
+		m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 }
 
@@ -444,7 +508,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditFocalLaw()
 void CPhasedArrayFocalLawsDlg::OnBnClickedCheckTxEqualsRx()
 {
 	theApp.m_LastSettings.nPhasedArrayMask & PA_RX_EQUAL_TX ? theApp.m_LastSettings.nPhasedArrayMask &= ~PA_RX_EQUAL_TX : theApp.m_LastSettings.nPhasedArrayMask |= PA_RX_EQUAL_TX;
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 }
 
@@ -452,14 +516,14 @@ void CPhasedArrayFocalLawsDlg::OnBnClickedCheckTxEqualsRx()
 void CPhasedArrayFocalLawsDlg::OnBnClickedCheckReverseElements()
 {
 	m_checkReverseElements.GetCheck() == false ? theApp.m_PhasedArray[PORTSIDE].setReverseArray(false) : theApp.m_PhasedArray[PORTSIDE].setReverseArray(true);
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 }
 
 
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementTx()
 {
 	theApp.m_PhasedArray[m_nSide].setTxFirstElement(m_comboFirstElementTx.GetCurSel());
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 }
 
@@ -467,7 +531,7 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementTx()
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementTx()
 {
 	theApp.m_PhasedArray[m_nSide].setTxLastElement(m_comboLastElementTx.GetCurSel());
-	ApplyFocalLaws();
+	m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 }
 
@@ -475,7 +539,7 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementTx()
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementRx()
 {
 	theApp.m_PhasedArray[m_nSide].setRxFirstElement(m_comboFirstElementRx.GetCurSel());
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 }
 
@@ -483,7 +547,7 @@ void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboFirstElementRx()
 void CPhasedArrayFocalLawsDlg::OnCbnSelchangeComboLastElementRx()
 {
 	theApp.m_PhasedArray[m_nSide].setRxLastElement(m_comboLastElementRx.GetCurSel());
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 }
 
@@ -498,7 +562,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinTxFocalLength(NMHDR* pNMHDR, LRESUL
 	theApp.m_PhasedArray[PORTSIDE].setTxFocalLength(fDistance);
 	Buff.Format(L"%.01f mm", theApp.m_PhasedArray[PORTSIDE].getTxFocalLength());
 	m_editTxFocalLength.SetWindowText(Buff);
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	UpdateAllControls();
 
 	*pResult = 0;
@@ -520,7 +584,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxFocalLength0(NMHDR *pNMHDR, LRESU
 		Buff = L"Infinity";
 	}
 	m_editRxFocalLength[nTOF].SetWindowText(Buff);
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	*pResult = 0;
 }
 
@@ -540,7 +604,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxFocalLength1(NMHDR *pNMHDR, LRESU
 		Buff = L"Infinity";
 	}
 	m_editRxFocalLength[nTOF].SetWindowText(Buff);
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	*pResult = 0;
 }
 
@@ -560,7 +624,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxFocalLength2(NMHDR *pNMHDR, LRESU
 		Buff = L"Infinity";
 	}
 	m_editRxFocalLength[nTOF].SetWindowText(Buff);
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	*pResult = 0;
 }
 
@@ -580,7 +644,7 @@ void CPhasedArrayFocalLawsDlg::OnDeltaposSpinRxFocalLength3(NMHDR *pNMHDR, LRESU
 		Buff = L"Infinity";
 	}
 	m_editRxFocalLength[nTOF].SetWindowText(Buff);
-	ApplyFocalLaws();
+	   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	*pResult = 0;
 }
 
@@ -594,7 +658,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxFocalLength0()
 	if (fLength > 1000.0f) fLength = 0.0f;
 	if (fLength - theApp.m_PhasedArray[PORTSIDE].getRxFocalLength(0)) {
 		theApp.m_PhasedArray[PORTSIDE].setRxFocalLength(fLength, 0);
-		ApplyFocalLaws();
+		   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 }
 
@@ -608,7 +672,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxFocalLength1()
 	if (fLength > 1000.0f) fLength = 0.0f;
 	if (fLength - theApp.m_PhasedArray[PORTSIDE].getRxFocalLength(1)) {
 		theApp.m_PhasedArray[PORTSIDE].setRxFocalLength(fLength, 1);
-		ApplyFocalLaws();
+		   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 }
 
@@ -622,7 +686,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxFocalLength2()
 	if (fLength > 1000.0f) fLength = 0.0f;
 	if (fLength - theApp.m_PhasedArray[PORTSIDE].getRxFocalLength(2)) {
 		theApp.m_PhasedArray[PORTSIDE].setRxFocalLength(fLength, 2);
-		ApplyFocalLaws();
+		   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 }
 
@@ -636,7 +700,7 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditRxFocalLength3()
 	if (fLength > 1000.0f) fLength = 0.0f;
 	if (fLength - theApp.m_PhasedArray[PORTSIDE].getRxFocalLength(2)) {
 		theApp.m_PhasedArray[PORTSIDE].setRxFocalLength(fLength, 3);
-		ApplyFocalLaws();
+		   m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
 
 }
@@ -651,6 +715,41 @@ void CPhasedArrayFocalLawsDlg::OnEnChangeEditTxFocalLength()
 	if (fLength > 1000.0f) fLength = 0.0f;
 	if (fLength - theApp.m_PhasedArray[PORTSIDE].getTxFocalLength()) {
 		theApp.m_PhasedArray[PORTSIDE].setTxFocalLength(fLength);
-		ApplyFocalLaws();
+		m_nUpdateHardware |= U_APPLY_FOCAL_LAWS;
 	}
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnEnChangeEditGain()
+{
+	CString Buff;
+	float fGain;
+	int nFL = theApp.m_LSA.m_nScopeViewLaw;
+
+	m_editGain.GetWindowTextW(Buff);
+	_WTOF(Buff, fGain);
+
+	if (fGain - theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].getGain()) {
+		theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].setGain(fGain);
+		m_nUpdateHardware |= U_BEAM_CORRECTION_GAIN;
+	}
+}
+
+
+void CPhasedArrayFocalLawsDlg::OnDeltaposSpinGain(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	float fGain;
+	int nFL = theApp.m_LSA.m_nScopeViewLaw;
+	CString Buff;
+
+	fGain = theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].getGain();
+	fGain += ((float)pNMUpDown->iDelta * 0.5f);
+
+	theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].setGain(fGain);
+	m_nUpdateHardware |= U_BEAM_CORRECTION_GAIN;
+	Buff.Format(L"%.01f dB", fGain);
+	m_editGain.SetWindowTextW(Buff);
+
+	*pResult = 0;
 }

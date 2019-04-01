@@ -305,7 +305,7 @@ void CAOSPhasedArrayPage::OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *p
 	pDispInfo->item.pszText = str;
 	int nRow = pDispInfo->item.iItem;
 
-	if (nRow < theApp.m_AOSPhasedArray.getMessageSize()) {
+	if (nRow>=0 && nRow < theApp.m_AOSPhasedArray.getMessageSize()) {
 		switch (pDispInfo->item.iSubItem) {
 		case 0:	swprintf_s(str, 100, _T("%d"), pDispInfo->item.iItem + 1);
 			break;
@@ -315,6 +315,5 @@ void CAOSPhasedArrayPage::OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *p
 		m_listMessages.setCellColor(nRow, 1, RGB(200, 200, 200), RGB(0, 0, 255));
 	}
 
-	*pResult = 0;
 	*pResult = 0;
 }

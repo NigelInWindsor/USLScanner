@@ -157,7 +157,7 @@ void COriginPage::OnButtonXLeft()
 		theApp.m_Motors.OriginAll(0,0x01);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nXLeft].nHomeMode) {
 		case 0:
 			break;
@@ -198,7 +198,7 @@ void COriginPage::OnButtonYleft()
 		theApp.m_Motors.OriginAll(0,0x02);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nYLeft].nHomeMode) {
 		case 0:
 			break;
@@ -235,7 +235,7 @@ void COriginPage::OnButtonZleft()
 		theApp.m_Motors.OriginAll(0,0x04);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nZLeft].nHomeMode) {
 		case 0:
 			break;
@@ -269,7 +269,7 @@ void COriginPage::OnButtonXtleft()
 	case RAILWAY_AXLE:
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nXtLeft].nHomeMode) {
 		case 0:
 			break;
@@ -303,7 +303,7 @@ void COriginPage::OnButtonYtleft()
 		theApp.m_Motors.OriginAll(0,0x08);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nYtLeft].nHomeMode) {
 		case 0:
 			break;
@@ -339,7 +339,7 @@ void COriginPage::OnButtonXRight()
 		theApp.m_Motors.OriginAll(0,0x01);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nXRight].nHomeMode) {
 		case 0:
 			break;
@@ -375,7 +375,7 @@ void COriginPage::OnButtonYright()
 		theApp.m_Motors.OriginAll(0,0x10);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nYRight].nHomeMode) {
 		case 0:
 			break;
@@ -412,7 +412,7 @@ void COriginPage::OnButtonZright()
 		theApp.m_Motors.OriginAll(0,0x20);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nZRight].nHomeMode) {
 		case 0:
 			break;
@@ -443,7 +443,7 @@ void COriginPage::OnButtonXtright()
 		theApp.m_Motors.OriginAll(0, 0x20);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nXtRight].nHomeMode) {
 		case 0:
 			break;
@@ -474,7 +474,7 @@ void COriginPage::OnButtonYtright()
 		theApp.m_Motors.OriginAll(0,0x40);
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch (theApp.m_Axes[theApp.m_Tank.nYtRight].nHomeMode) {
 		case 0:
 			break;

@@ -3780,7 +3780,7 @@ void CViewPage::GotoPoint(int nSide)
 			case SPX_ROBOT:
 			case TANK_5AXIS:
 			case TANK_6AXIS:
-			case QUICKSTEP_FLATBED:
+			case TANK_2AXIS:
 				theApp.m_Motors.IntelligentGotoSurfaceCoord(&CpSurface, nSide, theApp.m_LastSettings.nDangerPlaneMoveMask);
 				break;
 			case TRACKED_PROBE:
@@ -3805,7 +3805,7 @@ void CViewPage::GotoPoint(int nSide)
 			case SPX_ROBOT:
 			case FB_11_AXIS:
 			case TANK_5AXIS:
-			case QUICKSTEP_FLATBED:
+			case TANK_2AXIS:
 				theApp.m_Motors.IntelligentGotoSurfaceCoord(&CpSurface, nSide, theApp.m_LastSettings.nDangerPlaneMoveMask);
 				theApp.m_FBCtrl.JogJustR(CpSurface.Side0.fR, PROFILE->m_fScanSpeed);
 				break;

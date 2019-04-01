@@ -238,7 +238,7 @@ void CPhasedArrayLineScanPage::OnBnClickedButtonStart()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		if (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY) {
 			pFrame->StartScan(ROBOT_ROLLER_PROBE_SCAN);
 		}

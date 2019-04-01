@@ -122,7 +122,12 @@ void CCoord::FormatNormal(CString *pBuff, int nStyle, int nOffset)
 			};
 			break;
 		case 1:	
-			strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.02f",nOffset,Side[nSide].fX,nOffset+1,Side[nSide].fY,nOffset+2,Side[nSide].fZ,nOffset+3,Side[nSide].fI,nOffset+4,Side[nSide].fJ,nOffset+5,Side[nSide].fK,nOffset+6,0.0f, nOffset + 14, fTurntable);
+			if (nSide == 0) {
+				strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.02f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, Side[nSide].fI, nOffset + 4, Side[nSide].fJ, nOffset + 5, Side[nSide].fK, nOffset + 6, 0.0f, nOffset + 14, fTurntable);
+			}
+			else {
+				strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, Side[nSide].fI, nOffset + 4, Side[nSide].fJ, nOffset + 5, Side[nSide].fK, nOffset + 6, 0.0f);
+			}
 			break;
 		}
 	}

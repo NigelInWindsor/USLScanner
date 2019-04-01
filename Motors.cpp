@@ -1245,6 +1245,8 @@ bool CMotors::ReportPumpStatus(int nAxis, int nSide)
 	case FB_TWIN_TOWER:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
+	case TANK_2AXIS:
+	case TANK_5AXIS:
 		return theApp.m_Ethercat.ReportPumpStatus(nAxis, nSide);
 		break;
 	}
@@ -1264,6 +1266,8 @@ void CMotors::SetPumpSpeed(int nAxis, int nSide)
 	case FB_TWIN_TOWER:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
+	case TANK_2AXIS:
+	case TANK_5AXIS:
 		theApp.m_FBCtrl.SetPumpSpeed(nAxis, nSide);
 		break;
 	}
@@ -1283,6 +1287,8 @@ void CMotors::PumpStart(int nAxis, int nSide)
 	case FB_TWIN_TOWER:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
+	case TANK_2AXIS:
+	case TANK_5AXIS:
 		theApp.m_FBCtrl.PumpStart(nAxis, nSide);
 		break;
 	}
@@ -1302,6 +1308,8 @@ void CMotors::PumpStop(int nAxis, int nSide)
 	case FB_TWIN_TOWER:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
+	case TANK_2AXIS:
+	case TANK_5AXIS:
 		theApp.m_FBCtrl.PumpStop(nAxis, nSide);
 		break;
 	}
@@ -1370,7 +1378,7 @@ void CMotors::GotoSurfaceCoord(CCoord *pCpSurface, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TANK_6AXIS:
 		theApp.m_Thread.m_CpMoveTo = CpSurface;
 		if(theApp.m_LastSettings.nGotoWithStepOff) {
@@ -1399,7 +1407,7 @@ void CMotors::IntelligentGotoSurfaceCoord(CCoord *pCpSurface, int nSideMask, int
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 	case TANK_6AXIS:
 		theApp.m_Thread.m_CpSurface = *pCpSurface;

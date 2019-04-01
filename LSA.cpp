@@ -1043,8 +1043,8 @@ bool CLSA::ApplyFocalLaws(int &nFocalLaws, int nElements, int nStartPosition, bo
 		LocalFLii.nOutputFocalLawNumber[0] = nFL;
 		GetSetFL(nFL, &LocalFLii,false);
 
-		CmdSetTXBeamPos(nFL+1, nStartElement, nFinishElement);
-		CmdSetRXBeamPos(nFL+1, nStartElement, nFinishElement);
+//		CmdSetTXBeamPos(nFL+1, nStartElement, nFinishElement);
+//		CmdSetRXBeamPos(nFL+1, nStartElement, nFinishElement);
 		nActualNumberofFLs++; 
 		
 	}
@@ -1052,7 +1052,7 @@ bool CLSA::ApplyFocalLaws(int &nFocalLaws, int nElements, int nStartPosition, bo
 	theApp.m_PhasedArray[PORTSIDE].CalculateDelays(nDelaysns);
 
 	for(nFL=0;nFL<nActualNumberofFLs;nFL++) {
-
+/*
 		GetSetFL(nFL+1, &LocalFLii,true);
 		CmdSetWriteFL(nFL+1);
 
@@ -1081,15 +1081,15 @@ bool CLSA::ApplyFocalLaws(int &nFocalLaws, int nElements, int nStartPosition, bo
 		for(nElement=0;nElement<nElements;nElement++) {				
 			CmdSetTXDelays(nFL+1,LocalFLii.nTXStartElement+nElement,nDelaysns[nElement]);
 		}
-		
+	*/	
 	}
 
 	nFocalLawsL = nFocalLaws;
 	m_nActualLawsL = nActualNumberofFLs;
 
 	if (m_nScopeViewLaw < 0) m_nScopeViewLaw = 0;
-	if(nFocalLawsL)
-		CmdSetWriteFL(m_nScopeViewLaw+1);
+//	if(nFocalLawsL)
+//		CmdSetWriteFL(m_nScopeViewLaw+1);
 
 	return true;
 

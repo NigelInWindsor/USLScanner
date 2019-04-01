@@ -953,7 +953,7 @@ enum ScannerDescription{
 		RAILWAY_AXLE, //16
 		TRACKED_PROBE, //17
 		TANK_5AXIS, //18
-		QUICKSTEP_FLATBED, //19
+		TANK_2AXIS, //19
 		TANK_6AXIS, //20
 		TWIN_TOWER_KINEMATIC,	//21	Quickstep Twin Tower
 	};
@@ -1769,7 +1769,7 @@ public:
 	int				nDesiredDevice;
 
 	int				nLSAMask;
-	int				nLSACalibrationGate;
+	int				nPhasedArrayNormalizeGate;
 
 	int				nPositionTabMask;
 	int				nDataPropertiesMask;

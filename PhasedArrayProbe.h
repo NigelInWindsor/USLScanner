@@ -56,6 +56,7 @@ public:
 	D3DXVECTOR3 & getFocalLawPos(int nTxRx, int nFL);
 	D3DXVECTOR3 & getFocalLawNorm(int nTxRx, int nFL);
 	CString & getstrFocalLawPos(int nTxRx, int nIndex);
+	CString & getstrFocalLawGain(int nTxRx, int nIndex);
 	float getTxDelay(int nFL, int nElement);
 	float getRxDelay(int nFL, int nTOF, int nElement);
 	void DownloadAllToHardware(int nMask);
@@ -63,6 +64,7 @@ public:
 	void DownloadRxFocalLawsToHardware();
 	ULONGLONG getElementEnableMask(int nFL, int nTxRx);
 	float setAnalogueGain(float fGain, bool bWriteToHardware);
+	float setBeamCorrectionGain(int nFL, bool bWriteToHardware);
 	float setDigitalGain(float fGain, bool bWriteToHardware);
 	float setPulseWidth(float fPulseWidth, bool bWriteToHardware);
 	int setPRF(int nPRF, bool bWriteToHardware);
@@ -78,7 +80,8 @@ public:
 	int getProbeType();
 	int getFilterType();
 	int setFilterType(FrequencyFilterType eFilterType);
-	void ApplyFilter();
+	void CalculateFilter();
+	void DownloadFilterToHardware();
 	void CalculateFiringOrder();
 	bool setDacEnable(bool bEnable);
 	bool getDacEnable();

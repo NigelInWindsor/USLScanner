@@ -8,6 +8,7 @@
 #define U_PRF			0x0008
 #define	U_RECTIFY		0x0010
 #define U_DAC			0x0020
+#define U_FILTER			0x0040
 
 IMPLEMENT_DYNCREATE(CAOSPhasedArrayUTPage, CPropertyPage)
 
@@ -51,6 +52,7 @@ void CAOSPhasedArrayUTPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST_DAC_LIST, m_listDAC);
 	DDX_Control(pDX, IDC_COMBO_DAC_MODE, m_comboDacMode);
 	DDX_Control(pDX, IDC_COMBO_ENABLE, m_comboDacEnable);
+	DDX_Control(pDX, IDC_COMBO_NORMALIZE_GATE, m_comboNormalizeGate);
 }
 
 
@@ -71,14 +73,13 @@ BEGIN_MESSAGE_MAP(CAOSPhasedArrayUTPage, CPropertyPage)
 	ON_EN_CHANGE(IDC_EDIT_MAX_FILTER_FREQUENCY, &CAOSPhasedArrayUTPage::OnEnChangeEditMaxFilterFrequency)
 	ON_EN_CHANGE(IDC_EDIT_MIN_FILTER_FREQUENCY, &CAOSPhasedArrayUTPage::OnEnChangeEditMinFilterFrequency)
 	ON_CBN_SELCHANGE(IDC_COMBO_FILTER_TYPE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboFilterType)
-	ON_BN_CLICKED(IDC_BUTTON_APPLY, &CAOSPhasedArrayUTPage::OnBnClickedButtonApply)
 	ON_CBN_SELCHANGE(IDC_COMBO_DISPLAY_MODE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboDisplayMode)
 	ON_WM_PAINT()
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_MIN_FILTER_FREQUENCY, &CAOSPhasedArrayUTPage::OnDeltaposSpinMinFilterFrequency)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_MAX_FILTER_FREQUENCY, &CAOSPhasedArrayUTPage::OnDeltaposSpinMaxFilterFrequency)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_RIPPLE, &CAOSPhasedArrayUTPage::OnDeltaposSpinRipple)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_STOP_GAIN, &CAOSPhasedArrayUTPage::OnDeltaposSpinStopGain)
-ON_WM_CLOSE()
+	ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_FILTER_GAIN, &CAOSPhasedArrayUTPage::OnDeltaposSpinFilterGain)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_LIST_DAC_LIST, &CAOSPhasedArrayUTPage::OnLvnGetdispinfoListDacList)
@@ -91,6 +92,9 @@ ON_WM_CLOSE()
 	ON_COMMAND(ID_DAC_CLEAREVERYTHING, OnRbdacmenuCleareverything)
 	ON_COMMAND(ID_DAC_DELETEPT, OnRbdacmenuDeletept)
 	ON_CBN_SELCHANGE(IDC_COMBO_ENABLE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboEnable)
+	ON_CBN_SELCHANGE(IDC_COMBO_NORMALIZE_GATE, &CAOSPhasedArrayUTPage::OnCbnSelchangeComboNormalizeGate)
+	ON_BN_CLICKED(IDC_BUTTON_NORMALIZE, &CAOSPhasedArrayUTPage::OnBnClickedButtonNormalize)
+	ON_BN_CLICKED(IDC_BUTTON_ZERO, &CAOSPhasedArrayUTPage::OnBnClickedButtonZero)
 END_MESSAGE_MAP()
 
 void CAOSPhasedArrayUTPage::OnClose()
@@ -174,6 +178,13 @@ void CAOSPhasedArrayUTPage::UpdateAllControls()
 	CString Buff;
 	bool bFlag = true;
 
+	m_comboNormalizeGate.ResetContent();
+	m_comboNormalizeGate.LimitText(sizeof theApp.m_UtUser.m_TS[0].Gate.cName[0] - 1);
+	for (int gg = 0; gg < 8; gg++) {
+		m_comboNormalizeGate.AddString(theApp.m_UtUser.m_TS[0].Gate.cName[gg]);
+	}
+	m_comboNormalizeGate.SetCurSel(theApp.m_LastSettings.nPhasedArrayNormalizeGate);
+
 
 	m_comboDisplayMode.SetCurSel(theApp.m_LastSettings.nPAFilterDisplayMode &= 1);
 	m_comboRectify.SetCurSel(theApp.m_PhasedArray[PORTSIDE].getRectification());
@@ -254,6 +265,11 @@ UINT AOSUTThread(LPVOID pParam)
 				theApp.m_PhasedArray[PORTSIDE].setAllDacVariables();
 				pParent->m_nUpdateHardware &= ~U_DAC;
 			}
+			if (pParent->m_nUpdateHardware & U_FILTER) {
+				theApp.m_PhasedArray[PORTSIDE].DownloadFilterToHardware();
+				pParent->m_nUpdateHardware &= ~U_FILTER;
+			}
+
 		}
 		ReleaseSemaphore(pParent->m_hSemaphore, 1, NULL);
 	}
@@ -273,6 +289,7 @@ void CAOSPhasedArrayUTPage::OnEnChangeEditAnalogueGain()
 
 void CAOSPhasedArrayUTPage::OnEnChangeEditDigitalGain()
 {
+
 	theApp.m_PhasedArray[PORTSIDE].setDigitalGain(m_editspinDigitalGain.GetValue(), false);
 	m_nUpdateHardware |= U_DIGITAL_GAIN;
 
@@ -371,12 +388,6 @@ void CAOSPhasedArrayUTPage::OnCbnSelchangeComboFilterType()
 }
 
 
-void CAOSPhasedArrayUTPage::OnBnClickedButtonApply()
-{
-	theApp.m_PhasedArray[PORTSIDE].ApplyFilter();
-	Invalidate(false);
-}
-
 
 void CAOSPhasedArrayUTPage::OnCbnSelchangeComboDisplayMode()
 {
@@ -390,7 +401,7 @@ void CAOSPhasedArrayUTPage::OnPaint()
 {
 	CPaintDC dc(this);
 
-	theApp.m_PhasedArray[PORTSIDE].ApplyFilter();
+	theApp.m_PhasedArray[PORTSIDE].CalculateFilter();
 
 	switch (theApp.m_LastSettings.nPAFilterDisplayMode) {
 	default:
@@ -684,6 +695,8 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinMinFilterFrequency(NMHDR *pNMHDR, LRES
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	theApp.m_PhasedArray[PORTSIDE].m_fFilterFreq[0] = m_editspinMinFilterFrequency.GetPos();
 	*pResult = 0;
+	theApp.m_PhasedArray[PORTSIDE].CalculateFilter();
+	m_nUpdateHardware |= U_FILTER;
 	Invalidate(false);
 }
 
@@ -691,8 +704,10 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinMinFilterFrequency(NMHDR *pNMHDR, LRES
 void CAOSPhasedArrayUTPage::OnDeltaposSpinMaxFilterFrequency(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	theApp.m_PhasedArray[PORTSIDE].m_fFilterFreq[0] = m_editspinMaxFilterFrequency.GetPos();
+	theApp.m_PhasedArray[PORTSIDE].m_fFilterFreq[1] = m_editspinMaxFilterFrequency.GetPos();
 	*pResult = 0;
+	theApp.m_PhasedArray[PORTSIDE].CalculateFilter();
+	m_nUpdateHardware |= U_FILTER;
 	Invalidate(false);
 }
 
@@ -701,7 +716,11 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinRipple(NMHDR *pNMHDR, LRESULT *pResult
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	theApp.m_PhasedArray[PORTSIDE].m_fRipple = m_editspinRipple.GetPos();
+
 	*pResult = 0;
+	theApp.m_PhasedArray[PORTSIDE].CalculateFilter();
+	m_nUpdateHardware |= U_FILTER;
+
 	Invalidate(false);
 }
 
@@ -711,6 +730,9 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinStopGain(NMHDR *pNMHDR, LRESULT *pResu
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	theApp.m_PhasedArray[PORTSIDE].m_fStopGain = m_editspinStopGain.GetPos();
 	*pResult = 0;
+	theApp.m_PhasedArray[PORTSIDE].CalculateFilter();
+	m_nUpdateHardware |= U_FILTER;
+
 	Invalidate(false);
 }
 
@@ -723,6 +745,8 @@ void CAOSPhasedArrayUTPage::OnDeltaposSpinFilterGain(NMHDR *pNMHDR, LRESULT *pRe
 	
 	theApp.m_PhasedArray[PORTSIDE].m_nFilterGain = (int)m_editspinFilterGain.GetValue();
 	*pResult = 0;
+	m_nUpdateHardware |= U_FILTER;
+
 	Invalidate(false);
 }
 
@@ -897,3 +921,52 @@ void CAOSPhasedArrayUTPage::OnRbdacmenuDeletept()
 }
 
 
+
+
+void CAOSPhasedArrayUTPage::OnCbnSelchangeComboNormalizeGate()
+{
+	theApp.m_LastSettings.nPhasedArrayNormalizeGate = m_comboNormalizeGate.GetCurSel();
+
+}
+
+
+void CAOSPhasedArrayUTPage::OnBnClickedButtonNormalize()
+{
+	bool bCantCalibrate = false;
+	float fMaxAmp = 0.0f;
+	int nFLSrc = 0;
+
+	for (int nFL = 0; nFL < theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws(); nFL++) {
+
+		int nAmp = abs( theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] );
+		theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] = nAmp;
+
+		if (theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] >= 127) bCantCalibrate = true;
+
+		if ((float)nAmp > fMaxAmp) {
+			fMaxAmp = (float)nAmp;
+			nFLSrc = nFL;
+		}
+	}
+	if(bCantCalibrate== true) {
+		MessageBox(L"Error", L"Unable to normalize because at least one element is saturated", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	for (int nFL = 0; nFL < theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws(); nFL++) {
+		float fActAmp = (float)theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate];
+		float fAdditionalGain = log10f(fActAmp / fMaxAmp) * -20.0f;
+		theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].m_fGain += fAdditionalGain;
+	}
+	m_nUpdateHardware |= U_DIGITAL_GAIN;
+
+}
+
+
+void CAOSPhasedArrayUTPage::OnBnClickedButtonZero()
+{
+	for (int nFL = 0; nFL < theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws(); nFL++) {
+		theApp.m_PhasedArray[PORTSIDE].m_FLRx[nFL].m_fGain = 0.0f;
+	}
+	m_nUpdateHardware |= U_DIGITAL_GAIN;
+}

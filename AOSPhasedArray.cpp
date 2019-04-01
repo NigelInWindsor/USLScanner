@@ -432,21 +432,44 @@ bool CAOSPhasedArray::setAnalogueGain(float fGain)
 	return bRet;
 }
 
-bool CAOSPhasedArray::setDigitalGain(float fGain)
+bool CAOSPhasedArray::setDigitalGain(PVOID pParent)
 {
 	bool bRet = true;
 	if (isConnected() == false)	return false;
-	double dGain = (double)fGain;
+	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
+
 
 	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
 	{
 		for (int nCycle = 0; nCycle < m_nCycleCount; nCycle++) {
+			double dGain = (double)(pProbe->m_fDigitalGain + pProbe->m_FLRx[nCycle].m_fGain);
+
 			if (!m_pHWDeviceOEMPA->SetGainDigital(nCycle, dGain))
 				bRet = false;
 		}
 		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {
 			bRet = false;
 			AfxMessageBox( L"Failed to unlock");
+		}
+	}
+
+	return bRet;
+}
+
+bool CAOSPhasedArray::setBeamCorrectionGain(PVOID pParent, int nFL, float fGain)
+{
+	bool bRet = true;
+	if (isConnected() == false)	return false;
+	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
+
+	if (m_pHWDeviceOEMPA->LockDevice(eAcqOff))
+	{
+		double dGain = (double)(pProbe->m_fDigitalGain + pProbe->m_FLRx[nFL].m_fGain);
+		if (!m_pHWDeviceOEMPA->SetGainDigital(nFL, dGain))	bRet = false;
+
+		if (!m_pHWDeviceOEMPA->UnlockDevice(eAcqOn)) {
+			bRet = false;
+			AfxMessageBox(L"Failed to unlock");
 		}
 	}
 
@@ -1078,7 +1101,6 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent, int nWhichMask)
 	CPhasedArrayProbe* pProbe = (CPhasedArrayProbe*)pParent;
 
 	bool bRet = true;
-	double dTemp;
 	double dTimeSlotTime = 1.0f / (float)theApp.m_UtUser.m_Global.nPrf;
 	WORD wID = 65535;
 	DWORD adwHWAperture[4] = { 0 };
@@ -1147,9 +1169,10 @@ bool CAOSPhasedArray::setAllHardwareVariables(PVOID pParent, int nWhichMask)
 				CopyMemory(pProbe->m_FLRx[nFL].m_dwAperture, adwHWAperture, sizeof adwHWAperture);
 
 				//Cycle
-				dTemp = (double)pProbe->m_fDigitalGain;
-				if (!m_pHWDeviceOEMPA->SetGainDigital(nCycle, dTemp))																			bRet = false;
-				if (!m_pHWDeviceOEMPA->SetBeamCorrection(nCycle, m_fBeamCorrectionGain))														bRet = false;
+				double dGain = (double)(pProbe->m_fDigitalGain + pProbe->m_FLRx[nFL].m_fGain);
+
+				if (!m_pHWDeviceOEMPA->SetGainDigital(nCycle, dGain))																			bRet = false;
+				if (!m_pHWDeviceOEMPA->SetBeamCorrection(nCycle, m_fBeamCorrectionGain=0.0f))														bRet = false;
 
 				lPointCount = MinMax(&m_nAScanLength, 512, 8192);
 				pProbe->m_FLRx[nFL].m_dAscanRange = (double)theApp.m_UtUser.m_TS[ nFL ].Adc.nWidth * 1e-9;

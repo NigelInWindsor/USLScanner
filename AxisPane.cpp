@@ -240,9 +240,9 @@ int CAxisPane::InitPropList()
 	pPropSpin = new CUSLPropertyGridProperty(_T("Home Speed"), (_variant_t)(int)(0), _T("Specifies step size"), ID_HOME_SPEED, Format, NULL, NULL, (CWnd*)this);
 	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fHomeSpeed, -1000.0f, 1000.0f, 1);
 	pGroup->AddSubItem(pPropSpin);
-	Format.Format(L"%s %ss\x02c9\x0b2", L"%.02f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
-	pPropSpin = new CUSLPropertyGridProperty(_T("Acceleration"), (_variant_t)(int)(0), _T("Specifies step size"), ID_ACCELERATION, Format, NULL, NULL, (CWnd*)this);
-	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fAcceleration, -100.0f, 3000.0f, 2);
+	Format.Format(L"%s %ss\x02c9\x0b2", L"%.05f ", Units[theApp.m_Axes[m_nAxis].nUnitSelected]);
+	pPropSpin = new CUSLPropertyGridProperty(_T("Acceleration"), (_variant_t)(int)(0), _T("Acceleration of a kinematic move"), ID_ACCELERATION, Format, NULL, NULL, (CWnd*)this);
+	pPropSpin->EnableSpinControl(TRUE, theApp.m_Axes[m_nAxis].fAcceleration, -3000.0f, 3000.0f, 5);
 	pGroup->AddSubItem(pPropSpin);
 
 	m_wndPropList.AddProperty(pGroup);

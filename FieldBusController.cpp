@@ -124,6 +124,8 @@ CFieldBusController::CFieldBusController()
 
 	ZeroMemory(m_ArrayFlag, sizeof m_ArrayFlag);
 
+	InitializeCriticalSection(&m_CriticalSection);
+
 }
 
 CFieldBusController::~CFieldBusController()
@@ -143,12 +145,17 @@ int	CFieldBusController::getRxArraySize()
 	return m_RxArray.GetSize();
 }
 
-CString CFieldBusController::getRxArrayAt(int nIndex)
+CString &CFieldBusController::getRxArrayAt(int nIndex)
 {
+	static CString Buff;
+
+	Buff.Empty();
+	EnterCriticalSection(&m_CriticalSection);
 	if (nIndex < m_RxArray.GetSize()) {
-		return m_RxArray.GetAt(nIndex);
+		Buff = m_RxArray.GetAt(nIndex);
 	}
-	return L"";
+	LeaveCriticalSection(&m_CriticalSection);
+	return Buff;
 }
 
 int CFieldBusController::GetRxFlagAt(int nIndex)
@@ -163,6 +170,8 @@ void CFieldBusController::AddRxStr(CString *pBuff)
 	Buff = *pBuff;
 	Buff.Remove(0x0d);
 	Buff.Remove(0x0a);
+
+	EnterCriticalSection(&m_CriticalSection);
 
 	if(Buff.GetLength() > 0) {
 		if(Buff.GetAt(0) != 6) {
@@ -180,6 +189,8 @@ void CFieldBusController::AddRxStr(CString *pBuff)
 			}
 		}
 	}
+	LeaveCriticalSection(&m_CriticalSection);
+
 
 }
 
@@ -640,7 +651,7 @@ void CFieldBusController::DownloadPolyLine(CPolyCoord *pLine, int nFirstCoordina
 			break;
 		case RAILWAY_AXLE: 
 		case TANK_5AXIS:
-		case QUICKSTEP_FLATBED:
+		case TANK_2AXIS:
 		case TANK_6AXIS:
 		case TWIN_TOWER_KINEMATIC:
 			theApp.InvertNormScannerSpecific(&CpSurface, PORTSIDE);
@@ -961,23 +972,21 @@ void CFieldBusController::DoPolyLine(CPolyCoord *pLine, float fMoveSpeed, float 
 			break;
 		}
 		break;
-	case QUICKSTEP_FLATBED:
-		switch (theApp.m_LastSettings.nCoordMask) {
-		case 1:
-			SendStr(L"&1", _TERMINAL);
-			SendStr(L"#1->I", _TERMINAL);
-			SendStr(L"#2->I", _TERMINAL);
-			SendStr(L"&1 define lookahead 5000", _TERMINAL);
-			SendStr(L"Coord[1].LHDistance=500", _TERMINAL);
-			SendStr(L"Coord[1].SegLinToPvt=1", _TERMINAL);
-			SendStr(L"Coord[1].SegMoveTime=15", _TERMINAL);
-			SendStr(L"Coord[1].TA=20", _TERMINAL);
-			SendStr(L"Coord[1].Td=20", _TERMINAL);
-			SendStr(L"Coord[1].TS=20", _TERMINAL);
-			SendStr(L"Coord[1].TM=2", _TERMINAL);
-			Sleep(100);
-			SendStr(L"B6R", _TERMINAL);
-		}
+	case TANK_2AXIS:
+		SendStr(L"&1", _TERMINAL);
+		SendStr(L"#1->I", _TERMINAL);
+		SendStr(L"#2->I", _TERMINAL);
+		SendStr(L"&1 define lookahead 5000", _TERMINAL);
+		SendStr(L"Coord[1].LHDistance=500", _TERMINAL);
+		SendStr(L"Coord[1].SegLinToPvt=1", _TERMINAL);
+		SendStr(L"Coord[1].SegMoveTime=15", _TERMINAL);
+		SendStr(L"Coord[1].TA=500", _TERMINAL);
+		SendStr(L"Coord[1].Td=500", _TERMINAL);
+		SendStr(L"Coord[1].TS=500", _TERMINAL);
+		SendStr(L"Coord[1].TM=2", _TERMINAL);
+		Sleep(100);
+		SendStr(L"B6R", _TERMINAL);
+		Sleep(500);
 		break;
 	}
 
@@ -1190,7 +1199,7 @@ void CFieldBusController::DownloadEndEffectorWithWaterPath(int nSide,bool bImmed
 		}
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		Buff.Format(L"Length01X=%f", theApp.m_Kinematics.m_fXOffset[0]);
 		SendStr(Buff, _TERMINAL);
 		Buff.Format(L"LengthTZ=%f", theApp.m_Kinematics.getToolLength(0));
@@ -1527,13 +1536,13 @@ void CFieldBusController::EnableJoystick()
 		Sleep(100);
 		SendStr(L"B7R", _TERMINAL);
 		break;
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		SendStr(L"&1", _TERMINAL);
 		SendStr(L"#1->I", _TERMINAL);
 		SendStr(L"#2->I", _TERMINAL);
 		SendStr(L"Coord[1].SegLinToPvt=0", _TERMINAL);
-		SendStr(L"Coord[1].TA=400", _TERMINAL);
-		SendStr(L"Coord[1].Td=400", _TERMINAL);
+		SendStr(L"Coord[1].TA=50", _TERMINAL);
+		SendStr(L"Coord[1].Td=50", _TERMINAL);
 		SendStr(L"Coord[1].TS=50", _TERMINAL);
 		SendStr(L"Coord[1].TM=5", _TERMINAL);
 		Sleep(100);
@@ -2627,7 +2636,7 @@ bool CFieldBusController::ReportAirStatus(int nMask, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		m_nAirKnifeStatus[nSide] & 1 ? bFlag = TRUE : bFlag = FALSE;
 		break;
 	case TWIN_TOWER_KINEMATIC:
@@ -2658,7 +2667,7 @@ void CFieldBusController::AirStart(int nMask, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch(nSide) {
 		case 0:	SendStr(L"AirKnifeDemand0 = 1", _TERMINAL);
 			break;
@@ -2691,7 +2700,7 @@ void CFieldBusController::AirStop(int nMask, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		switch(nSide) {
 		case 0:	SendStr(L"AirKnifeDemand0 = 0", _TERMINAL);
 			break;
@@ -2733,7 +2742,7 @@ void CFieldBusController::EnableLights(int nFlag)
  	case DUAL_ROBOT_9_PLUS_9:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		break;
 	};
@@ -2875,7 +2884,7 @@ void CFieldBusController::Origin(int nWhichAxis)
 		SendStr(Buff, _TERMINAL);
 		SendStr(L"enable plc 11", _TERMINAL);
 		break;
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		break;
 	}
 }
@@ -2928,7 +2937,7 @@ void CFieldBusController::KillAllMotionPrograms()
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 
 		SendStr(L"DISABLE PLC 10..31", _TERMINAL);
@@ -2956,7 +2965,7 @@ void CFieldBusController::EnableAxes(int nAction)
 	switch (theApp.m_Tank.nScannerDescription) {
 	case TANK_5AXIS:
 	case RAILWAY_AXLE: 	
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		EnableMotors();
 		return;
@@ -3104,7 +3113,7 @@ bool CFieldBusController::MoveTo(int nAction,int nFrame)
 	case TANK_5AXIS:
 		nNumberAxes = 5;
 		break;
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		nNumberAxes = 2;
 		break;
 	case TWIN_TOWER_KINEMATIC:
@@ -3422,7 +3431,7 @@ bool CFieldBusController::ReportPumpStatus(int nAxis, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		return theApp.m_Ethercat.ReportPumpStatus(nAxis, nSide);
 		break;
@@ -3471,7 +3480,7 @@ void CFieldBusController::SetPumpSpeed(int nWhichAxis, int nSide)
 	case DUAL_ROBOT_9_PLUS_9:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 
 		switch(nSide) {
@@ -3526,7 +3535,7 @@ void CFieldBusController::PumpStart(int nAxis, int nSide)
 	case DUAL_ROBOT_9_PLUS_9:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 
 		switch(nSide) {
@@ -3585,7 +3594,7 @@ void CFieldBusController::PumpStop(int nAxis, int nSide)
 	case SPX_ROBOT:
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		switch(nSide) {
 		case 0:	SendStr(L"PumpDemand0=0", _TERMINAL);
@@ -3796,7 +3805,7 @@ void CFieldBusController::StartTurntableCartesianScanningAxes(CCoord Cp)
 			break;
 		}
 		break;
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
 		KillAllMotionPrograms();
@@ -3883,7 +3892,7 @@ void CFieldBusController::UpdateTurntableCartesianScanningAxes(CCoord Cp)
 	case RAILWAY_AXLE:
 	case TWIN_TOWER_KINEMATIC:
 		break;
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
 		Buff.Format(L"FirstCoordinate=%d", nFirstCoordinate = 0);
@@ -3937,7 +3946,7 @@ void CFieldBusController::StopContinuousRotate(int nAxis, bool bControlledStop)
 	case RAILWAY_AXLE:
 		break;
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 		break;
 	}

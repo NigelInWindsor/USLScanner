@@ -140,6 +140,7 @@ BOOL CAxisPmacDlg::OnInitDialog()
 	m_comboAmplifierType.AddString(L"Kollmorgen");
 	m_comboAmplifierType.AddString(L"Copley");
 	m_comboAmplifierType.AddString(L"Staubli");
+	m_comboAmplifierType.AddString(L"Oriental");
 	m_comboAmplifierType.AddString(L"GeoBrick");
 
 	

@@ -786,6 +786,14 @@ CString &CPhasedArrayProbe::getstrFocalLawPos(int nTxRx, int nIndex)
 	return Buff;
 }
 
+CString &CPhasedArrayProbe::getstrFocalLawGain(int nTxRx, int nIndex)
+{
+	static CString Buff;
+
+	Buff.Format(L"%.01fdB", m_FLRx[nIndex].m_fGain);
+	return Buff;
+}
+
 float CPhasedArrayProbe::getTxDelay(int nFL, int nElement)
 {
 
@@ -855,11 +863,19 @@ float CPhasedArrayProbe::setAnalogueGain(float fGain, bool bWriteToHardware)
 	return m_fAnalogueGain;
 }
 
+float CPhasedArrayProbe::setBeamCorrectionGain(int nFL, bool bWriteToHardware)
+{
+	if (bWriteToHardware == true && theApp.m_AOSPhasedArray.isConnected()) {
+		theApp.m_AOSPhasedArray.setBeamCorrectionGain(this, nFL, m_FLRx[nFL].m_fGain);
+	}
+	return m_FLRx[nFL].m_fGain;
+}
+
 float CPhasedArrayProbe::setDigitalGain(float fGain, bool bWriteToHardware)
 {
 	m_fDigitalGain = fGain;
 	if (bWriteToHardware == true && theApp.m_AOSPhasedArray.isConnected()) {
-		theApp.m_AOSPhasedArray.setDigitalGain(m_fDigitalGain);
+		theApp.m_AOSPhasedArray.setDigitalGain(this);
 	}
 	return m_fDigitalGain;
 }
@@ -962,10 +978,11 @@ int CPhasedArrayProbe::setFilterType(FrequencyFilterType eFilterType)
 	return (int)m_eFilterType;
 }
 
-void CPhasedArrayProbe::ApplyFilter()
+void CPhasedArrayProbe::CalculateFilter()
 {
 	float f1, f2, fr;
 	int numBands, i;
+
 
 	switch (m_eFilterType) {
 	default:
@@ -1069,10 +1086,13 @@ finished:
 	delete bands;
 	delete weights;
 
+}
+
+void CPhasedArrayProbe::DownloadFilterToHardware()
+{
 	if (theApp.m_AOSPhasedArray.isConnected()) {
 		theApp.m_AOSPhasedArray.setFilter(this);
 	}
-
 }
 
 void CPhasedArrayProbe::CalculateFiringOrder()

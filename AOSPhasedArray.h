@@ -9,10 +9,12 @@ const int g_iOEMMCScanCountMax = 16;
 
 class CAOSPhasedArray
 {
+protected:
+	CStringArray m_Messages;
+
 public:
 	WCHAR	m_wFileIdentifier[60] = L"USLScanner Phased Array";
 
-	CStringArray m_Messages;
 
 	CAOSPhasedArray();
 	~CAOSPhasedArray();
@@ -115,7 +117,8 @@ public:
 	bool Enable(bool bStart);
 	bool DriverRegistration();
 	bool setAnalogueGain(float fGain);
-	bool setDigitalGain(float fGain);
+	bool setDigitalGain(PVOID pParent);
+	bool setBeamCorrectionGain(PVOID pParent, int nFL, float fGain);
 	bool setPulseWidth(PVOID pParent, float fPulseWidth);
 	bool setTxFocalLaws(PVOID pParent);
 	bool setRxFocalLaws(PVOID pParent);
@@ -125,6 +128,7 @@ public:
 	bool setAllHardwareVariables(PVOID pParent, int nWhichMask);
 	bool HWToFile();
 	void EditFile(wchar_t * pFile, bool bCloseWaiting);
+	bool setMessageFail(CString strMessage, bool * bRet);
 	ULONGLONG Save(CUSLFile* pFile);
 	bool Retrieve(CUSLFile* pFile);
 	bool SetFilter();

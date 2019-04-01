@@ -79,6 +79,10 @@ public:
 	afx_msg void OnCbnSelchangeComboMode();
 	CButton m_buttonConnect;
 	afx_msg void OnBnClickedButtonConnect();
+	CEdit m_editSyncShift4;
+	CSpinButtonCtrl m_spinSyncShift4;
+	afx_msg void OnEnChangeEditSyncShift4();
+	afx_msg void OnDeltaposSpinSyncShift4(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 //{{AFX_INSERT_LOCATION}}

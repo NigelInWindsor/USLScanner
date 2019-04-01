@@ -169,6 +169,7 @@ public:
 	CListBox m_listCoords;
 	CEdit m_editVecE0E1;
 	afx_msg void OnEnChangeEdit1();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 //{{AFX_INSERT_LOCATION}}

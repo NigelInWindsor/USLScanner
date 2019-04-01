@@ -3587,7 +3587,9 @@
 #define IDC_SPIN_SYNC_SHIFT3            3918
 #define IDC_SPIN_SQUELCH_ATTENUATION    3918
 #define IDC_EDIT_SPEED_MOVE             3919
+#define IDC_EDIT_SYNC_SHIFT4            3919
 #define IDC_EDIT_SPEED_NORMALIZATION    3920
+#define IDC_SPIN_SYNC_SHIFT4            3920
 #define IDC_EDIT_SPEED_ORTHOGONAL       3921
 #define IDC_CHECK_CONNECT_AT_STARTUP    3922
 #define IDC_EDIT_PROBE_ANGLE            3923
@@ -3826,6 +3828,8 @@
 #define IDC_CHECK_TX_EQUALS_RX          4116
 #define IDC_CHECK_REVERSE_ELEMENTS      4117
 #define IDC_LIST_MESSAGES               4119
+#define IDC_CHECK_ENABLE_FILTER         4121
+#define IDC_COMBO_NORMALIZE_GATE        4123
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6092,7 +6096,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        734
 #define _APS_NEXT_COMMAND_VALUE         34152
-#define _APS_NEXT_CONTROL_VALUE         4121
+#define _APS_NEXT_CONTROL_VALUE         4124
 #define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif

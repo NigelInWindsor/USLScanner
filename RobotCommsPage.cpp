@@ -402,7 +402,7 @@ void CRobotCommsPage::OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *pResu
 {
 	//	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-	static	WCHAR str[100];
+	static	WCHAR str[200];
 
 	str[0] = 0;
 	pDispInfo->item.pszText = str;
@@ -410,9 +410,9 @@ void CRobotCommsPage::OnLvnGetdispinfoListMessages(NMHDR *pNMHDR, LRESULT *pResu
 
 	if (nRow < theApp.m_FBCtrl.getRxArraySize()) {
 		switch (pDispInfo->item.iSubItem) {
-		case 0:	swprintf_s(str, 100, _T("%d"), pDispInfo->item.iItem + 1);
+		case 0:	swprintf_s(str, 200, _T("%d"), pDispInfo->item.iItem + 1);
 			break;
-		case 1:	swprintf_s(str, 100, _T("%s"), (LPCWSTR)theApp.m_FBCtrl.getRxArrayAt(nRow).GetBuffer());
+		case 1:	swprintf_s(str, 200, _T("%s"), (LPCWSTR)theApp.m_FBCtrl.getRxArrayAt(nRow).GetBuffer());
 			break;
 		}
 		if (theApp.m_FBCtrl.GetRxFlagAt(nRow) == ERROR_STR) {

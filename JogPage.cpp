@@ -439,6 +439,7 @@ BOOL CJogPage::PreTranslateMessage(MSG* pMsg)
 			case DUAL_ROBOT:
 			case DUAL_ROBOT_9_PLUS_9:
 			case RAILWAY_AXLE:
+			case TANK_2AXIS:
 				if (m_nSide == 0 || m_nSide == 2) {
 					Buff.Format(L"XJogMove=%.02f", fXDistance);				theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 					Buff.Format(L"YJogMove=%.02f", fYDistance);				theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);

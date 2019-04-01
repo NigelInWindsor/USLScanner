@@ -238,6 +238,12 @@ void CRectilinearScanPage::UpdateAllControls()
 		}
 	}
 
+	m_editSlowIncrement.SetReadOnly(false);
+	if (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY) {
+		PROFILE->m_fSlowIncrement = theApp.m_PhasedArray[PORTSIDE].getRxFocalLawPitch();
+		m_editSlowIncrement.SetReadOnly(true);
+	}
+
 	Buff.Format(_T("%.*f %s"),theApp.m_LastSettings.nStepSizePrecision,PROFILE->m_fFastIncrement * theApp.m_fUnits,theApp.m_Units);
 	m_editFastIncrement.SetWindowText(Buff);
 	Buff.Format(_T("%.*f %s"),theApp.m_LastSettings.nStepSizePrecision,PROFILE->m_fSlowIncrement * theApp.m_fUnits,theApp.m_Units);
@@ -586,7 +592,7 @@ void CRectilinearScanPage::OnButtonStart()
 	case SPX_ROBOT:
 	case TANK_5AXIS:
 	case TANK_6AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		if (theApp.m_LastSettings.nDesiredDevice == PHASED_ARRAY) {
 			pFrame->StartScan(ROBOT_ROLLER_PROBE_SCAN);
 		}

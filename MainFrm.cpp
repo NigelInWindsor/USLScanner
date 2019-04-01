@@ -4509,9 +4509,9 @@ HRESULT CMainFrame::SetAccessPrivelages(WPARAM wp, LPARAM lp)
 	if(m_pProfileSheet && m_pProfileSheet->GetSafeHwnd()) m_pProfileSheet->SetAccessPrivelage();
 	if(m_pMotionToolsSheet && m_pMotionToolsSheet->GetSafeHwnd()) m_pMotionToolsSheet->UpdateAllPages();
 	if(m_pPaletteSheet && m_pPaletteSheet->GetSafeHwnd()) m_pPaletteSheet->UpdateAllPages();
-	m_wndAxisPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
-	m_wndAxesPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
-	m_wndPropertiesPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
+	if(m_wndAxisPane && m_wndAxisPane.GetSafeHwnd()) m_wndAxisPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
+	if (m_wndAxesPane && m_wndAxesPane.GetSafeHwnd()) m_wndAxesPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
+	if (m_wndPropertiesPane && m_wndPropertiesPane.GetSafeHwnd()) m_wndPropertiesPane.SendMessage(UI_SET_ACCESS_PRIVELAGES);
 
 
 	if((theApp.m_LastSettings.nScanMask & _LOCK_WP) && (theApp.m_pScanData != NULL)) {

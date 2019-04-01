@@ -92,6 +92,9 @@ struct Tank5AxisIO {
 	unsigned __int16 cCoordStatus[3];
 	int nEncoderPos[5];
 	unsigned char cAxisStatus[5];
+	unsigned char cPumpStatus;
+	unsigned char cAirKnifeStatus;
+	unsigned char cEStopStatus;
 };
 
 struct Tank6AxisIO {

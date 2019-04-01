@@ -2220,7 +2220,7 @@ void CMainThread::CollectNormalizeData()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 	case TANK_6AXIS:
 		theApp.m_Motors.GetSurfacePos(&CpHead);
@@ -2288,7 +2288,7 @@ void CMainThread::Normalize()
 		break;
 	case RAILWAY_AXLE:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case DUAL_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
 	case TANK_6AXIS:
@@ -4125,7 +4125,7 @@ void CMainThread::MovetoStartWithoutDangerPlane()
 		break;
 	case SPX_ROBOT: 
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 		MovetoPosWithoutDangerPlaneFieldBus();
 		break;
 	case TRACKED_PROBE:
@@ -4261,7 +4261,7 @@ void CMainThread::MovetoViaDangerPlane()
 		case DOUBLE_BRIDGE_TANK:
 		case TANK_5AXIS:
 		case TANK_6AXIS:
-		case QUICKSTEP_FLATBED:
+		case TANK_2AXIS:
 			MovetoViaDangerPlaneBridgeTank();
 			break;
 		case SINGLE_ROBOT:

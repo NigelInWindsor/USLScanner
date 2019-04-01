@@ -18,7 +18,8 @@ CAxesPane::CAxesPane()
 	m_strAmplifier[1] = L"Kollmorgen";
 	m_strAmplifier[2] = L"Copley";
 	m_strAmplifier[3] = L"Staubli";
-	m_strAmplifier[4] = L"GeoBrick";
+	m_strAmplifier[4] = L"Oriental";
+	m_strAmplifier[5] = L"GeoBrick";
 
 	m_strUnits[0] = L"mm";
 	m_strUnits[1] = L"\x022";
@@ -246,7 +247,7 @@ void CAxesPane::OnGetdispinfoListAxes(NMHDR *pNMHDR, LRESULT *pResult)
 			swprintf_s(str, 100, L"%.1f", pAxis->fMaxKin);
 			break;
 		case 13:
-			swprintf_s(str, 100, L"%s", (LPCWSTR)m_strAmplifier[pAxis->eAmplifierType % 4]);
+			swprintf_s(str, 100, L"%s", (LPCWSTR)m_strAmplifier[pAxis->eAmplifierType % 5]);
 			break;
 		case 14:
 			swprintf(str, 100, L"%s", (LPCWSTR)m_strUnits[MinMax(&pAxis->nUnitSelected, 0, 2)]);

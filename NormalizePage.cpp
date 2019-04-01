@@ -708,7 +708,7 @@ void CNormalizePage::OnButtonWaterpathLeft()
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TANK_5AXIS:
-	case QUICKSTEP_FLATBED:
+	case TANK_2AXIS:
 	case TWIN_TOWER_KINEMATIC:
 	case TANK_6AXIS:
 		theApp.m_Motors.GetSurfacePos(&CpSurface);
@@ -726,7 +726,7 @@ void CNormalizePage::OnButtonWaterpathLeft()
 			CpSurface.Side[STARBOARD].fZ -= CpSurface.Side[STARBOARD].fK * fWp;
 		}
 
-		if (theApp.m_Tank.nScannerDescription == TANK_5AXIS || theApp.m_Tank.nScannerDescription == QUICKSTEP_FLATBED) {
+		if (theApp.m_Tank.nScannerDescription == TANK_5AXIS || theApp.m_Tank.nScannerDescription == TANK_2AXIS) {
 			theApp.m_Motors.IntelligentGotoSurfaceCoord(&CpSurface, 1, 0);
 			return;
 		}

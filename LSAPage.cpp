@@ -572,10 +572,10 @@ again_label:
 	Sleep(500);
 	for(nFL=0;nFL<theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws();nFL++) {
 
-		nAmp = theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nLSACalibrationGate];
-		theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nLSACalibrationGate] = nAmp;
+		nAmp = theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate];
+		theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] = nAmp;
 
-		if(theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nLSACalibrationGate] >= 127) {
+		if(theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] >= 127) {
 			if(m_pPr30->fLinGain >= 1.0f) {
 				m_pPr30->fLinGain -= 1.0f;
 				theApp.m_UtUser.Pr30LinFloatGain(m_pPr30);
@@ -597,7 +597,7 @@ again_label:
 	dMax = -100.0;
 	dMin = 100.0;
 	for(nFL=0;nFL<theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws();nFL++) {
-		dAmp[nFL] = (double)theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nLSACalibrationGate] * 100.0 / 128.0;
+		dAmp[nFL] = (double)theApp.m_UtUser.m_TS[nFL].Gate.nAmplitude[theApp.m_LastSettings.nPhasedArrayNormalizeGate] * 100.0 / 128.0;
 		if(dAmp[nFL] > dMax) {
 			dMax = dAmp[nFL];
 			nMaxFL = nFL;
@@ -609,8 +609,8 @@ again_label:
 	}
 
 	dDesiredAmp = dMax;
-	if(theApp.m_LastSettings.nLSACalibrationGate > 0) {
-		if(theApp.m_UtUser.m_TS[0].Gate.nThreshold[theApp.m_LastSettings.nLSACalibrationGate] >= 0) {
+	if(theApp.m_LastSettings.nPhasedArrayNormalizeGate > 0) {
+		if(theApp.m_UtUser.m_TS[0].Gate.nThreshold[theApp.m_LastSettings.nPhasedArrayNormalizeGate] >= 0) {
 			dDesiredAmp = dMax;
 		} else {
 			dDesiredAmp = fabs(dMin);
@@ -619,7 +619,7 @@ again_label:
 
 	for(nFL=0;nFL<theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws();nFL++) {
 
-		if(theApp.m_UtUser.m_TS[0].Gate.nThreshold[theApp.m_LastSettings.nLSACalibrationGate] >= 0) {
+		if(theApp.m_UtUser.m_TS[0].Gate.nThreshold[theApp.m_LastSettings.nPhasedArrayNormalizeGate] >= 0) {
 			dGain =	log10(dDesiredAmp/dAmp[nFL]) * 20;
 		} else {
 			dGain =	log10(dDesiredAmp/fabs(dAmp[nFL])) * 20;
@@ -701,7 +701,7 @@ void CLSAPage::UpdateAllControls()
 
 	m_spinFocalLawGain.SetPos((int)(theApp.m_LSA.GetFLGain(theApp.m_LSA.m_nScopeViewLaw) * 10.0f));
 
-	m_comboGate.SetCurSel(theApp.m_LastSettings.nLSACalibrationGate);
+	m_comboGate.SetCurSel(theApp.m_LastSettings.nPhasedArrayNormalizeGate);
 
 	////////////// PR30 Stuff
 	m_comboAmplifier.SetCurSel(m_pPr30->nOutputSelect);
@@ -789,7 +789,7 @@ void CLSAPage::OnButtonZeroGains()
 
 void CLSAPage::OnSelchangeComboGate() 
 {
-	theApp.m_LastSettings.nLSACalibrationGate = m_comboGate.GetCurSel();
+	theApp.m_LastSettings.nPhasedArrayNormalizeGate = m_comboGate.GetCurSel();
 }
 
 void CLSAPage::CreateColumns()

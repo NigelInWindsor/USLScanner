@@ -104,4 +104,8 @@ public:
 	void OnRbdacmenuDeletept();
 	CComboBox m_comboDacEnable;
 	afx_msg void OnCbnSelchangeComboEnable();
+	CComboBox m_comboNormalizeGate;
+	afx_msg void OnCbnSelchangeComboNormalizeGate();
+	afx_msg void OnBnClickedButtonNormalize();
+	afx_msg void OnBnClickedButtonZero();
 };

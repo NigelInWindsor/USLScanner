@@ -20,6 +20,8 @@ public:
 	int getLastElement();
 	float getTxDelay(int nElement);
 	float getRxDelay(int nTOF, int nElement);
+	float getGain();
+	float setGain(float fGain);
 
 
 public:
@@ -33,6 +35,7 @@ public:
 	int m_nStartElement;
 	int	m_nLastElement;
 	float m_fBeamAngle;
+	float m_fGain;
 	int	m_nFocalTOFCount;
 	float m_fFocalLength[4];
 

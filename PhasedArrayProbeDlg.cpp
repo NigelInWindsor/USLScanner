@@ -241,7 +241,7 @@ void CPhasedArrayProbeDlg::UpdateAllControls()
 
 void CPhasedArrayProbeDlg::FillList()
 {
-	CString Buff;
+	CString Buff, Gain;
 
 	m_listCoords.ResetContent();
 	if (theApp.m_LastSettings.nPhasedArrayMask & PA_DISPLAY_ELEMENTS) {
@@ -253,7 +253,8 @@ void CPhasedArrayProbeDlg::FillList()
 	else {
 		for (int ii = 0; ii < theApp.m_PhasedArray[PORTSIDE].getNumberFocalLaws(); ii++) {
 			Buff = theApp.m_PhasedArray[PORTSIDE].getstrFocalLawPos(TX_FL,ii);
-			m_listCoords.AddString(Buff);
+			Gain = theApp.m_PhasedArray[PORTSIDE].getstrFocalLawGain(RX_FL, ii);
+			m_listCoords.AddString(Buff + L" " + Gain);
 		}
 	}
 }
@@ -1280,4 +1281,32 @@ void CPhasedArrayProbeDlg::OnEnChangeEdit1()
 	ExtractVector(Buff, NULL, &vec, NULL);
 
 	theApp.m_PhasedArray[0].setVectorEOE1(vec);
+}
+
+
+BOOL CPhasedArrayProbeDlg::PreTranslateMessage(MSG* pMsg)
+{
+	HANDLE hWnd;
+	CString	Buff;
+
+	if (pMsg->message == 0x100) {
+
+		switch (pMsg->wParam) {
+		case 13:
+			hWnd = ::GetFocus();
+			if (hWnd == m_editVecE0E1.m_hWnd) {
+				theApp.m_PhasedArray[PORTSIDE].CalculateElementCoordinates();
+				theApp.m_PhasedArray[PORTSIDE].CalculateTxFocalLaws();
+				theApp.m_PhasedArray[PORTSIDE].CalculateRxFocalLaws();
+
+				FillList();
+
+				::SetFocus(m_editVecE0E1.m_hWnd);
+				return TRUE;
+			}
+			break;
+		}
+	}
+
+	return CResizablePage::PreTranslateMessage(pMsg);
 }
