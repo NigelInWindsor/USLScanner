@@ -114,6 +114,7 @@
 #define IDD_DATA_VALUE_PROPERTIES_DLG   169
 #define IDS_Zero_degrees                169
 #define IDD_ZOOM_PAGE                   170
+#define IDS_Rotate                      170
 #define IDD_RULER_PAGE                  171
 #define IDD_VIEW_DIALOGBAR              172
 #define IDR_VIEW_TOOLS_TOOLBAR          173
@@ -1700,29 +1701,23 @@
 #define IDC_CHECK_LOAD_UT               2170
 #define IDC_EDIT_SAMPLESLINE            2171
 #define IDC_EDIT_I                      2171
-#define IDC_EDIT_YAW                    2171
 #define IDC_EDIT_NUMBERLINES            2172
 #define IDC_EDIT_J                      2172
 #define IDC_EDIT_STARTOFFSET            2173
 #define IDC_EDIT_K                      2173
-#define IDC_EDIT_ROLL                   2173
 #define IDC_EDIT_MAX_VALUE              2174
 #define IDC_EDIT_W                      2174
 #define IDC_EDIT_QX                     2174
 #define IDC_EDIT_MIN_VALUE              2175
 #define IDC_EDIT_RF_X                   2175
-#define IDC_EDIT_NORM_I                 2175
 #define IDC_EDIT_QY                     2175
 #define IDC_SPIN_SAMPLESLINE            2176
 #define IDC_EDIT_RF_Y                   2176
-#define IDC_EDIT_NORM_J                 2176
 #define IDC_EDIT_QZ                     2176
 #define IDC_SPIN_NUMBERLINES            2177
 #define IDC_EDIT_RF_Z                   2177
-#define IDC_EDIT_NORM_K                 2177
 #define IDC_EDIT_QW                     2177
 #define IDC_EDIT_RF_I                   2178
-#define IDC_EDIT_NORM_R                 2178
 #define IDC_EDIT_SEARCH_FOR             2179
 #define IDC_EDIT_RF_J                   2179
 #define IDC_COMBO_SIZEOF                2180
@@ -1910,7 +1905,6 @@
 #define IDC_BUTTON_FINISH               2354
 #define IDC_EDIT_RIGHT_XT               2355
 #define IDC_EDIT_RIGHT_YT               2356
-#define IDC_EDIT_PITCH                  2356
 #define IDC_EDIT_RIGHT_I                2357
 #define IDC_EDIT_RIGHT_J                2358
 #define IDC_EDIT_PHASE                  2358
@@ -2633,11 +2627,17 @@
 #define IDC_COMBO_MAIN_TIPS             3044
 #define IDC_EDIT_MINIMUM_WATER_PATH     3045
 #define IDC_COMBO_CSCAN_OVERLAYMODE     3046
+#define IDC_BUTTON_YAW_NEGATIVE         3046
 #define IDC_COMBO_RESOLUTION            3047
+#define IDC_BUTTON_YAW_POSITIVE         3047
 #define IDC_BUTTON_ROT_X_POS            3048
+#define IDC_BUTTON_PITCH_NEGATIVE       3048
 #define IDC_BUTTON_ROT_X_NEG            3049
+#define IDC_BUTTON_PITCH_POSITIVE       3049
 #define IDC_EDIT_THETA                  3050
+#define IDC_BUTTON_ROLL_NEGATIVE        3050
 #define IDC_SPIN_THETA                  3051
+#define IDC_BUTTON_ROLL_POSITIVE        3051
 #define IDC_EDIT_PHI                    3052
 #define IDC_SPIN_PHI                    3053
 #define IDC_LIST_LIGHTS                 3054
@@ -3830,6 +3830,13 @@
 #define IDC_LIST_MESSAGES               4119
 #define IDC_CHECK_ENABLE_FILTER         4121
 #define IDC_COMBO_NORMALIZE_GATE        4123
+#define IDC_EDIT_FRAME_ZERO             4124
+#define IDC_EDIT_NORM_I                 4125
+#define IDC_EDIT_NORM_J                 4126
+#define IDC_EDIT_NORM_K                 4127
+#define IDC_EDIT_ROLL                   4128
+#define IDC_EDIT_PITCH                  4129
+#define IDC_EDIT_YAW                    4130
 #define ID_SYSTEM_OPTIONS               32771
 #define ID_SYSTEM_CARDS                 32772
 #define ID_SYSTEM_DEVICERESOURCES       32773
@@ -6094,9 +6101,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        734
+#define _APS_NEXT_RESOURCE_VALUE        736
 #define _APS_NEXT_COMMAND_VALUE         34152
-#define _APS_NEXT_CONTROL_VALUE         4124
+#define _APS_NEXT_CONTROL_VALUE         4131
 #define _APS_NEXT_SYMED_VALUE           394
 #endif
 #endif

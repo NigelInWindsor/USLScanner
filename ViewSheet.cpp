@@ -319,7 +319,7 @@ int CViewSheet::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	int cyTlb = m_wndArchiveToolBar.CalcFixedLayout(FALSE, TRUE).cy;
 
-	m_wndArchiveToolBar.SetWindowPos(NULL, rrClient.left, rrClient.top, m_wndArchiveToolBar.CalcFixedLayout(FALSE, TRUE).cx, cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);			m_wndArchiveToolBar.GetWindowRect(rr);
+	m_wndArchiveToolBar.SetWindowPos(NULL, rrClient.left, rrClient.top, m_wndArchiveToolBar.CalcFixedLayout(FALSE, TRUE).cx, cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);			m_wndArchiveToolBar.GetWindowRect(rr); ScreenToClient(rr);
 	m_wndToolsToolBar.SetWindowPos(NULL, rr.right, rrClient.top, m_wndToolsToolBar.CalcFixedLayout(FALSE, TRUE).cx, cyTlb, SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW);	m_wndToolsToolBar.GetWindowRect(rr);
 
 

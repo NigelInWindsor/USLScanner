@@ -1010,7 +1010,7 @@ bool CLSA::OldApplyFocalLaws(int &nFocalLaws, int nElements, int nStartPosition,
 
 bool CLSA::ApplyFocalLaws(int &nFocalLaws, int nElements, int nStartPosition, bool bFocused, int nFocusDepth, int nScanPitch, float fArrayPitchmm)
 {
-	int nActualNumberofFLs,nTemp,nACM,nFL,jj,nStartElement,nFinishElement,nElement;
+	int nActualNumberofFLs,nTemp,nFL,jj,nStartElement,nFinishElement;
 	struct LSAFocalLaw LocalFLii;
 	int nDelaysns[128];
 

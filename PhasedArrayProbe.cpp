@@ -996,9 +996,13 @@ void CPhasedArrayProbe::CalculateFilter()
 	case BANDSTOP:	numBands = 3;
 		break;
 	}
-	double* desired = new double[numBands];
-	double* bands = new double[2 * numBands];
-	double* weights = new double[numBands];
+	int nArraySize = 6;
+	double* desired = new double[nArraySize];
+	double* bands = new double[nArraySize];
+	double* weights = new double[nArraySize];
+	ZeroMemory(desired, nArraySize * sizeof(double));
+	ZeroMemory(bands, nArraySize * sizeof(double));
+	ZeroMemory(weights, nArraySize * sizeof(double));
 
 	if (m_fRipple <= 0.0f) m_fRipple = 0.5f;
 
@@ -1077,7 +1081,7 @@ void CPhasedArrayProbe::CalculateFilter()
 		if (bands[i]>0.5) goto finished;
 	}
 
-	m_FIR.nNumTaps = 64;
+	m_FIR.nNumTaps = 256;
 	m_FIR.remez(numBands, bands, desired, weights, FIR_BANDPASS);	//FIR_BANDPASS FIR_DIFFERENTIATOR FIR_POSITIVE
 
 

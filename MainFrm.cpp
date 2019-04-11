@@ -3210,7 +3210,7 @@ void CMainFrame::OnDeltaposSpinLeftWaterPath(NMHDR* pNMHDR, LRESULT* pResult)
 
 	fOldWp = theApp.m_Kinematics.m_fDesiredWaterPath[nSide];
 	if(theApp.m_LastSettings.nMeasurementUnits==0) {
-		theApp.m_Kinematics.m_fDesiredWaterPath[nSide] += (float)(pNMUpDown->iDelta*5);
+		theApp.m_Kinematics.m_fDesiredWaterPath[nSide] += ((float)pNMUpDown->iDelta*5.0f);
 	} else {
 		theApp.m_Kinematics.m_fDesiredWaterPath[nSide] += ((float)pNMUpDown->iDelta * 2.54f);
 	}
@@ -3218,7 +3218,6 @@ void CMainFrame::OnDeltaposSpinLeftWaterPath(NMHDR* pNMHDR, LRESULT* pResult)
 	default:
 		break;
 	case SINGLE_ROBOT:
-	case DUAL_ROBOT:
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
@@ -3232,6 +3231,9 @@ void CMainFrame::OnDeltaposSpinLeftWaterPath(NMHDR* pNMHDR, LRESULT* pResult)
 				theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(nSide,false);
 			}
 		}
+		break;
+	case DUAL_ROBOT:
+		theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(nSide, false);
 		break;
 	case TRACKED_PROBE:
 		break;
@@ -3268,7 +3270,6 @@ void CMainFrame::OnDeltaposSpinRightWaterPath(NMHDR* pNMHDR, LRESULT* pResult)
 	default:
 		break;
 	case SINGLE_ROBOT:
-	case DUAL_ROBOT:
 	case DUAL_ROBOT_9_PLUS_9:
 	case SPX_ROBOT:
 	case TWIN_TOWER_KINEMATIC:
@@ -3282,6 +3283,9 @@ void CMainFrame::OnDeltaposSpinRightWaterPath(NMHDR* pNMHDR, LRESULT* pResult)
 				theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(nSide,false);
 			}
 		}
+		break;
+	case DUAL_ROBOT:
+		theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(nSide, false);
 		break;
 	case TRACKED_PROBE:
 		break;

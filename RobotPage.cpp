@@ -41,7 +41,9 @@ void CRobotPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_BASE_ROT_Z, m_editBaseRotZ);
 	DDX_Control(pDX, IDC_EDIT_BASE_ROT_Y, m_editBaseRotY);
 	DDX_Control(pDX, IDC_EDIT_BASE_ROT_X, m_editBaseRotX);
-	DDX_Control(pDX, IDC_EDIT_NORM_R, m_editNormR);
+	DDX_Control(pDX, IDC_EDIT_ROLL, m_editRoll);
+	DDX_Control(pDX, IDC_EDIT_PITCH, m_editPitch);
+	DDX_Control(pDX, IDC_EDIT_YAW, m_editYaw);
 	DDX_Control(pDX, IDC_EDIT_NORM_K, m_editNormK);
 	DDX_Control(pDX, IDC_EDIT_NORM_J, m_editNormJ);
 	DDX_Control(pDX, IDC_EDIT_NORM_I, m_editNormI);
@@ -91,6 +93,7 @@ void CRobotPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_I, m_editI);
 	DDX_Control(pDX, IDC_EDIT_X, m_editX);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_EDIT_FRAME_ZERO, m_editFrameZero);
 }
 
 
@@ -131,6 +134,7 @@ BEGIN_MESSAGE_MAP(CRobotPage, CResizablePage)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_BASE_ROT_Z, OnDeltaposSpinBaseRotZ)
 	ON_BN_CLICKED(IDC_BUTTON_BASE, OnButtonBase)
 	//}}AFX_MSG_MAP
+	ON_EN_CHANGE(IDC_EDIT_FRAME_ZERO, &CRobotPage::OnEnChangeEditFrameZero)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -319,6 +323,8 @@ void CRobotPage::UpdateAllControls()
 	Buff.Format(L"%.02f%s",theApp.m_Robot[m_nRobot].m_fBaseRotZ,DEGREES);
 	m_editBaseRotZ.SetWindowText(Buff);
 
+	Buff.Format(L"X:%.01f Y:%.01f Z:%.01f", theApp.m_Tank.vFrameZero[m_nRobot].x, theApp.m_Tank.vFrameZero[m_nRobot].y, theApp.m_Tank.vFrameZero[m_nRobot].z);
+	m_editFrameZero.SetWindowTextW(Buff);
 
 	SetAccessPrivelage();
 
@@ -442,13 +448,13 @@ void CRobotPage::OnTimer(UINT nIDEvent)
 		m_editY.SetWindowText(Buff);
 		Buff.Format(L"%.02f",vPos.z);
 		m_editZ.SetWindowText(Buff);
-		Buff.Format(L"%.03f",quatPos.x);
+		Buff.Format(L"%.04f",quatPos.x);
 		m_editI.SetWindowText(Buff);
-		Buff.Format(L"%.03f",quatPos.y);
+		Buff.Format(L"%.04f",quatPos.y);
 		m_editJ.SetWindowText(Buff);
-		Buff.Format(L"%.03f",quatPos.z);
+		Buff.Format(L"%.04f",quatPos.z);
 		m_editK.SetWindowText(Buff);
-		Buff.Format(L"%.03f",quatPos.w);
+		Buff.Format(L"%.04f",quatPos.w);
 		m_editW.SetWindowText(Buff);
 
 		//Normal from quaternion
@@ -464,15 +470,14 @@ void CRobotPage::OnTimer(UINT nIDEvent)
 		Buff.Format(L"%.04f",matQuatRot._31);	m_editNormI.SetWindowText(Buff);
 		Buff.Format(L"%.04f",matQuatRot._32);	m_editNormJ.SetWindowText(Buff);
 		Buff.Format(L"%.04f",matQuatRot._33);	m_editNormK.SetWindowText(Buff);
-//		float fR = atan2f(matQuatRot._23,matQuatRot._13) * RAD_TO_DEG;
-		float fR = -atan2f(-matQuatRot._23,-matQuatRot._13) * RAD_TO_DEG;
-/*		if(fR >= 0.0f) {
-			fR = 180.0f - fR;
-		} else {
-			fR = 180.0f + fR;
-		};
-		*/
-		Buff.Format(L"%.02f",fR);	m_editNormR.SetWindowText(Buff);
+
+		float fYaw = atan2f(matQuatRot._32,  matQuatRot._31) * RAD_TO_DEG;
+		float fPitch = acosf(matQuatRot._33) * RAD_TO_DEG;
+		float fRoll = atan2f(-matQuatRot._23,-matQuatRot._13) * -RAD_TO_DEG;
+
+		Buff.Format(L"%.01f", fYaw);	m_editYaw.SetWindowText(Buff);
+		Buff.Format(L"%.01f", fPitch);	m_editPitch.SetWindowText(Buff);
+		Buff.Format(L"%.01f", fRoll);	m_editRoll.SetWindowText(Buff);
 
 
 		Cp.Side0.fI = -matQuatRot._31;
@@ -896,4 +901,10 @@ void CRobotPage::OnButtonBase()
 	};
 	
 	UpdateAllControls();
+}
+
+
+void CRobotPage::OnEnChangeEditFrameZero()
+{
+	ExtractVector(&m_editFrameZero, &theApp.m_Tank.vFrameZero[m_nRobot]);
 }

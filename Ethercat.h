@@ -47,10 +47,12 @@ struct Global32AxisIO {
 struct TwinRobotIO {
 	unsigned char cDataFormat;
 	unsigned char cLife;
-	unsigned char cGeneralStatus;
 	unsigned char cCoordStatus[3];
 	int nEncoderPos[14];
 	unsigned char cAxisStatus[14];
+	unsigned char cPumpStatus;
+	unsigned char cAirKnifeStatus;
+	unsigned char cEStopStatus;
 };
 
 

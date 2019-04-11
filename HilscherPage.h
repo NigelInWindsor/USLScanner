@@ -29,12 +29,6 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CHilscherPage)
 	enum { IDD = IDD_HILSCHER_PAGE };
-	CEdit	m_editSyncShift1;
-	CSpinButtonCtrl	m_spinSyncShift1;
-	CEdit	m_editSyncShift2;
-	CSpinButtonCtrl	m_spinSyncShift2;
-	CEdit	m_editSyncShift3;
-	CSpinButtonCtrl	m_spinSyncShift3;
 	CEdit	m_editCallbackPeriod;
 	CEdit	m_editCallbackCount;
 	CComboBox	m_comboDisplayMode;
@@ -65,12 +59,6 @@ protected:
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnHilscherClearall();
-	afx_msg void OnChangeEditSyncShift1();
-	afx_msg void OnDeltaposSpinSyncShift1(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnChangeEditSyncShift2();
-	afx_msg void OnDeltaposSpinSyncShift2(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnChangeEditSyncShift3();
-	afx_msg void OnDeltaposSpinSyncShift3(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -79,10 +67,6 @@ public:
 	afx_msg void OnCbnSelchangeComboMode();
 	CButton m_buttonConnect;
 	afx_msg void OnBnClickedButtonConnect();
-	CEdit m_editSyncShift4;
-	CSpinButtonCtrl m_spinSyncShift4;
-	afx_msg void OnEnChangeEditSyncShift4();
-	afx_msg void OnDeltaposSpinSyncShift4(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
 //{{AFX_INSERT_LOCATION}}

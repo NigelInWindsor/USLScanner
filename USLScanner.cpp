@@ -38,6 +38,7 @@ END_MESSAGE_MAP()
 
 CUSLScannerApp::CUSLScannerApp()
 {
+	TestEuler();
 	CheckQuaternionMaths();
 	//Set up memory leak detection.
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -657,6 +658,12 @@ BOOL CUSLScannerApp::InitInstance()
 
 
 	CEvaluationDlg dlg;
+	for (int ii = 0; ii < ParamsL; ii++) {
+		if (Params.GetAt(ii) == "code") {
+			dlg.SetSelfDestructDate(0);
+		}
+	}
+
 	if (dlg.IsCodeRequired() == true) {
 		dlg.DoModal();
 		if (dlg.IsCodeRequired() == true) {
@@ -2433,4 +2440,33 @@ int CUSLScannerApp::ScanfDistanceTimens(CString Buff, int nUnits)
 		break;
 	};
 	return nTimens;
+}
+
+
+void CUSLScannerApp::TestEuler()
+{
+	CCoord Cp;
+	D3DXMATRIXA16 matYPR;
+	D3DXMATRIXA16 matQuat;
+	D3DXQUATERNION quat;
+	D3DXMATRIXA16 matRoll, matPitch, matYaw;
+
+	D3DXVECTOR3 vect = D3DXVECTOR3(0.9f, 0.2f, 0.8f);
+	D3DXVec3Normalize(&vect, &vect);
+	float fRoll = 0.0f;
+	float fYaw = atan2f(vect.y, vect.x);
+	float fPitch = acosf(vect.z);
+
+	D3DXMatrixRotationZ(&matRoll, fRoll);
+	D3DXMatrixRotationY(&matPitch, fPitch);
+	D3DXMatrixRotationZ(&matYaw, fYaw);
+	D3DXMatrixMultiply(&matYPR, &matRoll, &matPitch);
+	D3DXMatrixMultiply(&matYPR, &matYPR, &matYaw);
+
+	Cp.Side0.norm.x = vect.x;
+	Cp.Side0.norm.y = vect.y;
+	Cp.Side0.norm.z = vect.z;
+	Cp.Side0.norm.w = 0.0f;
+	Cp.QuaternionFromNormal(0, &quat);
+	D3DXMatrixRotationQuaternion(&matQuat, &quat);
 }

@@ -314,7 +314,9 @@ public:
 	void FormatNormal(CString *pBuff,int nStyle,int nOffset=0);
 	void TransformCoordinate(int nSide, D3DXVECTOR3 * vTranslate, float fXRotateDegrees, float fYRotateDegrees, float fZRotateDegrees);
 	void RotateCoordinate(int nSide, float fXRotateDegrees, float fYRotateDegrees, float fZRotateDegrees);
+	D3DXMATRIXA16 & YawPitchRollToMatrix(float fYaw, float fPitch, float fRoll);
 	void FormatQuaternion(CString *pBuff,int nStyle,int nOffset=0);
+	void FormatYawPitchRoll(CString * pBuff, int nStyle, int nOffset);
 	void Retrieve(CUSLFile* pFile);
 	void Save(CUSLFile* pFile);
 

@@ -498,7 +498,7 @@ bool CParksMcClellanPage::CalculateFilter()
 		if(bands[i]>0.5) goto finished;
 	}
 
-	theApp.Fir.nNumTaps = theApp.m_LastSettings.nNumberTaps;
+	theApp.Fir.nNumTaps = theApp.m_LastSettings.nNumberTaps = 128;
 	theApp.Fir.remez( numBands, bands, desired, weights, FIR_BANDPASS);	//FIR_BANDPASS FIR_DIFFERENTIATOR FIR_POSITIVE
 
 	Invalidate(FALSE);

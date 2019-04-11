@@ -338,6 +338,13 @@ enum VertexArrayType {
 	VA_ANGLE,
 };
 
+struct YPRROTATES
+{
+	float fYaw;
+	float fPitch;
+	float fRoll;
+};
+
 class CD3DArcBall_10
 {
 public:

@@ -17,7 +17,7 @@ class CEvaluationDlg : public CDialog
 public:
 	CString *GetExpiryDate();
 	bool IsCodeRequired();
-	void	SetSelfDestructDate(CString GUID, time_t newdate = 0);
+	void	SetSelfDestructDate(time_t newdate);
 	int		CheckReceivingCode();
 	bool	FindSelfDestructDate(CString GUID, time_t * pSelfDestructDate);
 	void	SetMachineName(CString Name);

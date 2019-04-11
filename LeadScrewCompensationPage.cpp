@@ -162,12 +162,10 @@ void CLeadScrewCompensationPage::UpdateAllControls()
 	m_comboLaserAxis.SetCurSel(theApp.m_LastSettings.nLaserAxis);
 
 	FillList();
-
 }
 
 BOOL CLeadScrewCompensationPage::OnKillActive() 
 {
-	
 	if(m_bTimerActive == TRUE) KillTimer(1);
 	m_bTimerActive = FALSE;
 	
@@ -351,20 +349,13 @@ void CLeadScrewCompensationPage::OnRclickListCoords(NMHDR* pNMHDR, LRESULT* pRes
 
 void CLeadScrewCompensationPage::CloseEditSpin()
 {
-//	if(m_pEditSpinItem!=NULL) {
-//		m_pEditSpinItem->SendMessage(WM_CLOSE);
-//		m_pEditSpinItem=NULL;
-//	}
-
 	SAFE_DELETE( m_pEditSpinItem );
-
 }
 
 void CLeadScrewCompensationPage::OnLeadscrewAdd() 
 {
 	Position Pos;
 	int nAxis = m_nAxis;
-
 
 	Pos.Zero();
 	if(theApp.m_Kinematics.m_LeadScrew[ theApp.m_Axes[nAxis].nPhysicalAxis - 1 ].m_nCoordL < 1) {

@@ -68,7 +68,7 @@ void CFIR::CreateDenseGrid(int r, int numtaps, int numband, double bands[],
                      int symmetry)
 {
    int i, j, k, band;
-   double delf, lowf, highf, grid0;
+   double delf, lowf, highf;
 
    delf = 0.5/(GRIDDENSITY*r);
 
@@ -77,18 +77,18 @@ void CFIR::CreateDenseGrid(int r, int numtaps, int numband, double bands[],
  *   symmetry is odd and Grid[0] = max(delf, band[0])
  */
 
-   if ((symmetry == FIR_NEGATIVE) && (delf > bands[0]))  bands[0] = delf;
-   grid0 = (symmetry == FIR_NEGATIVE) && (delf > bands[0]) ? delf : bands[0];
+   if ((symmetry == FIR_NEGATIVE) && (delf > bands[0]))
+      bands[0] = delf;
 
    j=0;
    for (band=0; band < numband; band++)
    {
-	  lowf = (band == 0 ? grid0 : bands[2 * band]);
+      Grid[j] = bands[2*band];
+      lowf = bands[2*band];
       highf = bands[2*band + 1];
       k = (int)((highf - lowf)/delf + 0.5);   /* .5 for rounding */
       for (i=0; i<k; i++)
       {
-//		  D[j] = des[2 * band] + i * (des[2 * band + 1] - des[2 * band]) / (k - 1);
          D[j] = des[band];
          W[j] = weight[band];
          Grid[j] = lowf;

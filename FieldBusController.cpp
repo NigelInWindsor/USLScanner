@@ -641,8 +641,19 @@ void CFieldBusController::DownloadPolyLine(CPolyCoord *pLine, int nFirstCoordina
 		pLine->GetCoord(nNumberCoords, &CpSurface);
 
 		switch (theApp.m_Tank.nScannerDescription) {
-		case DUAL_ROBOT_9_PLUS_9:
 		case DUAL_ROBOT:
+			CpSurface.Side[0].pt -= theApp.m_Tank.vFrameZero[0];
+			CpSurface.Side[1].pt -= theApp.m_Tank.vFrameZero[1];
+			CpSurface.InvertNorm(PORTSIDE);
+			CpSurface.InvertNorm(STARBOARD);
+			for (int ii = 0; ii < 3; ii++) {
+				CpSurface.RotateCoordinate(PORTSIDE, -theApp.m_Tank.rFrame[PORTSIDE][ii].x, -theApp.m_Tank.rFrame[PORTSIDE][ii].y, -theApp.m_Tank.rFrame[PORTSIDE][ii].z);
+				CpSurface.RotateCoordinate(STARBOARD, -theApp.m_Tank.rFrame[STARBOARD][ii].x, -theApp.m_Tank.rFrame[STARBOARD][ii].y, -theApp.m_Tank.rFrame[STARBOARD][ii].z);
+			}
+
+			CpSurface.FormatYawPitchRoll(&Buff, 1, (nNumberCoords * 20) + nFirstCoordinate);
+			break;
+		case DUAL_ROBOT_9_PLUS_9:
 			theApp.InvertNormScannerSpecific(&CpSurface, PORTSIDE);
 			theApp.InvertNormScannerSpecific(&CpSurface, STARBOARD);
 			CpSurface.TransformCoordinate(PORTSIDE, &theApp.m_Tank.vFrameZero[0], 0.0f, 0.0f, 0.0f);
@@ -1023,6 +1034,12 @@ void CFieldBusController::DownloadRobotKinematics(int nRobot)
 	Buff.Format(L"%sBaseRotZ=%f",Robot,theApp.m_Robot[nRobot].m_fBaseRotZ);
 	SendStr(Buff, _TERMINAL);
 */
+	Buff.Format(L"%sLength01X=%f", Robot, theApp.m_Robot[nRobot].m_vBaseJ1.x);
+	SendStr(Buff, _TERMINAL);
+	Buff.Format(L"%sLength01Y=%f", Robot, theApp.m_Robot[nRobot].m_vBaseJ1.y);
+	SendStr(Buff, _TERMINAL);
+	Buff.Format(L"%sLength01Z=%f", Robot, theApp.m_Robot[nRobot].m_vBaseJ1.z);
+	SendStr(Buff, _TERMINAL);
 
 	Buff.Format(L"%sLength12X=%f",Robot,theApp.m_Robot[nRobot].m_vJ1J2.x);
 	SendStr(Buff, _TERMINAL);
@@ -1156,16 +1173,16 @@ void CFieldBusController::DownloadEndEffectorWithWaterPath(int nSide,bool bImmed
 
 		switch (nSide) {
 		case 0:
-			TX = L"PreAcceptLengthTX";
-			TY = L"PreAcceptLengthTY";
-			TZ = L"PreAcceptLengthTZ";
-			rotY = L"PreAcceptToolRY";
+			TX = L"LengthTX";
+			TY = L"LengthTY";
+			TZ = L"LengthTZ";
+			rotY = L"ToolRY";
 			break;
 		case 1:
-			TX = L"B_PreAcceptLengthTX";
-			TY = L"B_PreAcceptLengthTY";
-			TZ = L"B_PreAcceptLengthTZ";
-			rotY = L"B_PreAcceptToolRY";
+			TX = L"B_LengthTX";
+			TY = L"B_LengthTY";
+			TZ = L"B_LengthTZ";
+			rotY = L"B_ToolRY";
 			break;
 		}
 
@@ -1180,11 +1197,9 @@ void CFieldBusController::DownloadEndEffectorWithWaterPath(int nSide,bool bImmed
 		Buff.Format(L"%s=%f", TZ, theApp.m_Robot[nSide].m_vJ6ToolTip.z + fWp * theApp.m_Robot[nSide].m_vAtToolTip.z + (float)theApp.m_LastSettings.nExtraArmLength);
 		SendStr(Buff, _TERMINAL);
 
-		fAngle = atan2f(theApp.m_Robot[nSide].m_vAtToolTip.x, theApp.m_Robot[nSide].m_vAtToolTip.z) * RAD_TO_DEG;
+		fAngle = asinf(theApp.m_Robot[nSide].m_vAtToolTip.x) * RAD_TO_DEG;
 		Buff.Format(L"%s=%f", rotY, fAngle);
 		SendStr(Buff, _TERMINAL);
-
-		SendStr(L"enable plc 0", _TERMINAL);
 		break;
 	case RAILWAY_AXLE:
 		switch (nSide) {
@@ -2505,6 +2520,7 @@ void CFieldBusController::EnableMotors()
 		SendStr(Buff, _TERMINAL);
 		break;
 	case DUAL_ROBOT_9_PLUS_9:
+	case DUAL_ROBOT:
 		for(ii=0;ii<2;ii++) {
 			DownloadRobotKinematics(ii);
 			DownloadEndEffectorWithWaterPath(ii,true);

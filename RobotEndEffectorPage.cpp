@@ -164,16 +164,14 @@ void CRobotEndEffectorPage::UpdateAllControls()
 	m_checkRobot0.SetWindowText(theApp.m_DlgSideName[0]);
 	m_checkRobot1.SetWindowText(theApp.m_DlgSideName[1]);
 
-	Buff.Format(L"X %.01f\tY %.01f\tZ %.01f\tI %.05f\tJ %.05f\tK %.05f",theApp.m_Robot[m_nRobot].m_vJ6ToolTip.x,theApp.m_Robot[m_nRobot].m_vJ6ToolTip.y,theApp.m_Robot[m_nRobot].m_vJ6ToolTip.z,
-										theApp.m_Robot[m_nRobot].m_vAtToolTip.x, theApp.m_Robot[m_nRobot].m_vAtToolTip.y, theApp.m_Robot[m_nRobot].m_vAtToolTip.z);
-	m_editJ6toTT.SetWindowText(Buff);
+	UpdateToolText();
 
-	fAngle = asinf(theApp.m_Robot[m_nRobot].m_vAtToolTip.x) * RAD_TO_DEG;
+	fAngle = asinf(theApp.m_Robot[m_nRobot].m_vAtToolTip.y) * RAD_TO_DEG;
 	m_spinXRotation.SetPos((int)(fAngle * 10.0f) + 1800);
 	Buff.Format(L"%.01f%s", fAngle, theApp.m_Degrees);
 	m_editXRotation.SetWindowText(Buff);
 
-	fAngle = asinf(theApp.m_Robot[m_nRobot].m_vAtToolTip.y) * RAD_TO_DEG;
+	fAngle = asinf(theApp.m_Robot[m_nRobot].m_vAtToolTip.x) * RAD_TO_DEG;
 	m_spinYRotation.SetPos((int)(fAngle * 10.0f) + 1800);
 	Buff.Format(L"%.01f%s", fAngle, theApp.m_Degrees);
 	m_editYRotation.SetWindowText(Buff);
@@ -198,11 +196,19 @@ void CRobotEndEffectorPage::UpdateAllControls()
 	m_editProbeVector.SetWindowText(Buff);
 }
 
+void CRobotEndEffectorPage::UpdateToolText()
+{
+	CString Buff;
+
+	Buff.Format(L"X %.01f\tY %.01f\tZ %.01f\tI %.05f\tJ %.05f\tK %.05f", theApp.m_Robot[m_nRobot].m_vJ6ToolTip.x, theApp.m_Robot[m_nRobot].m_vJ6ToolTip.y, theApp.m_Robot[m_nRobot].m_vJ6ToolTip.z,
+		theApp.m_Robot[m_nRobot].m_vAtToolTip.x, theApp.m_Robot[m_nRobot].m_vAtToolTip.y, theApp.m_Robot[m_nRobot].m_vAtToolTip.z);
+	m_editJ6toTT.SetWindowText(Buff);
+}
 
 void CRobotEndEffectorPage::OnDeltaposSpinYRotation(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-	
+	CString Buff;
 
 	float fAngle0 = asinf(theApp.m_Robot[m_nRobot].m_vAtToolTip.x) * RAD_TO_DEG;
 	float fAngle1 = fAngle0;
@@ -214,8 +220,11 @@ void CRobotEndEffectorPage::OnDeltaposSpinYRotation(NMHDR* pNMHDR, LRESULT* pRes
 		theApp.m_Robot[m_nRobot].m_vAtToolTip.z = cosf(fAngle1 * DEG_TO_RAD);
 
 		CalculateKinematics();
-		UpdateAllControls();
-		theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(m_nRobot,false);
+		theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(m_nRobot, false);
+
+		UpdateToolText();
+		Buff.Format(L"%.01f%s", fAngle1, theApp.m_Degrees);
+		m_editYRotation.SetWindowText(Buff);
 	}
 	*pResult = 0;
 }
@@ -232,12 +241,14 @@ void CRobotEndEffectorPage::OnChangeEditYRotation()
 	_WTOF(Buff,fAngle1);
 
 	if(fAngle1 - fAngle0) {
-			theApp.m_Robot[m_nRobot].m_vAtToolTip.x = sinf(fAngle1 * DEG_TO_RAD);
+		theApp.m_Robot[m_nRobot].m_vAtToolTip.x = sinf(fAngle1 * DEG_TO_RAD);
 		theApp.m_Robot[m_nRobot].m_vAtToolTip.y = 0.0f;
 		theApp.m_Robot[m_nRobot].m_vAtToolTip.z = cosf(fAngle1 * DEG_TO_RAD);
 
 		CalculateKinematics();
 		theApp.m_FBCtrl.DownloadEndEffectorWithWaterPath(m_nRobot,false);
+
+		UpdateToolText();
 	}
 
 

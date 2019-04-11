@@ -280,6 +280,8 @@ void CJogPage::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	CPropertyPage::OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
+#define YPRSpeed 1.0f
+
 BOOL CJogPage::PreTranslateMessage(MSG* pMsg) 
 {
 	CString Buff;
@@ -295,7 +297,10 @@ BOOL CJogPage::PreTranslateMessage(MSG* pMsg)
 	float fYDistance = 0.0f;
 	float fZDistance = 0.0f;
 	float fXtDistance = 0.0f;
-	float fYtDistance = 0.0f;
+	float fYtDistance = 0.0f; 
+	float fYawDistance = 0.0f;
+	float fPitchDistance = 0.0f;
+	float fRollDistance = 0.0f;
 
 	switch(pMsg->message) {
 	case 0x100:
@@ -420,6 +425,51 @@ BOOL CJogPage::PreTranslateMessage(MSG* pMsg)
 				}
 			}
 
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_YAW_NEGATIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fYawDistance = fDistance = -YPRSpeed;
+				}
+			}
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_YAW_POSITIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fYawDistance = fDistance = YPRSpeed;
+				}
+			}
+
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_PITCH_NEGATIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fPitchDistance = fDistance = -YPRSpeed;
+				}
+			}
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_PITCH_POSITIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fPitchDistance = fDistance = YPRSpeed;
+				}
+			}
+
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_ROLL_NEGATIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fRollDistance = fDistance = -YPRSpeed;
+				}
+			}
+			pButton = (CButton*)GetDlgItem(IDC_BUTTON_ROLL_POSITIVE);
+			if (pButton && pButton->GetSafeHwnd()) {
+				pButton->GetWindowRect(rr);	ScreenToClient(rr);
+				if (rr.PtInRect(point)) {
+					fRollDistance = fDistance = YPRSpeed;
+				}
+			}
+
 
 			switch(theApp.m_Tank.nScannerDescription) {
 			default:
@@ -444,15 +494,17 @@ BOOL CJogPage::PreTranslateMessage(MSG* pMsg)
 					Buff.Format(L"XJogMove=%.02f", fXDistance);				theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 					Buff.Format(L"YJogMove=%.02f", fYDistance);				theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 					Buff.Format(L"ZJogMove=%.02f", fZDistance);				theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-					Buff.Format(L"RXJogMove=%.05f", fXtDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-					Buff.Format(L"RYJogMove=%.05f", fYtDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"YawJogMove=%.05f", fYawDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"PitchJogMove=%.05f", fPitchDistance);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"RollJogMove=%.05f", fRollDistance);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				}
 				if (m_nSide == 1 || m_nSide == 2) {
 					Buff.Format(L"B_XJogMove=%.02f", fXDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 					Buff.Format(L"B_YJogMove=%.02f", fYDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 					Buff.Format(L"B_ZJogMove=%.02f", fZDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-					Buff.Format(L"B_RXJogMove=%.05f", fXtDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-					Buff.Format(L"B_RYJogMove=%.05f", fYtDistance);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"B_YawJogMove=%.05f", fYawDistance);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"B_PitchJogMove=%.05f", fPitchDistance);	theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+					Buff.Format(L"B_RollJogMove=%.05f", fRollDistance);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				}
 				break;
 			}
@@ -482,13 +534,15 @@ BOOL CJogPage::PreTranslateMessage(MSG* pMsg)
 				Buff.Format(L"XJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				Buff.Format(L"YJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				Buff.Format(L"ZJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-				Buff.Format(L"RXJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-				Buff.Format(L"RYJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"YawJogMove=%.05f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"PitchJogMove=%.05f", 0.0f);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"RollJogMove=%.05f", 0.0f);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				Buff.Format(L"B_XJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				Buff.Format(L"B_YJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				Buff.Format(L"B_ZJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-				Buff.Format(L"B_RXJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
-				Buff.Format(L"B_RYJogMove=%.0f", 0.0f);			theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"B_YawJogMove=%.05f", 0.0f);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"B_PitchJogMove=%.05f", 0.0f);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
+				Buff.Format(L"B_RollJogMove=%.05f", 0.0f);		theApp.m_FBCtrl.SendStr(Buff, _TERMINAL);
 				break;
 			}
 		};

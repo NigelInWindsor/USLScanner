@@ -22,8 +22,6 @@ CFlattenDlg::CFlattenDlg(CWnd* pParent /*=NULL*/,CWnd** pDlg)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
 	m_pDlg = pDlg;
-	
-
 }
 
 
@@ -105,14 +103,12 @@ void CFlattenDlg::OnDestroy()
 	CDialog::OnDestroy();
 	
 	*m_pDlg	= NULL;	
-	
 }
 
 BOOL CFlattenDlg::OnInitDialog() 
 {
 	BOOL bResult = CDialog::OnInitDialog();
 	CString Buff;
-	
 
 	m_StaticPosView.Initialize(this, m_staticView, TRUE, TRUE, TRUE, TRUE);
 
@@ -127,8 +123,6 @@ BOOL CFlattenDlg::OnInitDialog()
 	m_StaticPosView.SetNewPos();
 
 	GenerateSamplePositionVertices();
-
-
 	
 	SetToolBarCheckedState();
 
@@ -144,7 +138,6 @@ void CFlattenDlg::OnSize(UINT nType, int cx, int cy)
 	if(GetSafeHwnd()) {
 		Invalidate(FALSE);
 	}
-	
 }
 
 
@@ -160,9 +153,7 @@ void CFlattenDlg::OnPaint()
 	ScreenToClient(&m_rrView);
 	m_rrView.DeflateRect(1,1);
 
-
 	m_pArray = new COLORREF[(m_rrView.Width()+2) * (m_rrView.Height()+2)];
-
 
 	bmp.CreateCompatibleBitmap(&dc,m_rrView.Width(),m_rrView.Height());
 	bmp.SetBitmapBits((DWORD)(m_rrView.Width()*m_rrView.Height()*4),m_pArray);
@@ -179,7 +170,6 @@ void CFlattenDlg::OnPaint()
 	dcMem.SelectObject(pOldBitmap);
 
 	SAFE_DELETE(m_pArray);
-
 }
 
 void CFlattenDlg::RenderSamplePosition(CDC *pDC)

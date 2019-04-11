@@ -28,7 +28,7 @@ CEvaluationDlg::CEvaluationDlg(CWnd* pParent /*=NULL*/)
 	strcpy_s(m_MachineID,"");
 
 	if(FindSelfDestructDate(SELF_DESTRUCT_GUID,&m_nSelfDestructDate)==false) {//no date found, must be a new install
-		SetSelfDestructDate(SELF_DESTRUCT_GUID);
+		SetSelfDestructDate(0);
 		SetMachineName(SELF_DESTRUCT_GUID);
 	}
 
@@ -200,7 +200,7 @@ bool CEvaluationDlg::IsCodeRequired()
 
 
 
-void CEvaluationDlg::SetSelfDestructDate(CString GUID, time_t newdate)
+void CEvaluationDlg::SetSelfDestructDate(time_t newdate)
 {
 	CRegKey	RegKey;
 	CRegKey SubKey;
@@ -241,7 +241,7 @@ int CEvaluationDlg::CheckReceivingCode()
 		return m_nErrorCode = -1;
 	}
 
-	SetSelfDestructDate(SELF_DESTRUCT_GUID,Words[0]);
+	SetSelfDestructDate(Words[0]);
 	return 1;
 }
 
@@ -280,7 +280,7 @@ void CEvaluationDlg::OnDtnDatetimechangeDatetimepickerEval(NMHDR *pNMHDR, LRESUL
 	CString Buff;
 
 	m_datetimepickerEval.GetTime(timeSelected);
-	SetSelfDestructDate(SELF_DESTRUCT_GUID, timeSelected.GetTime());
+	SetSelfDestructDate(timeSelected.GetTime());
 
 	unsigned char *pBytes = (unsigned char*)&timeSelected;
 	int nSum = 0;

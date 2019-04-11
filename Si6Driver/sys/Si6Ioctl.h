@@ -9,6 +9,7 @@ enum AmplifierType {
 	Kollmorgen,
 	Copley,
 	Staubli,
+	Oriental,
 	GeoBrick,
 };
 

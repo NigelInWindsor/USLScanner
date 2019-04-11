@@ -437,13 +437,12 @@ void CEthercat::InvalidateRobotJoints()
 			if(cStatus & FB_MAX_SWITCH)			nStatus |= PMAC_MAX_SWITCH;
 			theApp.m_Axes[ii].nStatus = nStatus;
 		}
-
-		theApp.m_FBCtrl.m_nEStopStatus[0] = pTwinRobotIO[0]->cGeneralStatus & 1;
-		theApp.m_FBCtrl.m_nEStopStatus[1] = pTwinRobotIO[0]->cGeneralStatus & 1;
-		theApp.m_FBCtrl.m_nPumpStatus[0] = (pTwinRobotIO[0]->cGeneralStatus >> 1) & 1;
-		theApp.m_FBCtrl.m_nPumpStatus[1] = (pTwinRobotIO[0]->cGeneralStatus >> 2) & 1;
-		theApp.m_FBCtrl.m_nAirKnifeStatus[0] = (pTwinRobotIO[0]->cGeneralStatus >> 3) & 1;
-		theApp.m_FBCtrl.m_nAirKnifeStatus[1] = (pTwinRobotIO[0]->cGeneralStatus >> 4) & 1;
+		theApp.m_FBCtrl.m_nEStopStatus[0] = pTwinRobotIO[0]->cEStopStatus & 1;
+		theApp.m_FBCtrl.m_nEStopStatus[1] = pTwinRobotIO[0]->cEStopStatus & 1;
+		theApp.m_FBCtrl.m_nPumpStatus[0] = (pTwinRobotIO[0]->cPumpStatus >> 0) & 1;
+		theApp.m_FBCtrl.m_nPumpStatus[1] = (pTwinRobotIO[0]->cPumpStatus >> 1) & 1;
+		theApp.m_FBCtrl.m_nAirKnifeStatus[0] = (pTwinRobotIO[0]->cAirKnifeStatus >> 0) & 1;
+		theApp.m_FBCtrl.m_nAirKnifeStatus[1] = (pTwinRobotIO[0]->cAirKnifeStatus >> 1) & 1;
 		break;
 	case FB_11_AXIS:
 		pnPos0 =		(int*)&EthercatIO[0].cArray;

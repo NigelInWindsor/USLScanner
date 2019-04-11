@@ -25,6 +25,7 @@ public:
 	int m_nRobot;
 	
 	void UpdateAllControls();
+	void UpdateToolText();
 	CRobotEndEffectorPage();
 	~CRobotEndEffectorPage();
 

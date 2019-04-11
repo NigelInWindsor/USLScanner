@@ -32,14 +32,6 @@ void CHilscherPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CHilscherPage)
-	DDX_Control(pDX, IDC_EDIT_SYNC_SHIFT1, m_editSyncShift1);
-	DDX_Control(pDX, IDC_SPIN_SYNC_SHIFT1, m_spinSyncShift1);
-	DDX_Control(pDX, IDC_EDIT_SYNC_SHIFT2, m_editSyncShift2);
-	DDX_Control(pDX, IDC_SPIN_SYNC_SHIFT2, m_spinSyncShift2);
-	DDX_Control(pDX, IDC_EDIT_SYNC_SHIFT3, m_editSyncShift3);
-	DDX_Control(pDX, IDC_SPIN_SYNC_SHIFT3, m_spinSyncShift3);
-	DDX_Control(pDX, IDC_EDIT_SYNC_SHIFT4, m_editSyncShift4);
-	DDX_Control(pDX, IDC_SPIN_SYNC_SHIFT4, m_spinSyncShift4);
 	DDX_Control(pDX, IDC_EDIT_CALLBACK_PERIOD, m_editCallbackPeriod);
 	DDX_Control(pDX, IDC_EDIT_CALLBACK_COUNT, m_editCallbackCount);
 	DDX_Control(pDX, IDC_COMBO_DISPLAY_MODE, m_comboDisplayMode);
@@ -59,17 +51,9 @@ BEGIN_MESSAGE_MAP(CHilscherPage, CPropertyPage)
 	ON_WM_TIMER()
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_HILSCHER_CLEARALL, OnHilscherClearall)
-	ON_EN_CHANGE(IDC_EDIT_SYNC_SHIFT1, OnChangeEditSyncShift1)
-	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_SYNC_SHIFT1, OnDeltaposSpinSyncShift1)
-	ON_EN_CHANGE(IDC_EDIT_SYNC_SHIFT2, OnChangeEditSyncShift2)
-	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_SYNC_SHIFT2, OnDeltaposSpinSyncShift2)
-	ON_EN_CHANGE(IDC_EDIT_SYNC_SHIFT3, OnChangeEditSyncShift3)
-	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_SYNC_SHIFT3, OnDeltaposSpinSyncShift3)
 	//}}AFX_MSG_MAP
 	ON_CBN_SELCHANGE(IDC_COMBO_MODE, &CHilscherPage::OnCbnSelchangeComboMode)
 	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CHilscherPage::OnBnClickedButtonConnect)
-	ON_EN_CHANGE(IDC_EDIT_SYNC_SHIFT4, &CHilscherPage::OnEnChangeEditSyncShift4)
-	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_SYNC_SHIFT4, &CHilscherPage::OnDeltaposSpinSyncShift4)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -82,11 +66,6 @@ BOOL CHilscherPage::OnInitDialog()
 
 	Buff.LoadString(IDS_Raw);		m_comboDisplayMode.AddString(Buff);
 	Buff.LoadString(IDS_Decoded);	m_comboDisplayMode.AddString(Buff);
-
-	m_spinSyncShift1.SetRange(0, 100);
-	m_spinSyncShift2.SetRange(0, 100);
-	m_spinSyncShift3.SetRange(0, 100);
-	m_spinSyncShift4.SetRange(0, 100);
 
 	m_comboMode.AddString(L"Irq SI10");
 	m_comboMode.AddString(L"Event 0 ms");
@@ -119,15 +98,6 @@ void CHilscherPage::UpdateAllControls()
 	CString Buff;
 
 	theApp.m_LastSettings.nHilscherDisplayMask & 1 ? m_comboDisplayMode.SetCurSel(1) : m_comboDisplayMode.SetCurSel(0);
-
-	Buff.Format(L"%.01f", theApp.m_Tank.fEthercatSyncShift[1]);
-	m_editSyncShift1.SetWindowText(Buff);
-	Buff.Format(L"%.01f", theApp.m_Tank.fEthercatSyncShift[2]);
-	m_editSyncShift2.SetWindowText(Buff);
-	Buff.Format(L"%.01f", theApp.m_Tank.fEthercatSyncShift[3]);
-	m_editSyncShift3.SetWindowText(Buff);
-	Buff.Format(L"%.01f", theApp.m_Tank.fEthercatSyncShift[4]);
-	m_editSyncShift4.SetWindowText(Buff);
 
 	m_comboMode.SetCurSel(theApp.m_LastSettings.nEthercatCommunicationMode);
 
@@ -415,60 +385,6 @@ void CHilscherPage::OnCbnSelchangeComboMode()
 	theApp.m_LastSettings.nEthercatCommunicationMode = m_comboMode.GetCurSel();
 }
 
-void CHilscherPage::OnChangeEditSyncShift1()
-{
-	CString Buff;
-
-	m_editSyncShift1.GetWindowText(Buff);
-	_WTOF(Buff, theApp.m_Tank.fEthercatSyncShift[AmplifierType::Kollmorgen]);
-}
-
-void CHilscherPage::OnDeltaposSpinSyncShift1(NMHDR* pNMHDR, LRESULT* pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-
-	theApp.m_Tank.fEthercatSyncShift[AmplifierType::Kollmorgen] += ((float)pNMUpDown->iDelta * 0.1f);
-	UpdateAllControls();
-
-	*pResult = 0;
-}
-
-void CHilscherPage::OnChangeEditSyncShift2()
-{
-	CString Buff;
-
-	m_editSyncShift2.GetWindowText(Buff);
-	_WTOF(Buff, theApp.m_Tank.fEthercatSyncShift[AmplifierType::Copley]);
-}
-
-void CHilscherPage::OnDeltaposSpinSyncShift2(NMHDR* pNMHDR, LRESULT* pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-
-	theApp.m_Tank.fEthercatSyncShift[AmplifierType::Copley] += ((float)pNMUpDown->iDelta * 0.1f);
-	UpdateAllControls();
-
-	*pResult = 0;
-}
-
-void CHilscherPage::OnChangeEditSyncShift3()
-{
-	CString Buff;
-
-	m_editSyncShift3.GetWindowText(Buff);
-	_WTOF(Buff, theApp.m_Tank.fEthercatSyncShift[AmplifierType::Staubli]);
-}
-
-void CHilscherPage::OnDeltaposSpinSyncShift3(NMHDR* pNMHDR, LRESULT* pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-
-	theApp.m_Tank.fEthercatSyncShift[AmplifierType::Staubli] += ((float)pNMUpDown->iDelta * 0.1f);
-	UpdateAllControls();
-
-	*pResult = 0;
-}
-
 
 void CHilscherPage::OnBnClickedButtonConnect()
 {
@@ -481,22 +397,3 @@ void CHilscherPage::OnBnClickedButtonConnect()
 	}
 }
 
-
-void CHilscherPage::OnEnChangeEditSyncShift4()
-{
-	CString Buff;
-
-	m_editSyncShift4.GetWindowText(Buff);
-	_WTOF(Buff, theApp.m_Tank.fEthercatSyncShift[AmplifierType::Oriental]);
-}
-
-
-void CHilscherPage::OnDeltaposSpinSyncShift4(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-
-	theApp.m_Tank.fEthercatSyncShift[AmplifierType::Oriental] += ((float)pNMUpDown->iDelta * 0.1f);
-	UpdateAllControls();
-
-	*pResult = 0;
-}

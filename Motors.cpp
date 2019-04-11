@@ -213,8 +213,10 @@ void CMotors::GetSurfacePos(CCoord *pCpSurface,int nFL)
 	case DUAL_ROBOT:
 		theApp.m_Robot[0].GetToolPos(pCpSurface,PORTSIDE);
 		theApp.m_Robot[1].GetToolPos(pCpSurface,STARBOARD);
-		pCpSurface->RotateCoordinate(PORTSIDE, 0.0f, 0.0f, 0.0f);
-		pCpSurface->RotateCoordinate(STARBOARD, 0.0f, 0.0f, 180.0f);
+		for (int ii = 0; ii < 3; ii++) {
+			pCpSurface->RotateCoordinate(PORTSIDE, theApp.m_Tank.rFrame[PORTSIDE][ii].x, theApp.m_Tank.rFrame[PORTSIDE][ii].y, theApp.m_Tank.rFrame[PORTSIDE][ii].z);
+			pCpSurface->RotateCoordinate(STARBOARD, theApp.m_Tank.rFrame[STARBOARD][ii].x, theApp.m_Tank.rFrame[STARBOARD][ii].y, theApp.m_Tank.rFrame[STARBOARD][ii].z);
+		}
 		pCpSurface->InvertNorm(PORTSIDE);
 		pCpSurface->InvertNorm(STARBOARD);
 		pCpSurface->Side[0].pt += theApp.m_Tank.vFrameZero[0];

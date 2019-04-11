@@ -42,7 +42,9 @@ public:
 	CEdit	m_editBaseRotZ;
 	CEdit	m_editBaseRotY;
 	CEdit	m_editBaseRotX;
-	CEdit	m_editNormR;
+	CEdit	m_editRoll;
+	CEdit	m_editYaw;
+	CEdit	m_editPitch;
 	CEdit	m_editNormK;
 	CEdit	m_editNormJ;
 	CEdit	m_editNormI;
@@ -151,6 +153,9 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	CEdit m_editFrameZero;
+	afx_msg void OnEnChangeEditFrameZero();
 };
 
 //{{AFX_INSERT_LOCATION}}

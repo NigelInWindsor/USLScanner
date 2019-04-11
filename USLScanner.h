@@ -2158,6 +2158,8 @@ struct TankStruct {
 	D3DXVECTOR3	vTTNorm;
 	D3DXVECTOR3 vTTZeroDegrees;
 
+	D3DXVECTOR3	rFrame[2][3];
+
 	int		nSpare[100];
 
 };
@@ -2415,6 +2417,7 @@ public:
 	void TestTurntableRollOver();
 	void FormatTime(CString & Buff, int nTimens, int nUnits, CString Units);
 	int ScanfDistanceTimens(CString Buff, int nUnits);
+	void TestEuler();
 	void CheckQuaternionMaths();
 	void AddToLogging(CString *pBuff);
 	void StopLogging();

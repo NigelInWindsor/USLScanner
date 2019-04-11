@@ -84,9 +84,9 @@ void CCoord::FormatQuaternion(CString *pBuff, int nStyle, int nOffset)
 
 }
 
-void CCoord::FormatNormal(CString *pBuff, int nStyle, int nOffset)
+void CCoord::FormatYawPitchRoll(CString *pBuff, int nStyle, int nOffset)
 {
-	CString strSide[2];
+	CString strSide[2],strTurntable;
 	int nSide;
 	float fTurntable;
 	CCoord Cp;
@@ -110,20 +110,68 @@ void CCoord::FormatNormal(CString *pBuff, int nStyle, int nOffset)
 		if ((Side[0].fR - Cp.Side0.fR) > 0.0f) fTurntable -= 360.0f;
 		break;
 	}
+	strTurntable.Format(L"M%d=%.02f", nOffset + 14, fTurntable);
 
 	for(nSide = 0;nSide < 2;nSide++, nOffset += 7) {
 
-		switch(nStyle) {
+		float fYaw = atan2f(Side[nSide].fJ, Side[nSide].fI) * RAD_TO_DEG;
+		float fPitch = acosf(Side[nSide].fK) * RAD_TO_DEG;
+		float fRoll = Side[nSide].fW;
+
+		if (nSide == 0) {
+			strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, fYaw, nOffset + 4, fPitch, nOffset + 5, fRoll, nOffset + 6, 0.0f);
+		}
+		else {
+			strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, fYaw, nOffset + 4, fPitch, nOffset + 5, fRoll, nOffset + 6, 0.0f);
+		}
+	}
+
+	pBuff->Format(L"%s %s %s",strSide[0],strSide[1], strTurntable);
+
+}
+
+void CCoord::FormatNormal(CString *pBuff, int nStyle, int nOffset)
+{
+	CString strSide[2], strTurntable;
+	int nSide;
+	float fTurntable;
+	CCoord Cp;
+
+	fTurntable = Side[0].fR + (float)theApp.m_Axes[theApp.m_Tank.nRLeft].nRevCounter * 360.0f;
+
+	switch (theApp.m_Axes[theApp.m_Tank.nRLeft].nModuloMode) {
+	default:
+		break;
+	case 1: //Shortest
+		theApp.m_Motors.GetTurntablePos(&Cp);
+		if ((Cp.Side0.fR - Side[0].fR) < -180.0f) fTurntable -= 360.0f;
+		if ((Cp.Side0.fR - Side[0].fR) > 180.0f) fTurntable += 360.0f;
+		break;
+	case 2: //Positive
+		theApp.m_Motors.GetTurntablePos(&Cp);
+		if ((Side[0].fR - Cp.Side0.fR) < 0.0f) fTurntable += 360.0f;
+		break;
+	case 3: //Negative
+		theApp.m_Motors.GetTurntablePos(&Cp);
+		if ((Side[0].fR - Cp.Side0.fR) > 0.0f) fTurntable -= 360.0f;
+		break;
+	}
+	strTurntable.Format(L"M%d=%.02f", nOffset + 14, fTurntable);
+
+	for (nSide = 0; nSide < 2; nSide++, nOffset += 7) {
+
+		switch (nStyle) {
 		case 0:
-			if(nSide==0) {
-				strSide[nSide].Format(L"X %.02f Y %.02f Z %.02f A %.07f B %.07f C %.07f U %.07f",Side[nSide].fX,Side[nSide].fY,Side[nSide].fZ,Side[nSide].fI,Side[nSide].fJ,Side[nSide].fK,0.0f);
-			} else {
-				strSide[nSide].Format(L"XX %.02f YY %.02f ZZ %.02f AA %.07f BB %.07f CC %.07f UU %.07f",Side[nSide].fX,Side[nSide].fY,Side[nSide].fZ,Side[nSide].fI,Side[nSide].fJ,Side[nSide].fK,0.0f);
+			if (nSide == 0) {
+				strSide[nSide].Format(L"X %.02f Y %.02f Z %.02f A %.07f B %.07f C %.07f U %.07f", Side[nSide].fX, Side[nSide].fY, Side[nSide].fZ, Side[nSide].fI, Side[nSide].fJ, Side[nSide].fK, 0.0f);
+			}
+			else {
+				strSide[nSide].Format(L"XX %.02f YY %.02f ZZ %.02f AA %.07f BB %.07f CC %.07f UU %.07f", Side[nSide].fX, Side[nSide].fY, Side[nSide].fZ, Side[nSide].fI, Side[nSide].fJ, Side[nSide].fK, 0.0f);
 			};
 			break;
-		case 1:	
+		case 1:
 			if (nSide == 0) {
-				strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.02f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, Side[nSide].fI, nOffset + 4, Side[nSide].fJ, nOffset + 5, Side[nSide].fK, nOffset + 6, 0.0f, nOffset + 14, fTurntable);
+				strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, Side[nSide].fI, nOffset + 4, Side[nSide].fJ, nOffset + 5, Side[nSide].fK, nOffset + 6, 0.0f);
 			}
 			else {
 				strSide[nSide].Format(L"M%d=%.02f M%d=%.02f M%d=%.02f M%d=%.07f M%d=%.07f M%d=%.07f M%d=%.07f", nOffset, Side[nSide].fX, nOffset + 1, Side[nSide].fY, nOffset + 2, Side[nSide].fZ, nOffset + 3, Side[nSide].fI, nOffset + 4, Side[nSide].fJ, nOffset + 5, Side[nSide].fK, nOffset + 6, 0.0f);
@@ -132,10 +180,9 @@ void CCoord::FormatNormal(CString *pBuff, int nStyle, int nOffset)
 		}
 	}
 
-	pBuff->Format(L"%s %s",strSide[0],strSide[1]);
+	pBuff->Format(L"%s %s %s", strSide[0], strSide[1], strTurntable);
 
 }
-
 
 void CCoord::TransformCoordinate(int nSide, D3DXVECTOR3 *vTranslate, float fXRotateDegrees, float fYRotateDegrees, float fZRotateDegrees)
 {
@@ -166,9 +213,33 @@ void CCoord::TransformCoordinate(int nSide, D3DXVECTOR3 *vTranslate, float fXRot
 
 void CCoord::RotateCoordinate(int nSide, float fXRotateDegrees, float fYRotateDegrees, float fZRotateDegrees)
 {
-	D3DXMATRIXA16 matBase, matRotX, matRotZ;
+	D3DXMATRIXA16 matBase;
 
-	D3DXMatrixRotationZ(&matBase, fZRotateDegrees * DEG_TO_RAD);
-	D3DXVec3TransformCoord((D3DXVECTOR3*)&Side[nSide].norm, (D3DXVECTOR3*)&Side[nSide].norm, &matBase);
-	D3DXVec3TransformCoord(&Side[nSide].pt, &Side[nSide].pt, &matBase);
+	if (fXRotateDegrees + fYRotateDegrees + fZRotateDegrees) {
+		D3DXMatrixIdentity(&matBase);
+		if (fXRotateDegrees != 0.0f) D3DXMatrixRotationX(&matBase, fXRotateDegrees * DEG_TO_RAD);
+		if (fYRotateDegrees != 0.0f) D3DXMatrixRotationY(&matBase, fYRotateDegrees * DEG_TO_RAD);
+		if (fZRotateDegrees != 0.0f) D3DXMatrixRotationZ(&matBase, fZRotateDegrees * DEG_TO_RAD);
+		D3DXVec3TransformCoord((D3DXVECTOR3*)&Side[nSide].norm, (D3DXVECTOR3*)&Side[nSide].norm, &matBase);
+		D3DXVec3TransformCoord(&Side[nSide].pt, &Side[nSide].pt, &matBase);
+	}
+}
+
+/*
+fYaw
+fPitch
+fRoll
+*/
+
+D3DXMATRIXA16 & CCoord::YawPitchRollToMatrix(float fYaw, float fPitch, float fRoll)
+{
+	static D3DXMATRIXA16 mat, matRoll, matPitch, matYaw;
+
+	D3DXMatrixRotationZ(&matRoll, fRoll * DEG_RAD);
+	D3DXMatrixRotationY(&matPitch, fPitch * DEG_RAD);
+	D3DXMatrixRotationZ(&matYaw, fYaw * DEG_RAD);
+	D3DXMatrixMultiply(&mat, &matRoll, &matPitch);
+	D3DXMatrixMultiply(&mat, &mat, &matYaw);
+
+	return mat;
 }

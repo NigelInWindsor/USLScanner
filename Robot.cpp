@@ -335,7 +335,7 @@ void CRobot::InitializeJointMatrices()
 	D3DXMatrixRotationZ(&m_matJoint[5],m_fJointAngle[5]);
 
 	//needs expansion for differnt end effectors
-	fAngle = atan2f(m_vAtToolTip.x,m_vAtToolTip.z);
+	fAngle = asinf(m_vAtToolTip.x);
 //	fAngle = atan2f(sqrtf(m_vAtToolTip.y * m_vAtToolTip.y + m_vAtToolTip.x * m_vAtToolTip.x),m_vAtToolTip.z);
 	D3DXMatrixRotationY(&m_matJoint[6],fAngle);
 
